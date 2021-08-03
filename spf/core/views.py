@@ -32,8 +32,6 @@ def journals_page(request):
 
 
 @unauthenticated_user
-@login_required(login_url='login')
-@allowed_users(allowed_groups=['manager'])
 def register_page(request):
     form = CreateUserForm()
 

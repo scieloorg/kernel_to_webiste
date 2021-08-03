@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+SciELO Publishing Framework - Entrar
+{% endblock %}
+
+{% block content %}
+<div class="text-center my-3">
+    <img src="{% static 'img/logo-scielo.svg' %}" width="100px" height="100px" />
+</div>
+<h1 class="h4 text-center">SciELO Publishing Framework</h1>
+<form class="border my-3 p-3 form-user" method="post" action="">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="id_username" class="form-label">Usuário</label>
+        <input type="text" name="username" autofocus id="id_username" required class="form-control" placeholder="Digite seu nome de usuário">
+    </div>
+    <div class="mb-3">
+        <label for="id_password" class="form-label">Senha</label>
+        <input type="password" name="password" id="id_password" required class="form-control" placeholder="Digite sua senha">
+    </div>
+    <button type="submit" class="btn btn-primary">Entrar</button>
+</form>
+{% for message in messages %}
+<div class="d-flex justify-content-center">
+    <div class="alert alert-warning" role="alert">
+        {{ message }}
+    </div>
+</div>
+{% endfor %}
+<div class="d-flex justify-content-center"><p class="text-muted px-1">Não possui uma conta?</p><a class="link-primary" href="{% url 'register' %}"> Registrar-se</a>.</div>
+{% endblock %}

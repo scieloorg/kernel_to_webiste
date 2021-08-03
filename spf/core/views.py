@@ -67,6 +67,12 @@ def login_page(request):
     return render(request, 'login.html', context={})
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager'])
+def create_user_page(request):
+    return redirect('create_user')
+
+
 def logout_user(request):
     logout(request)
     return redirect('login')

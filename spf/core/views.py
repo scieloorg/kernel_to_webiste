@@ -40,7 +40,6 @@ def register_page(request):
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
-            user.groups.add(Group.objects.get(name='operator'))
             messages.success(request, 'Usuário {0} foi criado.'.format(username))
             return redirect('login')
 

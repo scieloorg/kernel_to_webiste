@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}
+SciELO Publishing Framework - Home
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-5">
+    <h2>Bem-vindo, {{ user.username }}</h2>
+
+    {% for message in messages %}
+    <div class="d-flex justify-content-center">
+        <div class="alert alert-warning" role="alert">
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

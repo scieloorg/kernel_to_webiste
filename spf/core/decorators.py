@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.utils.translation import gettext as _
 
 
 def unauthenticated_user(view):
@@ -21,7 +22,9 @@ def allowed_users(allowed_groups=[]):
                 for gn in [g.name for g in request.user.groups.all()]:
                     if gn in allowed_groups:
                         return view(request, *args, **kwargs)
-                messages.warning(request, 'Página restrita.')
-                return redirect('home')
+                messages.warning(request, _('You do not have permission to access the requested page'))
+                return redirect('user')
+            messages.warning(request, _('You do not have permission to access the requested page'))
+            return redirect('user')
         return wrapper
     return decorator

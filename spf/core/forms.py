@@ -1,7 +1,7 @@
-from django.forms import ModelForm, TextInput, EmailInput
+from django.forms import TextInput, EmailInput
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django import forms
+from django.utils.translation import gettext as _
 
 
 class CreateUserForm(UserCreationForm):
@@ -11,10 +11,10 @@ class CreateUserForm(UserCreationForm):
         widgets = {
             'username': TextInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Digite seu nome de usuário'
+                'placeholder': _('Enter your username')
             }),
             'email': EmailInput(attrs={
                 'class': 'form-control',
-                'placeholder': 'Digite seu e-mail'
-            })
+                'placeholder': _('Enter your e-mail')
+            }),
         }

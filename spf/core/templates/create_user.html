@@ -1,12 +1,13 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}
-SciELO Publishing Framework - Adicionar Usuário
+SciELO Publishing Framework - {% trans 'Add user' %}
 {% endblock %}
 
 {% block content %}
 <div class="row justify-content-center pt-5">
-  <h2>Adicionar usuário</h2>
+  <h2>{% trans 'Add user' %}</h2>
 
   {% for message in messages %}
   <div class="d-flex justify-content-center">

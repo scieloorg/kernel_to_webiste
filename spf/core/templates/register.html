@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% load static %}
 
 {% block title %}
-SciELO Publishing Framework - Registrar-se
+SciELO Publishing Framework - {% trans 'Sign up' %}
 {% endblock %}
 
 {% block content %}
@@ -14,27 +15,27 @@ SciELO Publishing Framework - Registrar-se
 <form class="bg-white border my-3 p-3 form-user" method="POST" action="{% url 'register' %}">
     {% csrf_token %}
     <div class="mb-3">
-        <label for="username" class="form-label">Usuário</label>
-        <input type="text" name="username" autofocus id="username" class="form-control" placeholder="Digite seu nome de usuário">
+        <label for="username" class="form-label">{% trans 'Username' %}</label>
+        <input type="text" name="username" autofocus id="username" class="form-control" placeholder="{% trans 'Enter your username' %}">
     </div>
     <div class="mb-3">
         <label for="email" class="form-label">E-mail</label>
-        <input type="text" name="email" autofocus id="email" class="form-control" placeholder="Digite seu e-mail">
+        <input type="text" name="email" autofocus id="email" class="form-control" placeholder="{% trans 'Enter your e-mail' %}">
     </div>
     <div class="mb-3">
-        <label for="password1" class="form-label">Senha</label>
-        <input type="password" name="password1" id="password1" class="form-control" placeholder="Digite sua senha">
+        <label for="password1" class="form-label">{% trans 'Password' %}</label>
+        <input type="password" name="password1" id="password1" class="form-control" placeholder="{% trans 'Enter your password' %}">
     </div>
     <div class="mb-3">
-        <label for="password2" class="form-label">Confirme a senha</label>
-        <input type="password" name="password2" id="password2" class="form-control" placeholder="Digite sua senha novamente">
+        <label for="password2" class="form-label">{% trans 'Confirm your password' %}</label>
+        <input type="password" name="password2" id="password2" class="form-control" placeholder="{% trans 'Re-enter your password' %}">
     </div>
-    <button type="submit" class="btn btn-primary">Criar Usuário</button>
+    <button type="submit" class="btn btn-primary">{% trans 'Add user' %}</button>
 </form>
 {% for message in messages %}
 <div class="alert alert-primary" role="alert">
     {{ message }}
 </div>
 {% endfor %}
-<div class="d-flex justify-content-center"><p class="text-muted mx-1">Já possui uma conta?</p><a class="link-primary" href="{% url 'login' %}">Entrar</a>.</div>
+<div class="d-flex justify-content-center"><p class="text-muted mx-1">{% trans 'Already have an account' %}?</p><a class="link-primary" href="{% url 'login' %}">{% trans 'Login' %}</a>.</div>
 {% endblock %}

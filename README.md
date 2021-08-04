@@ -28,8 +28,23 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
+_Translation_
+```shell
+# Access the core project directory
+cd core
+
+# Create the strings translated to Portuguese
+django-admin makemessages -l pt
+
+# Create the strings translated to Spanish
+django-admin makemessages -l es
+
+# Compile the translated strings
+django-admin compilemessages
+```
+
 ## Usage
-After following the install and run instructions, the application must be accessible through the address http://127.0.0.1:8000.
+After following the installing and running instructions, the application must be accessible through the address http://127.0.0.1:8000.
 
 
 ## Observations

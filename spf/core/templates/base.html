@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load i18n %}
 <head>
     {% load static %}
     <title>{% block title %}{% endblock %}</title>
@@ -22,9 +23,9 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     {% if user.is_authenticated %}
-                    <a class="nav-link m-1" href="{% url 'journals' %}">Periódicos</a>
+                    <a class="nav-link m-1" href="{% url 'journals' %}">{% trans 'Journals' %}</a>
                     {% else %}
-                    <a class="nav-link m-1" disabled href="{% url 'journals' %}">Periódicos</a>
+                    <a class="nav-link m-1" disabled href="{% url 'journals' %}">{% trans 'Journals' %}</a>
                     {% endif %}
                 </li>
                 <li class="nav-item">
@@ -36,18 +37,18 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle m-1" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">{{ request.user }}</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item disabled" href=""><i class="fas fa-columns px-2"></i>Painel</a></li>
-                            <li><a class="dropdown-item" href="{% url 'user' %}"><i class="fas fa-cog px-2"></i>Perfil</a></li>
+                            <li><a class="dropdown-item disabled" href=""><i class="fas fa-columns px-2"></i>{% translate "Dashboard" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user' %}"><i class="fas fa-cog px-2"></i>{% translate "Profile" %}</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt px-2"></i>Sair</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt px-2"></i>{% translate "Logout" %}</a></li>
                         </ul>
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="btn btn-outline-primary m-1" href="{% url 'login' %}">Entrar</a>
+                        <a class="btn btn-outline-primary m-1" href="{% url 'login' %}">{% trans 'Login' %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-primary m-1" href="{% url 'register' %}">Registrar-se</a>
+                        <a class="btn btn-outline-primary m-1" href="{% url 'register' %}">{% trans 'Sign up' %}</a>
                     </li>
                 {% endif %}
             </ul>

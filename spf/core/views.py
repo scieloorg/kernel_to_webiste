@@ -83,3 +83,23 @@ def user_add_page(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
+class DepositedPackagesByUserListView(LoginRequiredMixin, generic.ListView):
+    login_url = 'login'
+    model = Package
+    template_name = 'core/user_package_list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Package.objects.filter(depositor=self.request.user)
+
+
+class DepositedPackagesListView(LoginRequiredMixin, generic.ListView):
+    login_url = 'login'
+    model = Package
+    template_name = 'core/package_list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Package.objects.all()

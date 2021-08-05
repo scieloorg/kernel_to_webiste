@@ -1,33 +1,48 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
-from .models import Journal
+from django.views import generic
+
+from .models import Journal, Package
 from .forms import CreateUserForm
 from .decorators import unauthenticated_user, allowed_users
 
 
-def home_page(request):
-    return render(request, 'home.html', context={})
+def index_page(request):
+    return render(request, 'index.html', context={})
 
 
 @login_required(login_url='login')
-def user_page(request):
-    return render(request, 'user.html', context={})
+def user_profile_page(request):
+    return render(request, 'core/user_profile.html', context={})
+
+
+@login_required(login_url='login')
+def user_profile_edit_page(request):
+    return render(request, 'core/user_profile_edit.html', context={})
+
+
+@login_required(login_url='login')
+def user_dashboard_page(request):
+    return render(request, 'core/user_dashboard.html', context={})
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager'])
-def journals_page(request):
+def journal_list_page(request):
     num_journals = Journal.objects.all().count()
     context = {'num_journals': num_journals}
 
-    return render(request, 'journals.html', context=context)
+    return render(request, 'core/journal_list.html', context=context)
 
 
 @unauthenticated_user
-def register_page(request):
+def account_register_page(request):
     form = CreateUserForm()
 
     if request.method == 'POST':
@@ -39,11 +54,11 @@ def register_page(request):
             return redirect('login')
 
     context = {'form': form}
-    return render(request, 'register.html', context=context)
+    return render(request, 'accounts/register.html', context=context)
 
 
 @unauthenticated_user
-def login_page(request):
+def account_login_page(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -52,17 +67,17 @@ def login_page(request):
 
         if user is not None:
             login(request, user)
-            return redirect('home')
+            return redirect('index')
         else:
             messages.info(request, _('Incorrect username or password'))
 
-    return render(request, 'login.html', context={})
+    return render(request, 'accounts/login.html', context={})
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager'])
-def create_user_page(request):
-    return redirect('create_user')
+def user_add_page(request):
+    return redirect('core/user_add')
 
 
 def logout_user(request):

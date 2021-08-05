@@ -23,8 +23,8 @@ def allowed_users(allowed_groups=[]):
                     if gn in allowed_groups:
                         return view(request, *args, **kwargs)
                 messages.warning(request, _('You do not have permission to access the requested page'))
-                return redirect('user')
+                return redirect('index')
             messages.warning(request, _('You do not have permission to access the requested page'))
-            return redirect('user')
+            return redirect('index')
         return wrapper
     return decorator

@@ -2,21 +2,11 @@
 {% load i18n %}
 
 {% block title %}
-SciELO Publishing Framework
+SciELO Publishing Framework - {% trans 'Profile' %}
 {% endblock %}
 
 {% block content %}
 <div class="row justify-content-center pt-5">
-    <h2>{% trans 'Welcome' %}, {{ user.username }}</h2>
-
-    <h3>{% trans 'Profile' %}</h3>
-
-    {% for message in messages %}
-    <div class="d-flex justify-content-center">
-        <div class="alert alert-warning" role="alert">
-            {{ message }}
-        </div>
-    </div>
-    {% endfor %}
+    <h1 class="h4">{% trans 'Profile' %}</h1>
 </div>
 {% endblock %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-03 22:04-0300\n"
+"POT-Creation-Date: 2021-08-04 16:03-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,86 +18,122 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: decorators.py:25
+#: decorators.py:25 decorators.py:27
 msgid "You do not have permission to access the requested page"
 msgstr "Você não tem permissão para acessar a página solicitada"
 
-#: forms.py:14 templates/register.html:19
+#: forms.py:14 templates/accounts/login.html:19
+#: templates/accounts/register.html:19
 msgid "Enter your username"
 msgstr "Digite seu nome de usuário"
 
-#: forms.py:18 templates/register.html:23
+#: forms.py:18 templates/accounts/register.html:23
 msgid "Enter your e-mail"
 msgstr "Digite seu e-mail"
 
-#: templates/base.html:26 templates/base.html:28 templates/journals.html:5
-#: templates/journals.html:10
-msgid "Journals"
-msgstr "Periódicos"
-
-#: templates/base.html:40
-msgid "Dashboard"
-msgstr "Painel"
-
-#: templates/base.html:41 templates/user.html:10
-msgid "Profile"
-msgstr "Perfil"
-
-#: templates/base.html:43
-msgid "Logout"
-msgstr "Sair"
-
-#: templates/base.html:48 templates/login.html:7 templates/login.html:25
-#: templates/register.html:40
+#: templates/accounts/login.html:7 templates/accounts/login.html:25
+#: templates/accounts/register.html:40 templates/base.html:52
 msgid "Login"
 msgstr "Entrar"
 
-#: templates/base.html:51 templates/login.html:34 templates/register.html:7
-msgid "Sign up"
-msgstr "Registrar-se"
-
-#: templates/create_user.html:5 templates/create_user.html:10
-#: templates/register.html:33
-msgid "Add user"
-msgstr "Adicionar usuário"
-
-#: templates/home.html:10
-msgid "Welcome"
-msgstr "Bem-vindo"
-
-#: templates/login.html:18 templates/register.html:18
+#: templates/accounts/login.html:18 templates/accounts/register.html:18
+#: templates/core/package_list.html:19
 msgid "Username"
 msgstr "Usuário"
 
-#: templates/login.html:22 templates/register.html:26
+#: templates/accounts/login.html:22 templates/accounts/register.html:26
 msgid "Password"
 msgstr "Senha"
 
-#: templates/login.html:23 templates/register.html:27
+#: templates/accounts/login.html:23 templates/accounts/register.html:27
 msgid "Enter your password"
 msgstr "Digite sua senha"
 
-#: templates/login.html:34
+#: templates/accounts/login.html:34
 msgid "Don't have an account"
 msgstr "Já possui uma conta"
 
-#: templates/register.html:30
+#: templates/accounts/login.html:34 templates/accounts/register.html:7
+#: templates/base.html:55
+msgid "Sign up"
+msgstr "Registrar-se"
+
+#: templates/accounts/register.html:30
 msgid "Confirm your password"
 msgstr "Confirme sua senha"
 
-#: templates/register.html:31
+#: templates/accounts/register.html:31
 msgid "Re-enter your password"
 msgstr "Digite sua senha novamente"
 
-#: templates/register.html:40
+#: templates/accounts/register.html:33
+msgid "Add user"
+msgstr "Adicionar usuário"
+
+#: templates/accounts/register.html:40
 msgid "Already have an account"
 msgstr "Já possui uma conta"
 
-#: views.py:43
+#: templates/base.html:26 templates/core/user_package_list.html:5
+#: templates/core/user_package_list.html:10
+msgid "My packages"
+msgstr "Meus pacotes"
+
+#: templates/base.html:29 templates/core/package_list.html:10
+msgid "All packages"
+msgstr "Todos os pacotes"
+
+#: templates/base.html:33 templates/core/journal_list.html:5
+#: templates/core/journal_list.html:10
+msgid "Journals"
+msgstr "Periódicos"
+
+#: templates/base.html:44 templates/core/user_dashboard.html:5
+#: templates/core/user_dashboard.html:10
+msgid "Dashboard"
+msgstr "Painel"
+
+#: templates/base.html:45 templates/core/user_profile.html:5
+#: templates/core/user_profile.html:10
+msgid "Profile"
+msgstr "Perfil"
+
+#: templates/base.html:47
+msgid "Logout"
+msgstr "Sair"
+
+#: templates/core/package_list.html:5
+msgid "Packages"
+msgstr "Pacotes"
+
+#: templates/core/package_list.html:17 templates/core/user_package_list.html:17
+msgid "Name"
+msgstr "Nome"
+
+#: templates/core/package_list.html:18 templates/core/user_package_list.html:18
+msgid "Deposit date"
+msgstr "Data de depósito"
+
+#: templates/core/user_profile_edit.html:7
+#: templates/core/user_profile_edit.html:11
+msgid "Edit profile"
+msgstr "Editar perfil"
+
+#: templates/core/user_profile_edit.html:14
+#, fuzzy
+#| msgid "Edit profile"
+msgid "Update profile"
+msgstr "Atualizar perfil"
+
+#: templates/index.html:10
+msgid "Home"
+msgstr "Início"
+
+#: views.py:53
 #, python-format
 msgid "User %s was created"
 msgstr "Usuário %s foi criado"
 
-#: views.py:62
+#: views.py:72
 msgid "Incorrect username or password"
 msgstr "Nome de usuário ou senha incorreto"

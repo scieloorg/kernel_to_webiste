@@ -7,6 +7,31 @@ SciELO Publishing Framework - {% trans 'Journals' %}
 
 {% block content %}
 <div class="row justify-content-center pt-5">
-    <h2>{% trans 'Journals' %}: {{ num_journals }}</h2>
+    <h1 class="h4">{% trans 'All journals' %}</h1>
+    <div class="m-3">
+        {% if journal_list %}
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">{% trans 'Title' %}</th>
+                <th scope="col">{% trans 'Print ISSN' %}</th>
+                <th scope="col">{% trans 'Online ISSN' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for jour in journal_list %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ jour.title }}</td>
+                <td>{{ jour.print_issn }}</td>
+                <td>{{ jour.online_issn }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            </ul>
+        </table>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

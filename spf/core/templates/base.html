@@ -15,18 +15,22 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top border-bottom">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'home' %}">SPF</a>
+        <a class="navbar-brand" href="{% url 'index' %}">SPF</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav me-auto">
+                {% if user.is_authenticated %}
                 <li class="nav-item">
-                    {% if user.is_authenticated %}
-                    <a class="nav-link m-1" href="{% url 'journals' %}">{% trans 'Journals' %}</a>
-                    {% else %}
-                    <a class="nav-link m-1" disabled href="{% url 'journals' %}">{% trans 'Journals' %}</a>
-                    {% endif %}
+                    <a class="nav-link m-1" href="{% url 'user_package_list' %}">{% trans 'My packages' %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link m-1" href="{% url 'package_list' %}">{% trans 'All packages' %}</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link m-1" href="{% url 'journal_list' %}">{% trans 'Journals' %}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link disabled m-1" href="">FAQ</a>
@@ -37,8 +41,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle m-1" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">{{ request.user }}</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item disabled" href=""><i class="fas fa-columns px-2"></i>{% translate "Dashboard" %}</a></li>
-                            <li><a class="dropdown-item" href="{% url 'user' %}"><i class="fas fa-cog px-2"></i>{% translate "Profile" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_dashboard' %}"><i class="fas fa-columns px-2"></i>{% translate "Dashboard" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_profile' %}"><i class="fas fa-cog px-2"></i>{% translate "Profile" %}</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt px-2"></i>{% translate "Logout" %}</a></li>
                         </ul>

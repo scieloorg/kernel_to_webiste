@@ -8,5 +8,12 @@ SciELO Publishing Framework - {% trans 'Dashboard' %}
 {% block content %}
 <div class="row justify-content-center pt-5">
     <h1 class="h4">{% trans 'Dashboard' %}</h1>
+    {% for message in messages %}
+    <div class="d-flex justify-content-center">
+        <div class="alert alert-warning" role="alert">
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}

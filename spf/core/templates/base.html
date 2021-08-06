@@ -42,7 +42,7 @@
                         <a class="nav-link dropdown-toggle m-1" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">{{ request.user }}</a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'user_dashboard' %}"><i class="fas fa-columns px-2"></i>{% translate "Dashboard" %}</a></li>
-                            <li><a class="dropdown-item" href="{% url 'user_profile' %}"><i class="fas fa-cog px-2"></i>{% translate "Profile" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_profile_edit' %}"><i class="fas fa-cog px-2"></i>{% translate "Edit profile" %}</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt px-2"></i>{% translate "Logout" %}</a></li>
                         </ul>

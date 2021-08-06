@@ -1,15 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
 from django.views import generic
 
 from .models import Journal, Package
-from .forms import CreateUserForm
+from .forms import CreateUserForm, UpdateUserForm
 from .decorators import unauthenticated_user, allowed_users
 
 
@@ -24,6 +22,13 @@ def user_profile_page(request):
 
 @login_required(login_url='login')
 def user_profile_edit_page(request):
+    if request.method == 'POST':
+        form = UpdateUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, _('User %s was updated') % username)
+            return redirect('user_dashboard')
     return render(request, 'core/user_profile_edit.html', context={})
 
 
@@ -77,7 +82,7 @@ def account_login_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager'])
 def user_add_page(request):
-    return redirect('core/user_add')
+    return redirect('user_add')
 
 
 def logout_user(request):

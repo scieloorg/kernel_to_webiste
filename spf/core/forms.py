@@ -7,7 +7,7 @@ from django.utils.translation import gettext as _
 class CreateUserForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
+        fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
         widgets = {
             'username': TextInput(attrs={
                 'class': 'form-control',
@@ -17,4 +17,13 @@ class CreateUserForm(UserCreationForm):
                 'class': 'form-control',
                 'placeholder': _('Enter your e-mail')
             }),
+            'first_name': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('Enter your first name')
+            }),
+            'last_name': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': _('Enter your last name')
+            }),
+        }
         }

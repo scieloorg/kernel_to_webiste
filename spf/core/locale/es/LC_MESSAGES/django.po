@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-04 16:03-0300\n"
+"POT-Creation-Date: 2021-08-05 22:15-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,30 +22,43 @@ msgstr ""
 msgid "You do not have permission to access the requested page"
 msgstr "No tienes permiso para acceder a la página solicitada"
 
-#: forms.py:14 templates/accounts/login.html:19
+#: forms.py:14 forms.py:38 templates/accounts/login.html:19
 #: templates/accounts/register.html:19
 msgid "Enter your username"
 msgstr "Ingrese su nombre de usuario"
 
-#: forms.py:18 templates/accounts/register.html:23
+#: forms.py:18 forms.py:43 templates/accounts/register.html:23
+#: templates/core/user_profile_edit.html:22
 msgid "Enter your e-mail"
 msgstr "Ingrese su correo electrónico"
 
+#: forms.py:22 forms.py:47 templates/accounts/register.html:27
+#: templates/core/user_profile_edit.html:26
+msgid "Enter your first name"
+msgstr "Ingrese su nombre"
+
+#: forms.py:26 forms.py:51 templates/accounts/register.html:31
+#: templates/core/user_profile_edit.html:30
+#, fuzzy
+#| msgid "Enter your username"
+msgid "Enter your last name"
+msgstr "Ingrese su nombre de familia"
+
 #: templates/accounts/login.html:7 templates/accounts/login.html:25
-#: templates/accounts/register.html:40 templates/base.html:52
+#: templates/accounts/register.html:48 templates/base.html:52
 msgid "Login"
 msgstr "Iniciar sesión"
 
 #: templates/accounts/login.html:18 templates/accounts/register.html:18
-#: templates/core/package_list.html:19
+#: templates/core/package_list.html:19 templates/core/user_profile_edit.html:17
 msgid "Username"
 msgstr "Usuario"
 
-#: templates/accounts/login.html:22 templates/accounts/register.html:26
+#: templates/accounts/login.html:22 templates/accounts/register.html:34
 msgid "Password"
 msgstr "Contraseña"
 
-#: templates/accounts/login.html:23 templates/accounts/register.html:27
+#: templates/accounts/login.html:23 templates/accounts/register.html:35
 msgid "Enter your password"
 msgstr "Ingrese su contraseña"
 
@@ -58,19 +71,27 @@ msgstr "No tienes una cuenta"
 msgid "Sign up"
 msgstr "Registrarse"
 
-#: templates/accounts/register.html:30
+#: templates/accounts/register.html:26 templates/core/user_profile_edit.html:25
+msgid "First name"
+msgstr "Nombre"
+
+#: templates/accounts/register.html:30 templates/core/user_profile_edit.html:29
+msgid "Last name"
+msgstr "Nombre de familia"
+
+#: templates/accounts/register.html:38
 msgid "Confirm your password"
 msgstr "Ingrese su contraseña"
 
-#: templates/accounts/register.html:31
+#: templates/accounts/register.html:39
 msgid "Re-enter your password"
 msgstr "Vuelva a introducir su contraseña"
 
-#: templates/accounts/register.html:33
+#: templates/accounts/register.html:41
 msgid "Add user"
 msgstr "Agregar usuario"
 
-#: templates/accounts/register.html:40
+#: templates/accounts/register.html:48
 msgid "Already have an account"
 msgstr "Ya tengo una cuenta"
 
@@ -84,7 +105,6 @@ msgid "All packages"
 msgstr "Todos los paquetes"
 
 #: templates/base.html:33 templates/core/journal_list.html:5
-#: templates/core/journal_list.html:10
 msgid "Journals"
 msgstr "Revistas"
 
@@ -93,14 +113,32 @@ msgstr "Revistas"
 msgid "Dashboard"
 msgstr "Panel"
 
-#: templates/base.html:45 templates/core/user_profile.html:5
-#: templates/core/user_profile.html:10
-msgid "Profile"
-msgstr "Perfil"
+#: templates/base.html:45 templates/core/user_profile_edit.html:7
+#: templates/core/user_profile_edit.html:12
+msgid "Edit profile"
+msgstr "Editar perfil"
 
 #: templates/base.html:47
 msgid "Logout"
 msgstr "Salir"
+
+#: templates/core/journal_list.html:10
+#, fuzzy
+#| msgid "Journals"
+msgid "All journals"
+msgstr "Todas las revistas"
+
+#: templates/core/journal_list.html:17
+msgid "Title"
+msgstr "Título"
+
+#: templates/core/journal_list.html:18
+msgid "Print ISSN"
+msgstr "Print ISSN"
+
+#: templates/core/journal_list.html:19
+msgid "Online ISSN"
+msgstr "Online ISSN"
 
 #: templates/core/package_list.html:5
 msgid "Packages"
@@ -114,26 +152,31 @@ msgstr "Nombre"
 msgid "Deposit date"
 msgstr "Fecha de deposito"
 
-#: templates/core/user_profile_edit.html:7
-#: templates/core/user_profile_edit.html:11
-msgid "Edit profile"
-msgstr "Editar perfil"
+#: templates/core/package_list.html:20 templates/core/user_package_list.html:19
+msgid "State"
+msgstr "Estado"
 
-#: templates/core/user_profile_edit.html:14
-#, fuzzy
-#| msgid "Edit profile"
-msgid "Update profile"
-msgstr "Actualización del perfil"
+#: templates/core/user_profile.html:5 templates/core/user_profile.html:10
+msgid "Profile"
+msgstr "Perfil"
+
+#: templates/core/user_profile_edit.html:32
+msgid "Update user"
+msgstr "Editar usuario"
 
 #: templates/index.html:10
 msgid "Home"
 msgstr "Inicio"
 
-#: views.py:53
+#: views.py:30
+msgid "User %s was updated"
+msgstr "Se creó el usuario %s"
+
+#: views.py:58
 #, python-format
 msgid "User %s was created"
 msgstr "Se creó el usuario %s"
 
-#: views.py:72
+#: views.py:77
 msgid "Incorrect username or password"
 msgstr "Nombre de usuario o contraseña incorrecta."

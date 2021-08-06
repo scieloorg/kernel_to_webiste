@@ -13,5 +13,5 @@ urlpatterns = [
     path('user/dashboard', views.user_dashboard_page, name='user_dashboard'),
     path('user/package/list', views.DepositedPackagesByUserListView.as_view(), name='user_package_list'),
     path('user/profile', views.user_profile_page, name='user_profile'),
-    path('user/profile/edit', views.UserEditView.as_view(), name='user_profile_edit'),
+    path('user/profile/edit', views.user_profile_edit_page, name='user_profile_edit'),
 ]

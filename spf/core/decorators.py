@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 def unauthenticated_user(view):
     def wrapper(request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect('home')
+            return redirect('index')
         else:
             return view(request, *args, **kwargs)
 

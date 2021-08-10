@@ -1,0 +1,178 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-05 22:15-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: decorators.py:25 decorators.py:27
+msgid "You do not have permission to access the requested page"
+msgstr "Você não tem permissão para acessar a página solicitada"
+
+#: forms.py:14 forms.py:38 templates/accounts/login.html:19
+#: templates/accounts/register.html:19
+msgid "Enter your username"
+msgstr "Digite seu nome de usuário"
+
+#: forms.py:18 forms.py:43 templates/accounts/register.html:23
+#: templates/core/user_profile_edit.html:22
+msgid "Enter your e-mail"
+msgstr "Digite seu e-mail"
+
+#: forms.py:22 forms.py:47 templates/accounts/register.html:27
+#: templates/core/user_profile_edit.html:26
+msgid "Enter your first name"
+msgstr "Digite seu nome"
+
+#: forms.py:26 forms.py:51 templates/accounts/register.html:31
+#: templates/core/user_profile_edit.html:30
+msgid "Enter your last name"
+msgstr "Digite seu sobrenome"
+
+#: templates/accounts/login.html:7 templates/accounts/login.html:25
+#: templates/accounts/register.html:48 templates/base.html:52
+msgid "Login"
+msgstr "Entrar"
+
+#: templates/accounts/login.html:18 templates/accounts/register.html:18
+#: templates/core/package_list.html:19 templates/core/user_profile_edit.html:17
+msgid "Username"
+msgstr "Usuário"
+
+#: templates/accounts/login.html:22 templates/accounts/register.html:34
+msgid "Password"
+msgstr "Senha"
+
+#: templates/accounts/login.html:23 templates/accounts/register.html:35
+msgid "Enter your password"
+msgstr "Digite sua senha"
+
+#: templates/accounts/login.html:34
+msgid "Don't have an account"
+msgstr "Já possui uma conta"
+
+#: templates/accounts/login.html:34 templates/accounts/register.html:7
+#: templates/base.html:55
+msgid "Sign up"
+msgstr "Registrar-se"
+
+#: templates/accounts/register.html:26 templates/core/user_profile_edit.html:25
+msgid "First name"
+msgstr "Nome"
+
+#: templates/accounts/register.html:30 templates/core/user_profile_edit.html:29
+msgid "Last name"
+msgstr "Sobrenome"
+
+#: templates/accounts/register.html:38
+msgid "Confirm your password"
+msgstr "Confirme sua senha"
+
+#: templates/accounts/register.html:39
+msgid "Re-enter your password"
+msgstr "Digite sua senha novamente"
+
+#: templates/accounts/register.html:41
+msgid "Add user"
+msgstr "Adicionar usuário"
+
+#: templates/accounts/register.html:48
+msgid "Already have an account"
+msgstr "Já possui uma conta"
+
+#: templates/base.html:26 templates/core/user_package_list.html:5
+#: templates/core/user_package_list.html:10
+msgid "My packages"
+msgstr "Meus pacotes"
+
+#: templates/base.html:29 templates/core/package_list.html:10
+msgid "All packages"
+msgstr "Todos os pacotes"
+
+#: templates/base.html:33 templates/core/journal_list.html:5
+msgid "Journals"
+msgstr "Periódicos"
+
+#: templates/base.html:44 templates/core/user_dashboard.html:5
+#: templates/core/user_dashboard.html:10
+msgid "Dashboard"
+msgstr "Painel"
+
+#: templates/base.html:45 templates/core/user_profile_edit.html:7
+#: templates/core/user_profile_edit.html:12
+msgid "Edit profile"
+msgstr "Editar perfil"
+
+#: templates/base.html:47
+msgid "Logout"
+msgstr "Sair"
+
+#: templates/core/journal_list.html:10
+msgid "All journals"
+msgstr "Todos os periódicos"
+
+#: templates/core/journal_list.html:17
+msgid "Title"
+msgstr "Título"
+
+#: templates/core/journal_list.html:18
+msgid "Print ISSN"
+msgstr "Print ISSN"
+
+#: templates/core/journal_list.html:19
+msgid "Online ISSN"
+msgstr "Online ISSN"
+
+#: templates/core/package_list.html:5
+msgid "Packages"
+msgstr "Pacotes"
+
+#: templates/core/package_list.html:17 templates/core/user_package_list.html:17
+msgid "Name"
+msgstr "Nome"
+
+#: templates/core/package_list.html:18 templates/core/user_package_list.html:18
+msgid "Deposit date"
+msgstr "Data de depósito"
+
+#: templates/core/package_list.html:20 templates/core/user_package_list.html:19
+msgid "State"
+msgstr "Estado"
+
+#: templates/core/user_profile.html:5 templates/core/user_profile.html:10
+msgid "Profile"
+msgstr "Perfil"
+
+#: templates/core/user_profile_edit.html:32
+msgid "Update user"
+msgstr "Atualizar usuário"
+
+#: templates/index.html:10
+msgid "Home"
+msgstr "Início"
+
+#: views.py:30
+msgid "User %s was updated"
+msgstr "Usuário %s foi criado"
+
+#: views.py:58
+#, python-format
+msgid "User %s was created"
+msgstr "Usuário %s foi criado"
+
+#: views.py:77
+msgid "Incorrect username or password"
+msgstr "Nome de usuário ou senha incorreto"

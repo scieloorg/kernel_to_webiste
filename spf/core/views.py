@@ -40,16 +40,8 @@ def user_profile_edit_page(request):
 
 @login_required(login_url='login')
 def user_dashboard_page(request):
-    return render(request, 'core/user_dashboard.html', context={})
-
-
-@login_required(login_url='login')
-@allowed_users(allowed_groups=['manager'])
-def journal_list_page(request):
-    num_journals = Journal.objects.all().count()
-    context = {'num_journals': num_journals}
-
-    return render(request, 'core/journal_list.html', context=context)
+    groups = request.user.groups.values_list('name', flat=True)
+    return render(request, 'core/user_dashboard.html', context={'groups': groups})
 
 
 @unauthenticated_user
@@ -114,6 +106,18 @@ class DepositedPackagesListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return Package.objects.all()
+
+
+class JournalsListView(LoginRequiredMixin, generic.ListView):
+    login_url = 'login'
+    model = Journal
+    template_name = 'core/journal_list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Journal.objects.all()
+
+
 class SearchResultsView(PermissionRequiredMixin, generic.ListView):
     permission_required = 'core.view_document'
     model = Document

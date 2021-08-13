@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-05 22:15-0300\n"
+"POT-Creation-Date: 2021-08-12 21:56-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: decorators.py:25 decorators.py:27
-msgid "You do not have permission to access the requested page"
+#, fuzzy, python-format
+#| msgid "You do not have permission to access the requested page"
+msgid "You do not have permission to access the requested page %s"
 msgstr "No tienes permiso para acceder a la página solicitada"
 
 #: forms.py:14 forms.py:38 templates/accounts/login.html:19
@@ -50,7 +52,8 @@ msgid "Login"
 msgstr "Iniciar sesión"
 
 #: templates/accounts/login.html:18 templates/accounts/register.html:18
-#: templates/core/package_list.html:19 templates/core/user_profile_edit.html:17
+#: templates/core/package_list.html:19 templates/core/user_dashboard.html:33
+#: templates/core/user_profile_edit.html:17
 msgid "Username"
 msgstr "Usuario"
 
@@ -71,11 +74,13 @@ msgstr "No tienes una cuenta"
 msgid "Sign up"
 msgstr "Registrarse"
 
-#: templates/accounts/register.html:26 templates/core/user_profile_edit.html:25
+#: templates/accounts/register.html:26 templates/core/user_dashboard.html:34
+#: templates/core/user_profile_edit.html:25
 msgid "First name"
 msgstr "Nombre"
 
-#: templates/accounts/register.html:30 templates/core/user_profile_edit.html:29
+#: templates/accounts/register.html:30 templates/core/user_dashboard.html:35
+#: templates/core/user_profile_edit.html:29
 msgid "Last name"
 msgstr "Nombre de familia"
 
@@ -104,7 +109,7 @@ msgstr "Mis paquetes"
 msgid "All packages"
 msgstr "Todos los paquetes"
 
-#: templates/base.html:33 templates/core/journal_list.html:5
+#: templates/base.html:32 templates/core/journal_list.html:5
 msgid "Journals"
 msgstr "Revistas"
 
@@ -156,6 +161,66 @@ msgstr "Fecha de deposito"
 msgid "State"
 msgstr "Estado"
 
+#: templates/core/search_results.html:5 templates/core/search_results.html:10
+msgid "Documents"
+msgstr "Documentos"
+
+#: templates/core/search_results.html:17
+msgid "Document name"
+msgstr "Nombre del documento"
+
+#: templates/core/search_results.html:18 templates/core/user_dashboard.html:20
+msgid "Document identifier"
+msgstr "Identificador de documento"
+
+#: templates/core/search_results.html:19
+#, fuzzy
+#| msgid "Journals"
+msgid "Journal"
+msgstr "Revistas"
+
+#: templates/core/search_results.html:20
+#, fuzzy
+#| msgid "Packages"
+msgid "Package"
+msgstr "Paquetes"
+
+#: templates/core/search_results.html:39
+msgid "No results"
+msgstr "No hay resultados"
+
+#: templates/core/user_dashboard.html:14
+msgid "Search documents"
+msgstr "Buscar documentos"
+
+#: templates/core/user_dashboard.html:21
+msgid "Enter a document identifier"
+msgstr "Ingrese un identificador de documento "
+
+#: templates/core/user_dashboard.html:23
+msgid "Search"
+msgstr "Buscar"
+
+#: templates/core/user_dashboard.html:30
+#, fuzzy
+#| msgid "Edit profile"
+msgid "User profile"
+msgstr "Editar perfil"
+
+#: templates/core/user_dashboard.html:36
+msgid "E-mail"
+msgstr "E-mail"
+
+#: templates/core/user_dashboard.html:37
+#, fuzzy
+#| msgid "Last name"
+msgid "Last login date"
+msgstr "Nombre de familia"
+
+#: templates/core/user_dashboard.html:38
+msgid "Groups"
+msgstr "Grupos"
+
 #: templates/core/user_profile.html:5 templates/core/user_profile.html:10
 msgid "Profile"
 msgstr "Perfil"
@@ -164,19 +229,24 @@ msgstr "Perfil"
 msgid "Update user"
 msgstr "Editar usuario"
 
+#: templates/faq.html:5 templates/faq.html:10
+msgid "Frequently Asked Questions"
+msgstr "Preguntas Más Frecuentes"
+
 #: templates/index.html:10
 msgid "Home"
 msgstr "Inicio"
 
-#: views.py:30
+#: views.py:36
+#, python-format
 msgid "User %s was updated"
 msgstr "Se creó el usuario %s"
 
-#: views.py:58
+#: views.py:56
 #, python-format
 msgid "User %s was created"
 msgstr "Se creó el usuario %s"
 
-#: views.py:77
+#: views.py:75
 msgid "Incorrect username or password"
 msgstr "Nombre de usuario o contraseña incorrecta."

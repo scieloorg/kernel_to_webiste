@@ -6,14 +6,50 @@ SciELO Publishing Framework - {% trans 'Dashboard' %}
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center pt-5">
-    <h1 class="h4">{% trans 'Dashboard' %}</h1>
-    {% for message in messages %}
-    <div class="d-flex justify-content-center">
-        <div class="alert alert-warning" role="alert">
-            {{ message }}
+<div class="row">
+    <h1 class="h4 pt-5">{% trans 'Dashboard' %}</h1>
+    <div class="col-sm-5 mb-3">
+        <div class="card">
+            <div class="card-header">
+                {% trans 'Search documents' %}
+            </div>
+            <div class="card-body">
+                <form class="bg-white form-user" method="GET" action="{% url 'search_results' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="pid" class="form-label">{% trans 'Document identifier' %}</label>
+                        <input required type="text" name="pid" autofocus id="pid" class="form-control" placeholder="{% trans 'Enter a document identifier' %}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">{% trans 'Search' %}</button>
+                </form>
+            </div>
         </div>
     </div>
-    {% endfor %}
+    <div class="col-sm-7">
+        <div class="card mb-3">
+            <div class="card-header">{% trans 'User profile' %}</div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li>{% trans 'Username' %}: {{ request.user.username }}</li>
+                    <li>{% trans 'First name' %}: {{ request.user.first_name }}</li>
+                    <li>{% trans 'Last name' %}: {{ request.user.last_name }}</li>
+                    <li>{% trans 'E-mail' %}: {{ request.user.email }}</li>
+                    <li>{% trans 'Last login date' %}: {{ request.user.last_login }}</li>
+                    <li>{% trans 'Groups' %}:
+                    {% for g in groups %}
+                        <span class="badge bg-secondary mx-1">{{ g }}</span>
+                    {% endfor %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% for message in messages %}
+<div class="d-flex justify-content-center">
+    <div class="alert alert-warning" role="alert">
+        {{ message }}
+    </div>
 </div>
+{% endfor %}
 {% endblock %}
+</div>

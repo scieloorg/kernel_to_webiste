@@ -15,6 +15,10 @@ def index_page(request):
     return render(request, 'index.html', context={})
 
 
+def faq_page(request):
+    return render(request, 'faq.html', context={})
+
+
 @login_required(login_url='login')
 def user_profile_page(request):
     return render(request, 'core/user_profile.html', context={})

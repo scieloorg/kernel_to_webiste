@@ -43,6 +43,17 @@ django-admin makemessages -l es
 django-admin compilemessages
 ```
 
+## Populating database
+```shell
+# Add content to the main tables
+python manage.py loaddata user &
+python manage.py loaddata group &
+python manage.py loaddata document_file &
+python manage.py loaddata document &
+python manage.py loaddata package &
+python manage.py loaddata journal &
+```
+
 ## Usage
 After following the installing and running instructions, the application must be accessible through the address http://127.0.0.1:8000.
 

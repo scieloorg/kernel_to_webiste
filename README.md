@@ -1,5 +1,11 @@
 # SPF
 
+## Dependencies
+```shell
+gettext
+python 3.9
+```
+
 ## Installing
 _Developer environment_
 ```shell

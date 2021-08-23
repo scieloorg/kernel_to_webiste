@@ -1,16 +1,22 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.db.models import query
+from django.template import context
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic.list import ListView
 
-from .models import Document, Journal, Package
+from dsm import ingress
+import os
+
+from .models import Document, Package
+from .models import *
 from .forms import CreateUserForm, UpdateUserForm
 from .decorators import unauthenticated_user, allowed_users
+
 
 
 def index_page(request):
@@ -86,6 +92,39 @@ def user_add_page(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
+@login_required(login_url='login')
+def journal_list_page(request):
+    journal_list = Journal.objects.all()
+    return render(request, 'core/journal_list.html', context={'journal_list': journal_list})
+
+
+@login_required(login_url='login')
+def article_list_page(request):
+    article_list = {}
+
+    return render(request, 'core/article_list.html', context={'article_list': article_list})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_new_content'])
+def package_upload_page(request):
+    pkg_path = request.POST.get('package_file')
+    pkg_path = os.path.join('/home/rafael/Downloads/packages/', pkg_path)
+    ingress_results = ingress.upload_package(pkg_path)
+    if len(ingress_results['errors']) > 0:
+        messages.error(request, _('Errors ocurred: %s') % ingress_results['errors'])
+    else:
+        messages.success(request, _('Package %s was added') % ingress_results['docs'])
+    return redirect('user_dashboard')
+
+
+@login_required(login_url='login')
+def package_search_results_page(request):
+    pid_v3 = request.GET.get('pid')
+    package_uri_results = ingress.get_package_uri_by_pid(pid_v3)
+    return render(request, 'core/package_search_results.html', context={'pid': pid_v3, 'pkg_url': package_uri_results['doc_pkg']})
 
 
 class DepositedPackagesByUserListView(LoginRequiredMixin, generic.ListView):

@@ -9,12 +9,12 @@ SciELO Publishing Framework - {% trans 'Dashboard' %}
 <div class="row">
     <h1 class="h4 pt-5">{% trans 'Dashboard' %}</h1>
     <div class="col-sm-5 mb-3">
-        <div class="card">
+        <div class="card my-3">
             <div class="card-header">
                 {% trans 'Search documents' %}
             </div>
             <div class="card-body">
-                <form class="bg-white form-user" method="GET" action="{% url 'search_results' %}">
+                <form class="bg-white form-user" method="GET" action="{% url 'user_package_search_results' %}">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="pid" class="form-label">{% trans 'Document identifier' %}</label>
@@ -24,9 +24,21 @@ SciELO Publishing Framework - {% trans 'Dashboard' %}
                 </form>
             </div>
         </div>
+        <div class="card my-3">
+            <div class="card-body">
+                <form class="bg-white form-user" method="POST" action="package/upload">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="package_file" class="form-label">{% trans 'Package upload' %}</label>
+                        <input class="form-control" type="file" name="package_file" id="package_file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">{% trans 'Upload package' %}</button>
+                </form>
+            </div>
+        </div>
     </div>
     <div class="col-sm-7">
-        <div class="card mb-3">
+        <div class="card my-3">
             <div class="card-header">{% trans 'User profile' %}</div>
             <div class="card-body">
                 <ul class="list-unstyled">

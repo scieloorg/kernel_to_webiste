@@ -110,14 +110,17 @@ def article_list_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_new_content'])
 def package_upload_page(request):
-    pkg_path = request.POST.get('package_file')
-    pkg_path = os.path.join('/home/rafael/Downloads/packages/', pkg_path)
-    ingress_results = ingress.upload_package(pkg_path)
-    if len(ingress_results['errors']) > 0:
-        messages.error(request, _('Errors ocurred: %s') % ingress_results['errors'])
-    else:
-        messages.success(request, _('Package %s was added') % ingress_results['docs'])
-    return redirect('user_dashboard')
+    context = {}
+    if request.method == 'POST':
+        pkg_path = request.POST.get('package_file')
+        pkg_path = os.path.join('/home/rafaeljpd/Downloads/packages/', pkg_path)
+        ingress_results = upload_package(pkg_path)
+        if len(ingress_results['errors']) > 0:
+            messages.error(request, _('Errors ocurred: %s') % ingress_results['errors'])
+        else:
+            messages.success(request, _('Package %s was added') % ingress_results['docs'])
+
+    return render(request, 'core/user_package_upload.html', context=context)
 
 
 @login_required(login_url='login')

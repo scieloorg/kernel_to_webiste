@@ -11,7 +11,7 @@ SciELO Publishing Framework - {% trans 'Download Package' %}
     <div class="col-sm-5 mb-3">
         <div class="card my-3">
             <div class="card-header">
-                {% trans 'Download package' %}
+                {% trans 'Search package' %}
             </div>
             <div class="card-body">
                 <form class="bg-white form-user" method="GET" action="{% url 'user_package_download' %}">
@@ -26,8 +26,8 @@ SciELO Publishing Framework - {% trans 'Download Package' %}
         </div>
     </div>
     <div>
-    <h2 class="h4">{% trans 'Results' %}</h2>
     {% if pkgs %}
+        <h2 class="h4">{% trans 'Results for document' %} <strong>{{ pid }}</strong></h2>
         <table class="table table-bordered">
             <thead>
             <tr>

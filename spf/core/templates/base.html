@@ -28,12 +28,12 @@
                 <li class="nav-item">
                     <a class="nav-link m-1" href="{% url 'package_list' %}">{% trans 'All packages' %}</a>
                 </li>
-                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link m-1" href="{% url 'journal_list' %}">{% trans 'Journals' %}</a>
                 </li>
+                {% endif %}
                 <li class="nav-item">
-                    <a class="nav-link disabled m-1" href="">FAQ</a>
+                    <a class="nav-link m-1" href="{% url 'faq' %}">FAQ</a>
                 </li>
             </ul>
             <ul class="navbar-nav">

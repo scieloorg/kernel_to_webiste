@@ -1,5 +1,11 @@
 # SPF
 
+## Dependencies
+```shell
+gettext
+python 3.9
+```
+
 ## Installing
 _Developer environment_
 ```shell
@@ -41,6 +47,17 @@ django-admin makemessages -l es
 
 # Compile the translated strings
 django-admin compilemessages
+```
+
+## Populating database
+```shell
+# Add content to the main tables
+python manage.py loaddata user &
+python manage.py loaddata group &
+python manage.py loaddata document_file &
+python manage.py loaddata document &
+python manage.py loaddata package &
+python manage.py loaddata journal &
 ```
 
 ## Usage

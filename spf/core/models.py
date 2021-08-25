@@ -21,6 +21,7 @@ class Package(models.Model):
 
 class Document(models.Model):
     name = models.CharField(max_length=200)
+    pid = models.CharField(max_length=200)
     package = models.ForeignKey(Package, on_delete=models.CASCADE)
     journal = models.ForeignKey(Journal, on_delete=models.CASCADE)
 

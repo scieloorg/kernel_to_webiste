@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Recent Activities' %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <h1 class="h4 pt-5">{% trans 'Recent activities' %}</h1>
+    <div class="col-sm-5 mb-3">
+        <div class="card my-3">
+            <div class="card-header">{% trans 'Recent activities' %}</div>
+            <div class="card-body">
+                <table class="table table-striped table-hover table-borderless">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">{% trans 'Action' %}</th>
+                            <th scope="col">{% trans 'Timestamp' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>a1</td>
+                            <td>b1</td>
+                            <td>c1</td>
+                        </tr>
+                        <tr>
+                            <td>a2</td>
+                            <td>b2</td>
+                            <td>c2</td>
+                        </tr>
+                        <tr>
+                            <td>a3</td>
+                            <td>b3</td>
+                            <td>c3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% for message in messages %}
+        <div class="d-flex justify-content-center">
+            <div class="alert alert-warning" role="alert">
+                {{ message }}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+</div>

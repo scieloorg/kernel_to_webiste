@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 from django.views import generic
 from django.views.generic.list import ListView
 
-from dsm import ingress
+from dsm.ingress import get_package_uri_by_pid, upload_package
 import os
 
 from .models import Document, Package

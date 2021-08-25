@@ -124,10 +124,14 @@ def package_upload_page(request):
 
 
 @login_required(login_url='login')
-def package_search_results_page(request):
-    pid_v3 = request.GET.get('pid')
-    package_uri_results = ingress.get_package_uri_by_pid(pid_v3)
-    return render(request, 'core/package_search_results.html', context={'pid': pid_v3, 'pkg_url': package_uri_results['doc_pkg']})
+def package_download_page(request):
+    pid = request.GET.get('pid')
+    package_uri_results = {'pid': pid, 'doc_pkg': []}
+    if pid:
+        package_uri_results = get_package_uri_by_pid(pid)
+        if len(package_uri_results['doc_pkg']) == 0:
+            messages.warning(request, _('No packages were found for document %s') % pid)
+    return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
 
 
 class DepositedPackagesByUserListView(LoginRequiredMixin, generic.ListView):

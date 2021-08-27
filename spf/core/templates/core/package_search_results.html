@@ -10,7 +10,7 @@ SciELO Publishing Framework - {% trans 'Package' %}
     <h1 class="h4">{% trans 'Document Package' %}</h1>
     <div class="m-3">
         <div class="d-flex justify-content-left">
-            <div class="alert alert-info">{% trans 'Document identifier ' %}<strong>{{ pid }}</strong></div>
+            <div class="{{ message.tags }}">{% trans 'Document identifier ' %}<strong>{{ pid }}</strong></div>
         </div>
         {% for pkg in pkg_url %}
             <a href="{{ pkg.uri }}">{{ pkg.name }}</a>

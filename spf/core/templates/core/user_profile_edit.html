@@ -32,7 +32,7 @@ SciELO Publishing Framework - {% trans 'Edit profile' %}
             <button type="submit" class="btn btn-primary">{% trans 'Update user' %}</button>
         </form>
         {% for message in messages %}
-        <div class="alert alert-primary" role="alert">
+        <div class="{{ message.tags }}" role="alert">
             {{ message }}
         </div>
         {% endfor %}

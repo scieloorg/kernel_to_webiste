@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load spf_extras %}
 
 {% block title %}
 SciELO Publishing Framework - {% trans 'Download Package' %}
@@ -45,8 +46,9 @@ SciELO Publishing Framework - {% trans 'Download Package' %}
                 <td>
                     <a href="{{ pkg.uri }}" class="link">{{ pkg.uri }}</a>
                 </td>
-                <td>{{ pkg.created }}</td>
-                <td>{{ pkg.updated }}</td>
+                <td>
+                    {{ pkg.created|to_datetime|date:'Y-m-d H:i' }}</td>
+                <td>{{ pkg.updated|date:'Y-m-d H:i' }}</td>
             {% endfor %}
             </tbody>
         </table>

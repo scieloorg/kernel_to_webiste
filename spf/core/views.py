@@ -1,22 +1,20 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.db.models import query
-from django.template import context
+from django.core.files.storage import FileSystemStorage
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
 from django.views import generic
-from django.views.generic.list import ListView
 
 from dsm.ingress import get_package_uri_by_pid, upload_package
-import os
+from spf import settings
 
-from .models import Document, Package
 from .models import *
 from .forms import CreateUserForm, UpdateUserForm
 from .decorators import unauthenticated_user, allowed_users
 
+import os
 
 
 def index_page(request):

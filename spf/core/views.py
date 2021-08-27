@@ -37,7 +37,9 @@ def user_profile_edit_page(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, _('User %s was updated') % username)
+            messages.success(request,
+                             _('User %s was updated') % username,
+                             extra_tags='alert alert-success')
             return redirect('user_dashboard')
     return render(request, 'core/user_profile_edit.html', context={})
 
@@ -57,7 +59,9 @@ def account_register_page(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, _('User %s was created') % username)
+            messages.success(request,
+                             _('User %s was created') % username,
+                             extra_tags='alert alert-success')
             return redirect('login')
 
     context = {'form': form}
@@ -76,7 +80,9 @@ def account_login_page(request):
             login(request, user)
             return redirect('index')
         else:
-            messages.info(request, _('Incorrect username or password'))
+            messages.error(request,
+                          _('Incorrect username or password'),
+                          extra_tags='alert alert-danger')
 
     return render(request, 'accounts/login.html', context={})
 
@@ -128,7 +134,9 @@ def package_download_page(request):
     if pid:
         package_uri_results = get_package_uri_by_pid(pid)
         if len(package_uri_results['doc_pkg']) == 0:
-            messages.warning(request, _('No packages were found for document %s') % pid)
+            messages.warning(request,
+                             _('No packages were found for document %s') % pid,
+                             extra_tags='alert alert-warning')
     return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
 
 

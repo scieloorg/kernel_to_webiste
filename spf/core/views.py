@@ -112,17 +112,40 @@ def article_list_page(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_new_content'])
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def package_upload_page(request):
     context = {}
     if request.method == 'POST':
-        pkg_path = request.POST.get('package_file')
-        pkg_path = os.path.join('/home/rafaeljpd/Downloads/packages/', pkg_path)
-        ingress_results = upload_package(pkg_path)
-        if len(ingress_results['errors']) > 0:
-            messages.error(request, _('Errors ocurred: %s') % ingress_results['errors'])
-        else:
-            messages.success(request, _('Package %s was added') % ingress_results['docs'])
+        file_input = request.FILES.get('package_file')
+
+        if file_input:
+            fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
+
+            # envia arquivo para diretório temporário
+            pkg_name = fs.save(file_input.name, file_input)
+
+            # envia arquivo ao MinIO
+            try:
+                ingress_results = upload_package(os.path.join(fs.base_location, pkg_name))
+
+                if len(ingress_results['errors']) > 0:
+                    messages.error(request,
+                                   _('Errors ocurred: %s') % ingress_results['errors'],
+                                   extra_tags='alert alert-danger')
+                else:
+                    for d in ingress_results['docs']:
+                        messages.success(request,
+                                         _('Package (%s, %s) was added')
+                                         % (d['name'], d['id']),
+                                         extra_tags='alert alert-success')
+
+            except ValueError:
+                messages.error(request,
+                               _('%s has not a valid format. Please provide a zip file.') % pkg_name,
+                               extra_tags='alert alert-danger')
+
+            # remove arquivo de diretório temporário
+            fs.delete(pkg_name)
 
     return render(request, 'core/user_package_upload.html', context=context)
 

@@ -26,7 +26,7 @@ SciELO Publishing Framework - {% trans 'Login' %}
 </form>
 {% for message in messages %}
 <div class="d-flex justify-content-center">
-    <div class="alert alert-warning" role="alert">
+    <div class="{{ message.tags }}" role="alert">
         {{ message }}
     </div>
 </div>

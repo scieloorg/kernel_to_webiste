@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load spf_extras %}
 
 {% block title %}
 SciELO Publishing Framework - {% trans 'Dashboard' %}
@@ -9,12 +10,12 @@ SciELO Publishing Framework - {% trans 'Dashboard' %}
 <div class="row">
     <h1 class="h4 pt-5">{% trans 'Dashboard' %}</h1>
     <div class="col-sm-5 mb-3">
-        <div class="card">
+        <div class="card my-3">
             <div class="card-header">
-                {% trans 'Search documents' %}
+                {% trans 'Search package' %}
             </div>
             <div class="card-body">
-                <form class="bg-white form-user" method="GET" action="{% url 'search_results' %}">
+                <form class="bg-white form-user" method="GET" action="{% url 'user_package_download' %}">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="pid" class="form-label">{% trans 'Document identifier' %}</label>
@@ -24,9 +25,54 @@ SciELO Publishing Framework - {% trans 'Dashboard' %}
                 </form>
             </div>
         </div>
+        {% if user|has_group:"manager" or user|has_group:"operator_ingress" %}
+        <div class="card my-3">
+            <div class="card-body">
+                <form class="bg-white form-user" method="POST" enctype="multipart/form-data" action="package/upload">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="package_file" class="form-label">{% trans 'Upload package' %}</label>
+                        <input class="form-control" type="file" name="package_file" id="package_file">
+                    </div>
+                    <button type="submit" class="btn btn-primary">{% trans 'Upload' %}</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
     </div>
     <div class="col-sm-7">
-        <div class="card mb-3">
+        <div class="card my-3">
+            <div class="card-header">{% trans 'Recent activities' %}</div>
+            <div class="card-body">
+                <table class="table table-striped table-hover table-borderless">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">{% trans 'Action' %}</th>
+                            <th scope="col">{% trans 'Timestamp' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>a1</td>
+                            <td>b1</td>
+                            <td>c1</td>
+                        </tr>
+                        <tr>
+                            <td>a2</td>
+                            <td>b2</td>
+                            <td>c2</td>
+                        </tr>
+                        <tr>
+                            <td>a3</td>
+                            <td>b3</td>
+                            <td>c3</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card my-3">
             <div class="card-header">{% trans 'User profile' %}</div>
             <div class="card-body">
                 <ul class="list-unstyled">
@@ -46,7 +92,7 @@ SciELO Publishing Framework - {% trans 'Dashboard' %}
     </div>
 {% for message in messages %}
 <div class="d-flex justify-content-center">
-    <div class="alert alert-warning" role="alert">
+    <div class="{{ message.tags }}" role="alert">
         {{ message }}
     </div>
 </div>

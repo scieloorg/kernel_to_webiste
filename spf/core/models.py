@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from opac_schema.v1.models import *
+from opac_schema.v2.models import *
+
 
 class Journal(models.Model):
     print_issn = models.CharField(max_length=9)

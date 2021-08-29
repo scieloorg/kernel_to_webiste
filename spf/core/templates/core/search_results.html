@@ -35,7 +35,7 @@ SciELO Publishing Framework - {% trans 'Documents' %}
         </table>
         {% else %}
         <div class="d-flex justify-content-left">
-            <div class="alert alert-danger" role="alert">
+            <div class="{{ message.tags }}" role="alert">
                 {% trans 'No results' %}
             </div>
         </div>

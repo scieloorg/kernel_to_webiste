@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load spf_extras %}
 
 {% block title %}
 SciELO Publishing Framework - Home
@@ -8,5 +9,19 @@ SciELO Publishing Framework - Home
 {% block content %}
 <div class="row justify-content-center pt-5">
     <h1 class="h4">{% trans 'Home' %}</h1>
+    {% if user.is_authenticated %}
+        <div>
+            <ul>
+                <li>
+                    <a href="{% url 'user_package_download' %}">{% trans 'Search and download packages' %}</a>
+                </li>
+                {% if user|has_group:"manager" or user|has_group:"operator_ingress" %}
+                    <li>
+                        <a href="{% url 'user_package_upload' %}">{% trans 'Upload packages' %}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

@@ -2,15 +2,19 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.db.models import query
+from django.core.files.storage import FileSystemStorage
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
 from django.views import generic
-from django.views.generic.list import ListView
 
-from .models import Document, Journal, Package
+from dsm.ingress import get_package_uri_by_pid, upload_package
+from spf import settings
+
+from .models import *
 from .forms import CreateUserForm, UpdateUserForm
 from .decorators import unauthenticated_user, allowed_users
+
+import os
 
 
 def index_page(request):
@@ -33,7 +37,9 @@ def user_profile_edit_page(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, _('User %s was updated') % username)
+            messages.success(request,
+                             _('User %s was updated') % username,
+                             extra_tags='alert alert-success')
             return redirect('user_dashboard')
     return render(request, 'core/user_profile_edit.html', context={})
 
@@ -53,7 +59,9 @@ def account_register_page(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, _('User %s was created') % username)
+            messages.success(request,
+                             _('User %s was created') % username,
+                             extra_tags='alert alert-success')
             return redirect('login')
 
     context = {'form': form}
@@ -72,7 +80,9 @@ def account_login_page(request):
             login(request, user)
             return redirect('index')
         else:
-            messages.info(request, _('Incorrect username or password'))
+            messages.error(request,
+                          _('Incorrect username or password'),
+                          extra_tags='alert alert-danger')
 
     return render(request, 'accounts/login.html', context={})
 
@@ -86,6 +96,71 @@ def user_add_page(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+
+@login_required(login_url='login')
+def journal_list_page(request):
+    journal_list = Journal.objects.all()
+    return render(request, 'core/journal_list.html', context={'journal_list': journal_list})
+
+
+@login_required(login_url='login')
+def article_list_page(request):
+    article_list = {}
+
+    return render(request, 'core/article_list.html', context={'article_list': article_list})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+def package_upload_page(request):
+    context = {}
+    if request.method == 'POST':
+        file_input = request.FILES.get('package_file')
+
+        if file_input:
+            fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
+
+            # envia arquivo para diretório temporário
+            pkg_name = fs.save(file_input.name, file_input)
+
+            # envia arquivo ao MinIO
+            try:
+                ingress_results = upload_package(os.path.join(fs.base_location, pkg_name))
+
+                if len(ingress_results['errors']) > 0:
+                    messages.error(request,
+                                   _('Errors ocurred: %s') % ingress_results['errors'],
+                                   extra_tags='alert alert-danger')
+                else:
+                    for d in ingress_results['docs']:
+                        messages.success(request,
+                                         _('Package (%s, %s) was added')
+                                         % (d['name'], d['id']),
+                                         extra_tags='alert alert-success')
+
+            except ValueError:
+                messages.error(request,
+                               _('%s has not a valid format. Please provide a zip file.') % pkg_name,
+                               extra_tags='alert alert-danger')
+
+            # remove arquivo de diretório temporário
+            fs.delete(pkg_name)
+
+    return render(request, 'core/user_package_upload.html', context=context)
+
+
+@login_required(login_url='login')
+def package_download_page(request):
+    pid = request.GET.get('pid')
+    package_uri_results = {'pid': pid, 'doc_pkg': []}
+    if pid:
+        package_uri_results = get_package_uri_by_pid(pid)
+        if len(package_uri_results['doc_pkg']) == 0:
+            messages.warning(request,
+                             _('No packages were found for document %s') % pid,
+                             extra_tags='alert alert-warning')
+    return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
 
 
 class DepositedPackagesByUserListView(LoginRequiredMixin, generic.ListView):

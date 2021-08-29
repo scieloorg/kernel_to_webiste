@@ -1,13 +1,16 @@
 # SPF
 
 ## Dependencies
+Be sure that you have the necessary operational system dependencies:
 ```shell
 gettext
 python 3.9
 ```
 
-## Installing
-_Developer environment_
+
+## Installation
+
+_Create a virtual environment and install the application dependencies_
 ```shell
 # Create a virtual environment
 virtualenv -p python3.9 .venv
@@ -17,7 +20,13 @@ source .venv/bin/activated
 
 # Install dependencies
 pip install -r requirements.txt
+```
 
+## Set the environment variables (see config.ini.template)
+Set the necessary environment variables under a developer machine through the following command: `export $(cat config.ini.template | xargs) `
+
+## Prepare and run the application
+```shell
 # Access the spf root directory
 cd spf
 
@@ -29,12 +38,27 @@ python manage.py migrate
 
 # Create the superuser (take note of the credentials)
 python manage.py createsuperuser
+```
 
+_Add example data to the application database_
+```shell
+# Add content to the application tables
+python manage.py loaddata group
+python manage.py loaddata user
+python manage.py loaddata journal
+python manage.py loaddata package
+python manage.py loaddata document
+python manage.py loaddata document_file
+```
+
+_Run the application_
+```shell
 # Start the application
 python manage.py runserver
 ```
 
-_Translation_
+
+## How to translate the interface content to other languages
 ```shell
 # Access the core project directory
 cd core
@@ -49,16 +73,6 @@ django-admin makemessages -l es
 django-admin compilemessages
 ```
 
-## Populating database
-```shell
-# Add content to the main tables
-python manage.py loaddata user &
-python manage.py loaddata group &
-python manage.py loaddata document_file &
-python manage.py loaddata document &
-python manage.py loaddata package &
-python manage.py loaddata journal &
-```
 
 ## Usage
 After following the installing and running instructions, the application must be accessible through the address http://127.0.0.1:8000.

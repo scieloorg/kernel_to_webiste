@@ -114,8 +114,13 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def journal_list_page(request):
-    journal_list = Journal.objects.all()
-    return render(request, 'core/journal_list.html', context={'journal_list': journal_list})
+    journal_list = OPACJournal.objects.all()
+
+    paginator = Paginator(journal_list, 25)
+    page_number = request.GET.get('page')
+    journal_obj = paginator.get_page(page_number)
+
+    return render(request, 'core/journal_list.html', context={'journal_obj': journal_obj})
 
 
 @login_required(login_url='login')

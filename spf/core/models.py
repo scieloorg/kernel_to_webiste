@@ -1,50 +1,50 @@
+from enum import Enum
 from django.db import models
 from django.contrib.auth.models import User
 
 from opac_schema.v1.models import *
-from opac_schema.v2.models import *
 
 
-class Journal(models.Model):
-    print_issn = models.CharField(max_length=9)
-    online_issn = models.CharField(max_length=9)
-    title = models.CharField(max_length=255)
-    abbreviated_title = models.CharField(max_length=255)
+class EventName(Enum):
+    # nomes de eventos associados à busca e ao envio de pacotes
+    RETRIEVE_PACKAGE_DATA = "RETRIVE_PACKAGE_DATA"
+    UPLOAD_NEW_PACKAGE = "UPLOAD_NEW_PACKAGE"
+    UPLOAD_EXISTING_PACKAGE = "UPLOAD_EXISTING_PACKAGE"
 
-    def __str__(self):
-        return self.title
+    # nomes de eventos associados a validação
+    START_VALIDATION = "START_VALIDATION"
+    FINALIZE_VALIDATION = "FINALIZE_VALIDATION"
 
 
-class Package(models.Model):
+class EventStatus(Enum):
+    # estado de um evento
+    INITIATED = "INITIATED"
+    PENDING = "PENDING"
+    COMPLETED = "COMPLETED"
+    FAILED = "FAILED"
+
+
+class Event(models.Model):
+    # quem realiza o evento
+    actor = models.ForeignKey(User, on_delete=models.PROTECT)
+
+    # momento em que o evento foi iniciado
+    datetime = models.DateTimeField(auto_now=True)
+
+    # nome do evento
     name = models.CharField(max_length=200)
-    deposit_date = models.DateTimeField(auto_now=True)
-    state = models.IntegerField(default=0)
-    depositor = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
+    # estado do evento (iniciado, realizando, concluído)
+    status = models.CharField(max_length=100, default=EventStatus.INITIATED)
 
-class Document(models.Model):
-    name = models.CharField(max_length=200)
-    pid = models.CharField(max_length=200)
-    package = models.ForeignKey(Package, on_delete=models.CASCADE)
-    journal = models.ForeignKey(Journal, on_delete=models.CASCADE)
-
-
-class DocumentFile(models.Model):
-    name = models.CharField(max_length=200)
-    document = models.ForeignKey(Document, on_delete=models.CASCADE)
-    file = models.FileField()
-
-
-class DocumentAsset(models.Model):
-    name = models.CharField(max_length=200)
-    document = models.ForeignKey(Document, on_delete=models.CASCADE)
-    file = models.FileField()
+    # informação relacionada ao evento
+    annotation = models.CharField(max_length=200, null=True)
 
 
 class ValidationSchema(models.Model):
-    journal = models.ForeignKey(Journal, on_delete=models.PROTECT)
+    schema_name = models.CharField(max_length=200, null=True)
 
 
 class Validation(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, null=True)
     validation_schema = models.ForeignKey(ValidationSchema, on_delete=models.PROTECT)

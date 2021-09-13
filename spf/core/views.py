@@ -61,8 +61,13 @@ def user_dashboard_page(request):
 
 @login_required(login_url='login')
 def user_activity_list_page(request):
-    events = Event.objects.filter(actor=request.user)
-    return render(request, 'core/user_activity_list.html', context={'events': events})
+    event_list = Event.objects.filter(actor=request.user).order_by('-datetime')
+
+    paginator = Paginator(event_list, 25)
+    page_number = request.GET.get('page')
+    event_obj = paginator.get_page(page_number)
+
+    return render(request, 'core/user_activity_list.html', context={'event_obj': event_obj})
 
 
 @unauthenticated_user

@@ -131,7 +131,7 @@ msgstr "Atividades"
 #, fuzzy
 #| msgid "Articles"
 msgid "Articles Files"
-msgstr "Artigos"
+msgstr "Arquivos de Artigos"
 
 #: templates/base.html:32
 msgid "Packages"
@@ -161,7 +161,7 @@ msgstr "Sair"
 #, fuzzy
 #| msgid "Articles"
 msgid "Articles files"
-msgstr "Artigos"
+msgstr "Arquivos de artigos"
 
 #: templates/core/article_files_list.html:17
 #: templates/core/deposited_package_list.html:18
@@ -407,9 +407,7 @@ msgstr "Pacote (%(name)s, %(id)s) foi adicionado"
 #: views.py:199
 #, python-format
 msgid "%s does not have a valid format. Please provide a zip file."
-msgstr ""
-"%s não possui um formato válido. Por favor, forneça um arquivo em formato "
-"zip."
+msgstr "%s não possui um formato válido. Por favor, forneça um arquivo em formato zip."
 
 #: views.py:231
 #, python-format

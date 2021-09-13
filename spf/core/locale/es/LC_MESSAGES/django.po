@@ -127,11 +127,11 @@ msgstr "Ya tengo una cuenta"
 #: templates/base.html:26 templates/core/user_activity_list.html:5
 #: templates/core/user_activity_list.html:10
 msgid "Activities"
-msgstr ""
+msgstr "Actividades"
 
 #: templates/base.html:29
 msgid "Articles Files"
-msgstr ""
+msgstr "Archivos de Artículos"
 
 #: templates/base.html:32
 msgid "Packages"
@@ -159,7 +159,7 @@ msgstr "Salir"
 #: templates/core/article_files_list.html:5
 #: templates/core/article_files_list.html:9
 msgid "Articles files"
-msgstr ""
+msgstr "Archivos de artículos"
 
 #: templates/core/article_files_list.html:17
 #: templates/core/deposited_package_list.html:18
@@ -233,7 +233,7 @@ msgstr "Título"
 
 #: templates/core/journal_list.html:20
 msgid "Acronym"
-msgstr ""
+msgstr "Acrónimo"
 
 #: templates/core/journal_list.html:21
 msgid "Print ISSN"
@@ -287,11 +287,11 @@ msgstr "No hay resultados"
 
 #: templates/core/user_activity_list.html:17
 msgid "Activity"
-msgstr ""
+msgstr "Actividad"
 
 #: templates/core/user_activity_list.html:18
 msgid "Annotation"
-msgstr ""
+msgstr "Anotación"
 
 #: templates/core/user_activity_list.html:19
 #, fuzzy
@@ -301,7 +301,7 @@ msgstr "Estado"
 
 #: templates/core/user_activity_list.html:20
 msgid "Timestamp"
-msgstr ""
+msgstr "Fecha y hora"
 
 #: templates/core/user_dashboard.html:15
 #: templates/core/user_package_download.html:15
@@ -330,7 +330,7 @@ msgstr "Todos los paquetes"
 #: templates/core/user_dashboard.html:37
 #: templates/core/user_package_upload.html:20
 msgid "Upload"
-msgstr ""
+msgstr "Cargar"
 
 #: templates/core/user_dashboard.html:45
 #, fuzzy
@@ -414,7 +414,7 @@ msgstr "Inicio"
 
 #: templates/index.html:16
 msgid "Search and download packages"
-msgstr ""
+msgstr "Buscar y descargar paquetes"
 
 #: templates/index.html:20
 #, fuzzy
@@ -439,22 +439,22 @@ msgstr "Nombre de usuario o contraseña incorrecta."
 #: views.py:187
 #, python-format
 msgid "Errors ocurred: %s"
-msgstr ""
+msgstr "Ocurrieron errores: %s"
 
 #: views.py:193
 #, python-format
 msgid "Package (%(name)s, %(id)s) was added"
-msgstr ""
+msgstr "Se agregó el paquete (%(name)s, %(id)s)"
 
 #: views.py:199
 #, python-format
 msgid "%s does not have a valid format. Please provide a zip file."
-msgstr ""
+msgstr "%s no tiene un formato válido. Por favor, proporcione un archivo zip."
 
 #: views.py:231
 #, python-format
 msgid "No packages were found for document %s"
-msgstr ""
+msgstr "No se encontraron paquetes para el documento %s"
 
 msgid "EventName.RETRIEVE_PACKAGE_DATA"
 msgstr "Paquete buscado"

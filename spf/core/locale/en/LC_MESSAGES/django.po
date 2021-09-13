@@ -393,7 +393,7 @@ msgstr ""
 
 #: views.py:199
 #, python-format
-msgid "%s has not a valid format. Please provide a zip file."
+msgid "%s does not have a valid format. Please provide a zip file."
 msgstr ""
 
 #: views.py:231

@@ -190,7 +190,7 @@ def package_upload_page(request):
                     ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.COMPLETED})
             except ValueError:
                 messages.error(request,
-                               _('%s has not a valid format. Please provide a zip file.') % pkg_name,
+                               _('%s does not have a valid format. Please provide a zip file.') % pkg_name,
                                extra_tags='alert alert-danger')
                 ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.FAILED})
 

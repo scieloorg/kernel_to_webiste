@@ -406,7 +406,7 @@ msgstr "Pacote (%(name)s, %(id)s) foi adicionado"
 
 #: views.py:199
 #, python-format
-msgid "%s has not a valid format. Please provide a zip file."
+msgid "%s does not have a valid format. Please provide a zip file."
 msgstr ""
 "%s não possui um formato válido. Por favor, forneça um arquivo em formato "
 "zip."

@@ -200,11 +200,36 @@ def package_download_page(request):
     pid = request.GET.get('pid')
     package_uri_results = {'pid': pid, 'doc_pkg': []}
     if pid:
+        ev = Event()
+        ev.actor = request.user
+        ev.annotation = str({'pid': pid})
+        ev.name = EventName.RETRIEVE_PACKAGE_DATA
+        ev.save()
+
         package_uri_results = get_package_uri_by_pid(pid)
-        if len(package_uri_results['doc_pkg']) == 0:
-            messages.warning(request,
-                             _('No packages were found for document %s') % pid,
-                             extra_tags='alert alert-warning')
+
+        if len(package_uri_results['errors']) > 0:
+            for e in package_uri_results['errors']:
+                messages.error(
+                    request,
+                    e,
+                    extra_tags='alert alert-danger')
+
+            ev.status = EventStatus.FAILED
+            ev.save()
+
+        elif len(package_uri_results['doc_pkg']) == 0:
+            messages.warning(
+                request,
+                _('No packages were found for document %s') % pid,
+                extra_tags='alert alert-warning')
+            ev.status = EventStatus.COMPLETED
+            ev.save()
+
+        if len(package_uri_results['doc_pkg']) > 0:
+            ev.status = EventStatus.COMPLETED
+            ev.save()
+
     return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
 
 

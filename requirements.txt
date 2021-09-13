@@ -6,6 +6,6 @@ python-dateutil==2.8.2
 sqlparse==0.4.1
 lxml==4.6.3
 minio==7.1.0
--e git+https://github.com/rafaelpezzuto/opac_schema.git#egg=opac_schema
--e git+https://github.com/rafaelpezzuto/dsm.git#egg=dsm
--e git+https://github.com/rafaelpezzuto/scielo_v3_manager.git#egg=scielo_v3_manager
+-e git+https://github.com/scieloorg/opac_schema.git#egg=opac_schema
+-e git+https://github.com/scieloorg/dsm.git#egg=dsm
+-e git+https://github.com/scieloorg/scielo_v3_manager.git#egg=scielo_v3_manager

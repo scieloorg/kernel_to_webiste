@@ -135,6 +135,17 @@ def deposited_package_list_page(request):
     return render(request, 'core/deposited_package_list.html', context={'deposited_package_obj': deposited_package_obj})
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+def article_files_list_page(request):
+    article_files_list = ArticleFiles.objects.all()
+
+    paginator = Paginator(article_files_list, 25)
+    page_number = request.GET.get('page')
+    article_files_obj = paginator.get_page(page_number)
+
+    return render(request, 'core/article_files_list.html', context={'article_files_obj': article_files_obj})
+
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])

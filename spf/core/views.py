@@ -154,6 +154,12 @@ def package_upload_page(request):
     if request.method == 'POST':
         file_input = request.FILES.get('package_file')
 
+        ev = Event()
+        ev.actor = request.user
+        ev.annotation = str({'file_name': file_input.name})
+        ev.name = EventName.UPLOAD_EXISTING_PACKAGE
+        ev.save()
+
         if file_input:
             fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
 
@@ -171,14 +177,17 @@ def package_upload_page(request):
                 else:
                     for d in ingress_results['docs']:
                         messages.success(request,
-                                         _('Package (%s, %s) was added')
-                                         % (d['name'], d['id']),
+                                         _('Package (%(name)s, %(id)s) was added')
+                                         % {'name': d['name'], 'id': d['id']},
                                          extra_tags='alert alert-success')
-
+                    ev.status = EventStatus.COMPLETED
+                    ev.save()
             except ValueError:
                 messages.error(request,
                                _('%s has not a valid format. Please provide a zip file.') % pkg_name,
                                extra_tags='alert alert-danger')
+                ev.status = EventStatus.FAILED
+                ev.save()
 
             # remove arquivo de diretório temporário
             fs.delete(pkg_name)

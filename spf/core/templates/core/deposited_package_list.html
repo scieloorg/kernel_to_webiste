@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Deposited Packages' %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-5">
+    <h1 class="h4">{% trans 'Deposited packages' %}</h1>
+    <div class="m-3">
+        {% if deposited_package_obj %}
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">{% trans 'Identifier' %}</th>
+                <th scope="col">{% trans 'File Name' %}</th>
+                <th scope="col">{% trans 'Created' %}</th>
+                <th scope="col">{% trans 'Updated' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for dpkg in deposited_package_obj %}
+            <tr>
+                <th scope="row">{{ deposited_package_obj.start_index|add:forloop.counter0 }}</th>
+                <td>{{ dpkg.id }}</td>
+                <td><a href="{{ dpkg.file.uri }}">{{ dpkg.file.name }}</a></td>
+                <td>{{ dpkg.created|date:'Y-m-d H:i' }}</td>
+                <td>{{ dpkg.updated|date:'Y-m-d H:i' }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+            </ul>
+        </table>
+        {% endif %}
+    </div>
+</div>
+
+<nav aria-label="Deposited package navigation">
+    <ul class="pagination justify-content-center">
+        {% if deposited_package_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1">&laquo; First</a>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link"  href="?page={{ deposited_package_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item">
+            <a class="page-link">Page {{ deposited_package_obj.number }} of {{ deposited_package_obj.paginator.num_pages }}</a>
+        </li>
+
+        {% if deposited_package_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ deposited_package_obj.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ deposited_package_obj.paginator.num_pages }}">Last &raquo;</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}

@@ -1,14 +1,22 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.models import Group
 from django.core.files.storage import FileSystemStorage
+from django.core.paginator import Paginator
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
 from django.views import generic
 
 from dsm.ingress import get_package_uri_by_pid, upload_package
 from spf import settings
+
+from opac_schema.v1.models import Journal as OPACJournal
+from opac_schema.v2.models import (
+    ReceivedPackage,
+    ArticleFiles
+)
 
 from .models import *
 from .forms import CreateUserForm, UpdateUserForm
@@ -48,6 +56,12 @@ def user_profile_edit_page(request):
 def user_dashboard_page(request):
     groups = request.user.groups.values_list('name', flat=True)
     return render(request, 'core/user_dashboard.html', context={'groups': groups})
+
+
+@login_required(login_url='login')
+def user_activity_list_page(request):
+    events = Event.objects.filter(actor=request.user)
+    return render(request, 'core/user_activity_list.html', context={'events': events})
 
 
 @unauthenticated_user
@@ -100,15 +114,37 @@ def logout_user(request):
 
 @login_required(login_url='login')
 def journal_list_page(request):
-    journal_list = Journal.objects.all()
-    return render(request, 'core/journal_list.html', context={'journal_list': journal_list})
+    journal_list = OPACJournal.objects.all()
+
+    paginator = Paginator(journal_list, 25)
+    page_number = request.GET.get('page')
+    journal_obj = paginator.get_page(page_number)
+
+    return render(request, 'core/journal_list.html', context={'journal_obj': journal_obj})
 
 
 @login_required(login_url='login')
-def article_list_page(request):
-    article_list = {}
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+def deposited_package_list_page(request):
+    deposited_package_list = ReceivedPackage.objects.all()
 
-    return render(request, 'core/article_list.html', context={'article_list': article_list})
+    paginator = Paginator(deposited_package_list, 25)
+    page_number = request.GET.get('page')
+    deposited_package_obj = paginator.get_page(page_number)
+
+    return render(request, 'core/deposited_package_list.html', context={'deposited_package_obj': deposited_package_obj})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+def article_files_list_page(request):
+    article_files_list = ArticleFiles.objects.all()
+
+    paginator = Paginator(article_files_list, 25)
+    page_number = request.GET.get('page')
+    article_files_obj = paginator.get_page(page_number)
+
+    return render(request, 'core/article_files_list.html', context={'article_files_obj': article_files_obj})
 
 
 @login_required(login_url='login')
@@ -117,6 +153,12 @@ def package_upload_page(request):
     context = {}
     if request.method == 'POST':
         file_input = request.FILES.get('package_file')
+
+        ev = Event()
+        ev.actor = request.user
+        ev.annotation = str({'file_name': file_input.name})
+        ev.name = EventName.UPLOAD_EXISTING_PACKAGE
+        ev.save()
 
         if file_input:
             fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
@@ -135,14 +177,17 @@ def package_upload_page(request):
                 else:
                     for d in ingress_results['docs']:
                         messages.success(request,
-                                         _('Package (%s, %s) was added')
-                                         % (d['name'], d['id']),
+                                         _('Package (%(name)s, %(id)s) was added')
+                                         % {'name': d['name'], 'id': d['id']},
                                          extra_tags='alert alert-success')
-
+                    ev.status = EventStatus.COMPLETED
+                    ev.save()
             except ValueError:
                 messages.error(request,
                                _('%s has not a valid format. Please provide a zip file.') % pkg_name,
                                extra_tags='alert alert-danger')
+                ev.status = EventStatus.FAILED
+                ev.save()
 
             # remove arquivo de diretório temporário
             fs.delete(pkg_name)
@@ -155,42 +200,37 @@ def package_download_page(request):
     pid = request.GET.get('pid')
     package_uri_results = {'pid': pid, 'doc_pkg': []}
     if pid:
+        ev = Event()
+        ev.actor = request.user
+        ev.annotation = str({'pid': pid})
+        ev.name = EventName.RETRIEVE_PACKAGE_DATA
+        ev.save()
+
         package_uri_results = get_package_uri_by_pid(pid)
-        if len(package_uri_results['doc_pkg']) == 0:
-            messages.warning(request,
-                             _('No packages were found for document %s') % pid,
-                             extra_tags='alert alert-warning')
+
+        if len(package_uri_results['errors']) > 0:
+            for e in package_uri_results['errors']:
+                messages.error(
+                    request,
+                    e,
+                    extra_tags='alert alert-danger')
+
+            ev.status = EventStatus.FAILED
+            ev.save()
+
+        elif len(package_uri_results['doc_pkg']) == 0:
+            messages.warning(
+                request,
+                _('No packages were found for document %s') % pid,
+                extra_tags='alert alert-warning')
+            ev.status = EventStatus.COMPLETED
+            ev.save()
+
+        if len(package_uri_results['doc_pkg']) > 0:
+            ev.status = EventStatus.COMPLETED
+            ev.save()
+
     return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
-
-
-class DepositedPackagesByUserListView(LoginRequiredMixin, generic.ListView):
-    login_url = 'login'
-    model = Package
-    template_name = 'core/user_package_list.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Package.objects.filter(depositor=self.request.user)
-
-
-class DepositedPackagesListView(LoginRequiredMixin, generic.ListView):
-    login_url = 'login'
-    model = Package
-    template_name = 'core/package_list.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Package.objects.all()
-
-
-class JournalsListView(LoginRequiredMixin, generic.ListView):
-    login_url = 'login'
-    model = Journal
-    template_name = 'core/journal_list.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Journal.objects.all()
 
 
 class SearchResultsView(PermissionRequiredMixin, generic.ListView):

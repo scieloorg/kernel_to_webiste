@@ -42,37 +42,6 @@ SciELO Publishing Framework - {% trans 'Dashboard' %}
     </div>
     <div class="col-sm-7">
         <div class="card my-3">
-            <div class="card-header">{% trans 'Recent activities' %}</div>
-            <div class="card-body">
-                <table class="table table-striped table-hover table-borderless">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">{% trans 'Action' %}</th>
-                            <th scope="col">{% trans 'Timestamp' %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>a1</td>
-                            <td>b1</td>
-                            <td>c1</td>
-                        </tr>
-                        <tr>
-                            <td>a2</td>
-                            <td>b2</td>
-                            <td>c2</td>
-                        </tr>
-                        <tr>
-                            <td>a3</td>
-                            <td>b3</td>
-                            <td>c3</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="card my-3">
             <div class="card-header">{% trans 'User profile' %}</div>
             <div class="card-body">
                 <ul class="list-unstyled">
@@ -90,6 +59,7 @@ SciELO Publishing Framework - {% trans 'Dashboard' %}
             </div>
         </div>
     </div>
+
 {% for message in messages %}
 <div class="d-flex justify-content-center">
     <div class="{{ message.tags }}" role="alert">

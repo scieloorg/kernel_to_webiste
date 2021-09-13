@@ -23,10 +23,13 @@
             <ul class="navbar-nav me-auto">
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link m-1" href="{% url 'user_package_list' %}">{% trans 'My packages' %}</a>
+                    <a class="nav-link m-1" href="{% url 'user_activity_list' %}">{% trans 'Activities' %}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link m-1" href="{% url 'package_list' %}">{% trans 'All packages' %}</a>
+                    <a class="nav-link m-1" href="{% url 'article_files_list' %}">{% trans 'Articles' %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link m-1" href="{% url 'package_list' %}">{% trans 'Packages' %}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link m-1" href="{% url 'journal_list' %}">{% trans 'Journals' %}</a>

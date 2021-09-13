@@ -58,6 +58,12 @@ def user_dashboard_page(request):
     return render(request, 'core/user_dashboard.html', context={'groups': groups})
 
 
+@login_required(login_url='login')
+def user_activity_list_page(request):
+    events = Event.objects.filter(actor=request.user)
+    return render(request, 'core/user_activity_list.html', context={'events': events})
+
+
 @unauthenticated_user
 def account_register_page(request):
     form = CreateUserForm()

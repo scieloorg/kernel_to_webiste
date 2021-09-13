@@ -1,14 +1,22 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.models import Group
 from django.core.files.storage import FileSystemStorage
+from django.core.paginator import Paginator
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
 from django.views import generic
 
 from dsm.ingress import get_package_uri_by_pid, upload_package
 from spf import settings
+
+from opac_schema.v1.models import Journal as OPACJournal
+from opac_schema.v2.models import (
+    ReceivedPackage,
+    ArticleFiles
+)
 
 from .models import *
 from .forms import CreateUserForm, UpdateUserForm

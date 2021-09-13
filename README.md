@@ -45,10 +45,6 @@ _Add example data to the application database_
 # Add content to the application tables
 python manage.py loaddata group
 python manage.py loaddata user
-python manage.py loaddata journal
-python manage.py loaddata package
-python manage.py loaddata document
-python manage.py loaddata document_file
 ```
 
 _Run the application_

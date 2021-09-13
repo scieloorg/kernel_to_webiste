@@ -233,36 +233,6 @@ def package_download_page(request):
     return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
 
 
-class DepositedPackagesByUserListView(LoginRequiredMixin, generic.ListView):
-    login_url = 'login'
-    model = Package
-    template_name = 'core/user_package_list.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Package.objects.filter(depositor=self.request.user)
-
-
-class DepositedPackagesListView(LoginRequiredMixin, generic.ListView):
-    login_url = 'login'
-    model = Package
-    template_name = 'core/package_list.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Package.objects.all()
-
-
-class JournalsListView(LoginRequiredMixin, generic.ListView):
-    login_url = 'login'
-    model = Journal
-    template_name = 'core/journal_list.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Journal.objects.all()
-
-
 class SearchResultsView(PermissionRequiredMixin, generic.ListView):
     permission_required = 'core.view_document'
     model = Document

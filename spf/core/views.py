@@ -142,7 +142,7 @@ def deposited_package_list_page(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+@allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration'])
 def article_files_list_page(request):
     article_files_list = ArticleFiles.objects.all()
 

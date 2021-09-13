@@ -10,31 +10,32 @@ SciELO Publishing Framework - {% trans 'Journals' %}
     <h1 class="h4">{% trans 'Journals' %}</h1>
     <div class="m-3">
         {% if journal_obj %}
-        <table class="table table-sm table-bordered table-striped">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">{% trans 'Title' %}</th>
-                <th scope="col">{% trans 'Short Title' %}</th>
-                <th scope="col">{% trans 'Acronym' %}</th>
-                <th scope="col">{% trans 'Print ISSN' %}</th>
-                <th scope="col">{% trans 'Online ISSN' %}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for jour in journal_obj %}
-            <tr>
-                <th scope="row">{{ journal_obj.start_index|add:forloop.counter0 }}</th>
-                <td>{{ jour.title }}</td>
-                <td>{{ jour.short_title }}</td>
-                <td>{{ jour.acronym }}</td>
-                <td>{{ jour.print_issn }}</td>
-                <td>{{ jour.eletronic_issn }}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-            </ul>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{% trans 'Title' %}</th>
+                    <th scope="col">{% trans 'Short Title' %}</th>
+                    <th scope="col">{% trans 'Acronym' %}</th>
+                    <th scope="col">{% trans 'Print ISSN' %}</th>
+                    <th scope="col">{% trans 'Online ISSN' %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for jour in journal_obj %}
+                <tr>
+                    <td>{{ journal_obj.start_index|add:forloop.counter0 }}</td>
+                    <td>{{ jour.title }}</td>
+                    <td>{{ jour.short_title }}</td>
+                    <td>{{ jour.acronym }}</td>
+                    <td>{{ jour.print_issn }}</td>
+                    <td>{{ jour.eletronic_issn }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% endif %}
     </div>
 </div>

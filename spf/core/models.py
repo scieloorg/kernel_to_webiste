@@ -4,8 +4,12 @@ from django.contrib.auth.models import User
 from opac_schema.v1.models import *
 
 
+class IngressPackage(models.Model):
+    ...
 
 
+class MigratePackage(models.Model):
+    ...
 
 
 class Event(models.Model):
@@ -19,6 +23,7 @@ class Event(models.Model):
     name = models.CharField(max_length=200)
 
     # estado do evento (iniciado, realizando, concluído)
+    status = models.CharField(max_length=100)
 
     # informação relacionada ao evento
     annotation = models.CharField(max_length=200, null=True)

@@ -16,7 +16,7 @@ _Create a virtual environment and install the application dependencies_
 virtualenv -p python3.9 .venv
 
 # Access the virtual environment
-source .venv/bin/activated
+source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt

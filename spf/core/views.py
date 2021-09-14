@@ -119,6 +119,7 @@ def logout_user(request):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def journal_list_page(request):
     journal_list = OPACJournal.objects.all()
 
@@ -142,7 +143,7 @@ def deposited_package_list_page(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration'])
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def article_files_list_page(request):
     article_files_list = ArticleFiles.objects.all()
 
@@ -201,6 +202,7 @@ def package_upload_page(request):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def package_download_page(request):
     pid = request.GET.get('pid')
     package_uri_results = {'pid': pid, 'doc_pkg': []}

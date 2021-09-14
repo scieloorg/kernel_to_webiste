@@ -15,5 +15,8 @@ def has_group(user, group):
 @register.filter(name='to_datetime')
 def to_datetime(text):
     if isinstance(text, str):
-        return parser.parse(text)
+        try:
+            return parser.parse(text)
+        except:
+            pass
     return text

@@ -2,47 +2,47 @@
 {% load i18n %}
 
 {% block title %}
-SciELO Publishing Framework - {% trans "Article's Related Data" %}
+SciELO Publishing Framework - {% trans "Articles files" %}
 {% endblock %}
-
 {% block content %}
 <div class="row justify-content-center pt-5">
-    <h1 class="h4">{% trans "Article's related data" %}</h1>
+    <h1 class="h4">{% trans "Articles files" %}</h1>
     <div class="m-3">
         {% if article_files_obj %}
-        <table class="table table-sm table-bordered table-striped">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">{% trans 'Identifier' %}</th>
-                <th scope="col">{% trans 'Created' %}</th>
-                <th scope="col">{% trans 'Updated' %}</th>
-                <th scope="col">{% trans 'Package' %}</th>
-                <th scope="col">{% trans 'XML' %}</th>
-                <th scope="col">{% trans 'Assets' %}</th>
-                <th scope="col">{% trans 'Renditions' %}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for art in article_files_obj %}
-            <tr>
-                <th scope="row">{{ article_files_obj.start_index|add:forloop.counter0 }}</th>
-                <td>{{ art.id }}</td>
-                <td>{{ art.created|date:'Y-m-d H:i' }}</td>
-                {% if art.created != art.updated %}
-                <td>{{ art.updated|date:'Y-m-d H:i' }}</td>
-                {% else %}
-                <td></td>
-                {% endif %}
-                <td><a href="{{ art.file.uri }}">{{ art.file.name }}</a></td>
-                <td><a href="{{ art.xml.uri }}">{{ art.xml }}</a></td>
-                <td>{{ art.assets|length }}</td>
-                <td>{{ art.renditions|length }}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
-            </ul>
-        </table>
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{% trans 'Identifier' %}</th>
+                    <th scope="col">{% trans 'Creation date' %}</th>
+                    <th scope="col">{% trans 'Update date' %}</th>
+                    <th scope="col">{% trans 'Package name' %}</th>
+                    <th scope="col">{% trans 'XML' %}</th>
+                    <th scope="col">{% trans 'Assets' %}</th>
+                    <th scope="col">{% trans 'Renditions' %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for art in article_files_obj %}
+                <tr>
+                    <td>{{ article_files_obj.start_index|add:forloop.counter0 }}</td>
+                    <td>{{ art.id }}</td>
+                    <td>{{ art.created|date:'Y-m-d H:i' }}</td>
+                    {% if art.created != art.updated %}
+                    <td>{{ art.updated|date:'Y-m-d H:i' }}</td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    <td><a href="{{ art.file.uri }}">{{ art.file.name }}</a></td>
+                    <td><a href="{{ art.xml.uri }}">{{ art.xml }}</a></td>
+                    <td>{{ art.assets|length }}</td>
+                    <td>{{ art.renditions|length }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% endif %}
     </div>
 </div>

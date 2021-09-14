@@ -1,1 +1,0 @@
-[{"model": "core.documentfile", "pk": 1, "fields": {"name": "file00001", "document": 1, "file": "document.pdf"}}, {"model": "core.documentfile", "pk": 2, "fields": {"name": "file00002", "document": 2, "file": "document1.pdf"}}]

@@ -1,3 +1,4 @@
+from core.extdeps import event_manager
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -60,8 +61,13 @@ def user_dashboard_page(request):
 
 @login_required(login_url='login')
 def user_activity_list_page(request):
-    events = Event.objects.filter(actor=request.user)
-    return render(request, 'core/user_activity_list.html', context={'events': events})
+    event_list = Event.objects.filter(actor=request.user).order_by('-datetime')
+
+    paginator = Paginator(event_list, 25)
+    page_number = request.GET.get('page')
+    event_obj = paginator.get_page(page_number)
+
+    return render(request, 'core/user_activity_list.html', context={'event_obj': event_obj})
 
 
 @unauthenticated_user
@@ -136,7 +142,7 @@ def deposited_package_list_page(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+@allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration'])
 def article_files_list_page(request):
     article_files_list = ArticleFiles.objects.all()
 
@@ -153,12 +159,12 @@ def package_upload_page(request):
     context = {}
     if request.method == 'POST':
         file_input = request.FILES.get('package_file')
-
-        ev = Event()
-        ev.actor = request.user
-        ev.annotation = str({'file_name': file_input.name})
-        ev.name = EventName.UPLOAD_EXISTING_PACKAGE
-        ev.save()
+        # registra evento de envio de pacote novo
+        ev = event_manager.register_event(
+            request.user,
+            event_manager.EventName.UPLOAD_PACKAGE,
+            str({'file_name': file_input.name})
+        )
 
         if file_input:
             fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
@@ -174,20 +180,19 @@ def package_upload_page(request):
                     messages.error(request,
                                    _('Errors ocurred: %s') % ingress_results['errors'],
                                    extra_tags='alert alert-danger')
+                    ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.FAILED})
                 else:
                     for d in ingress_results['docs']:
                         messages.success(request,
                                          _('Package (%(name)s, %(id)s) was added')
                                          % {'name': d['name'], 'id': d['id']},
                                          extra_tags='alert alert-success')
-                    ev.status = EventStatus.COMPLETED
-                    ev.save()
+                    ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.COMPLETED})
             except ValueError:
                 messages.error(request,
-                               _('%s has not a valid format. Please provide a zip file.') % pkg_name,
+                               _('%s does not have a valid format. Please provide a zip file.') % pkg_name,
                                extra_tags='alert alert-danger')
-                ev.status = EventStatus.FAILED
-                ev.save()
+                ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.FAILED})
 
             # remove arquivo de diretório temporário
             fs.delete(pkg_name)
@@ -200,12 +205,11 @@ def package_download_page(request):
     pid = request.GET.get('pid')
     package_uri_results = {'pid': pid, 'doc_pkg': []}
     if pid:
-        ev = Event()
-        ev.actor = request.user
-        ev.annotation = str({'pid': pid})
-        ev.name = EventName.RETRIEVE_PACKAGE_DATA
-        ev.save()
-
+        ev = event_manager.register_event(
+            request.user,
+            event_manager.EventName.RETRIEVE_PACKAGE_DATA,
+            str(str({'pid': pid}))
+        )
         package_uri_results = get_package_uri_by_pid(pid)
 
         if len(package_uri_results['errors']) > 0:
@@ -214,21 +218,14 @@ def package_download_page(request):
                     request,
                     e,
                     extra_tags='alert alert-danger')
-
-            ev.status = EventStatus.FAILED
-            ev.save()
-
+            ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.FAILED})
         elif len(package_uri_results['doc_pkg']) == 0:
             messages.warning(
                 request,
                 _('No packages were found for document %s') % pid,
                 extra_tags='alert alert-warning')
-            ev.status = EventStatus.COMPLETED
-            ev.save()
-
-        if len(package_uri_results['doc_pkg']) > 0:
-            ev.status = EventStatus.COMPLETED
-            ev.save()
+        else:
+            ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.COMPLETED})
 
     return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
 

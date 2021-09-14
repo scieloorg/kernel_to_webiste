@@ -19,173 +19,160 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: decorators.py:26 decorators.py:30
-#, fuzzy, python-format
-#| msgid "You do not have permission to access the requested page"
+#, python-format
 msgid "You do not have permission to access the requested page %s"
-msgstr "Você não tem permissão para acessar a página solicitada"
+msgstr ""
 
 #: forms.py:14 forms.py:38 templates/accounts/login.html:19
 #: templates/accounts/register.html:19
 msgid "Enter your username"
-msgstr "Digite seu nome de usuário"
+msgstr ""
 
 #: forms.py:18 forms.py:43 templates/accounts/register.html:23
 #: templates/core/user_profile_edit.html:22
 msgid "Enter your e-mail"
-msgstr "Digite seu e-mail"
+msgstr ""
 
 #: forms.py:22 forms.py:47 templates/accounts/register.html:27
 #: templates/core/user_profile_edit.html:26
 msgid "Enter your first name"
-msgstr "Digite seu nome"
+msgstr ""
 
 #: forms.py:26 forms.py:51 templates/accounts/register.html:31
 #: templates/core/user_profile_edit.html:30
 msgid "Enter your last name"
-msgstr "Digite seu sobrenome"
+msgstr ""
 
 #: templates/accounts/add.html:7 templates/accounts/login.html:34
 #: templates/accounts/register.html:7 templates/base.html:58
 msgid "Sign up"
-msgstr "Registrar-se"
+msgstr ""
 
 #: templates/accounts/add.html:18 templates/accounts/login.html:18
 #: templates/accounts/register.html:18 templates/core/user_dashboard.html:48
 #: templates/core/user_profile_edit.html:17
 msgid "Username"
-msgstr "Usuário"
+msgstr ""
 
 #: templates/accounts/add.html:19
-#, fuzzy
-#| msgid "Enter your username"
 msgid "Enter the username"
-msgstr "Digite seu nome de usuário"
+msgstr ""
 
 #: templates/accounts/add.html:23
-#, fuzzy
-#| msgid "Enter your e-mail"
 msgid "Enter the user e-mail"
-msgstr "Digite seu e-mail"
+msgstr ""
 
 #: templates/accounts/add.html:26 templates/accounts/login.html:22
 #: templates/accounts/register.html:34
 msgid "Password"
-msgstr "Senha"
+msgstr ""
 
 #: templates/accounts/add.html:27
-#, fuzzy
-#| msgid "Enter your password"
 msgid "Enter the user password"
-msgstr "Digite sua senha"
+msgstr ""
 
 #: templates/accounts/add.html:30 templates/core/user_dashboard.html:53
 msgid "Groups"
-msgstr "Grupos"
+msgstr ""
 
 #: templates/accounts/add.html:38 templates/accounts/register.html:41
 #: templates/index.html:25
 msgid "Add user"
-msgstr "Adicionar usuário"
+msgstr ""
 
 #: templates/accounts/login.html:7 templates/accounts/login.html:25
 #: templates/accounts/register.html:48 templates/base.html:55
 msgid "Login"
-msgstr "Entrar"
+msgstr ""
 
 #: templates/accounts/login.html:23 templates/accounts/register.html:35
 msgid "Enter your password"
-msgstr "Digite sua senha"
+msgstr ""
 
 #: templates/accounts/login.html:34
 msgid "Don't have an account"
-msgstr "Já possui uma conta"
+msgstr ""
 
 #: templates/accounts/register.html:26 templates/core/user_dashboard.html:49
 #: templates/core/user_profile_edit.html:25
 msgid "First name"
-msgstr "Nome"
+msgstr ""
 
 #: templates/accounts/register.html:30 templates/core/user_dashboard.html:50
 #: templates/core/user_profile_edit.html:29
 msgid "Last name"
-msgstr "Sobrenome"
+msgstr ""
 
 #: templates/accounts/register.html:38
 msgid "Confirm your password"
-msgstr "Confirme sua senha"
+msgstr ""
 
 #: templates/accounts/register.html:39
 msgid "Re-enter your password"
-msgstr "Digite sua senha novamente"
+msgstr ""
 
 #: templates/accounts/register.html:48
 msgid "Already have an account"
-msgstr "Já possui uma conta"
+msgstr ""
 
 #: templates/base.html:26 templates/core/user_activity_list.html:5
 #: templates/core/user_activity_list.html:10
 msgid "Activities"
-msgstr "Atividades"
+msgstr ""
 
 #: templates/base.html:29
-#, fuzzy
-#| msgid "Articles"
 msgid "Articles Files"
-msgstr "Arquivos de Artigos"
+msgstr ""
 
 #: templates/base.html:32
 msgid "Packages"
-msgstr "Pacotes"
+msgstr ""
 
 #: templates/base.html:35 templates/core/journal_list.html:5
 #: templates/core/journal_list.html:10
 msgid "Journals"
-msgstr "Periódicos"
+msgstr ""
 
 #: templates/base.html:47 templates/core/user_dashboard.html:6
 #: templates/core/user_dashboard.html:11
 msgid "Dashboard"
-msgstr "Painel"
+msgstr ""
 
 #: templates/base.html:48 templates/core/user_profile_edit.html:7
 #: templates/core/user_profile_edit.html:12
 msgid "Edit profile"
-msgstr "Editar perfil"
+msgstr ""
 
 #: templates/base.html:50
 msgid "Logout"
-msgstr "Sair"
+msgstr ""
 
 #: templates/core/article_files_list.html:5
 #: templates/core/article_files_list.html:9
-#, fuzzy
-#| msgid "Articles"
 msgid "Articles files"
-msgstr "Arquivos de artigos"
+msgstr ""
 
 #: templates/core/article_files_list.html:17
 #: templates/core/deposited_package_list.html:18
 msgid "Identifier"
-msgstr "Identificador do documento"
+msgstr ""
 
 #: templates/core/article_files_list.html:18
 #: templates/core/deposited_package_list.html:20
 #: templates/core/user_package_download.html:39
 msgid "Creation date"
-msgstr "Data de criação"
+msgstr ""
 
 #: templates/core/article_files_list.html:19
 #: templates/core/deposited_package_list.html:21
 #: templates/core/user_package_download.html:40
-#, fuzzy
-#| msgid "Updated"
 msgid "Update date"
-msgstr "Data de atualização"
+msgstr ""
 
 #: templates/core/article_files_list.html:20
 #: templates/core/user_package_download.html:37
 msgid "Package name"
-msgstr "Nome do pacote"
+msgstr ""
 
 #: templates/core/article_files_list.html:21
 msgid "XML"
@@ -201,230 +188,230 @@ msgstr ""
 
 #: templates/core/deposited_package_list.html:5
 msgid "Deposited Packages"
-msgstr "Pacotes Depositados"
+msgstr ""
 
 #: templates/core/deposited_package_list.html:10
 msgid "Deposited packages"
-msgstr "Pacotes depositados"
+msgstr ""
 
 #: templates/core/deposited_package_list.html:19
 msgid "File Name"
-msgstr "Nome do arquivo"
+msgstr ""
 
 #: templates/core/journal_list.html:18
 msgid "Title"
-msgstr "Título"
+msgstr ""
 
 #: templates/core/journal_list.html:19
 msgid "Short Title"
-msgstr "Título abreviado"
+msgstr ""
 
 #: templates/core/journal_list.html:20
 msgid "Acronym"
-msgstr "Acrônimo"
+msgstr ""
 
 #: templates/core/journal_list.html:21
 msgid "Print ISSN"
-msgstr "Print ISSN"
+msgstr ""
 
 #: templates/core/journal_list.html:22
 msgid "Online ISSN"
-msgstr "Online ISSN"
+msgstr ""
 
 #: templates/core/package_search_results.html:5
 #: templates/core/search_results.html:20
 msgid "Package"
-msgstr "Pacote"
+msgstr ""
 
 #: templates/core/package_search_results.html:10
 msgid "Document Package"
-msgstr "Nome do documento"
+msgstr ""
 
 #: templates/core/package_search_results.html:13
 msgid "Document identifier "
-msgstr "Identificador do documento"
+msgstr ""
 
 #: templates/core/search_results.html:5 templates/core/search_results.html:10
 msgid "Documents"
-msgstr "Documentos"
+msgstr ""
 
 #: templates/core/search_results.html:17
 msgid "Document name"
-msgstr "Nome do documento"
+msgstr ""
 
 #: templates/core/search_results.html:18 templates/core/user_dashboard.html:21
 #: templates/core/user_package_download.html:21
 msgid "Document identifier"
-msgstr "Identificador do documento"
+msgstr ""
 
 #: templates/core/search_results.html:19
 msgid "Journal"
-msgstr "Periódicos"
+msgstr ""
 
 #: templates/core/search_results.html:39
 msgid "No results"
-msgstr "Não foram encontrados resultados"
+msgstr ""
 
 #: templates/core/user_activity_list.html:17
 msgid "Activity"
-msgstr "Atividade"
+msgstr ""
 
 #: templates/core/user_activity_list.html:18
 msgid "Annotation"
-msgstr "Anotação"
+msgstr ""
 
 #: templates/core/user_activity_list.html:19
 msgid "Status"
-msgstr "Estado"
+msgstr ""
 
 #: templates/core/user_activity_list.html:20
 msgid "Timestamp"
-msgstr "Data"
+msgstr ""
 
 #: templates/core/user_dashboard.html:15
 #: templates/core/user_package_download.html:15
 msgid "Search package"
-msgstr "Procurar pacote"
+msgstr ""
 
 #: templates/core/user_dashboard.html:22
 #: templates/core/user_package_download.html:22
 msgid "Enter a document identifier"
-msgstr "Digite um identificador de documento"
+msgstr ""
 
 #: templates/core/user_dashboard.html:24
 #: templates/core/user_package_download.html:24
 msgid "Search"
-msgstr "Procurar"
+msgstr ""
 
 #: templates/core/user_dashboard.html:34
 #: templates/core/user_package_upload.html:17
 msgid "Upload package"
-msgstr "Enviar pacote"
+msgstr ""
 
 #: templates/core/user_dashboard.html:37
 #: templates/core/user_package_upload.html:20
 msgid "Upload"
-msgstr "Enviar"
+msgstr ""
 
 #: templates/core/user_dashboard.html:45
 msgid "User profile"
-msgstr "Editar perfil"
+msgstr ""
 
 #: templates/core/user_dashboard.html:51
 msgid "E-mail"
-msgstr "E-mail"
+msgstr ""
 
 #: templates/core/user_dashboard.html:52
 msgid "Last login date"
-msgstr "Data do último acesso"
+msgstr ""
 
 #: templates/core/user_package_download.html:6
 msgid "Download Package"
-msgstr "Baixar pacote"
+msgstr ""
 
 #: templates/core/user_package_download.html:11
 msgid "Search packages"
-msgstr "Meus pacotes"
+msgstr ""
 
 #: templates/core/user_package_download.html:31
 msgid "Results for document"
-msgstr "Procurar documento"
+msgstr ""
 
 #: templates/core/user_package_download.html:38
 msgid "Package address"
-msgstr "Endereço do pacote"
+msgstr ""
 
 #: templates/core/user_package_list.html:5
 #: templates/core/user_package_list.html:10
 msgid "My packages"
-msgstr "Meus pacotes"
+msgstr ""
 
 #: templates/core/user_package_list.html:18
 msgid "Name"
-msgstr "Nome"
+msgstr ""
 
 #: templates/core/user_package_list.html:19
 msgid "Deposit date"
-msgstr "Data de depósito"
+msgstr ""
 
 #: templates/core/user_package_list.html:20
 msgid "State"
-msgstr "Estado"
+msgstr ""
 
 #: templates/core/user_package_upload.html:5
 #: templates/core/user_package_upload.html:10
 msgid "Upload Package"
-msgstr "Enviar Pacote"
+msgstr ""
 
 #: templates/core/user_profile.html:5 templates/core/user_profile.html:10
 msgid "Profile"
-msgstr "Perfil"
+msgstr ""
 
 #: templates/core/user_profile_edit.html:32
 msgid "Update user"
-msgstr "Atualizar usuário"
+msgstr ""
 
 #: templates/faq.html:5 templates/faq.html:10
 msgid "Frequently Asked Questions"
-msgstr "Perguntas Frequentes"
+msgstr ""
 
 #: templates/index.html:11
 msgid "Home"
-msgstr "Início"
+msgstr ""
 
 #: templates/index.html:16
 msgid "Search and download packages"
-msgstr "Procurar e baixar pacotes"
+msgstr ""
 
 #: templates/index.html:20
 msgid "Upload packages"
-msgstr "Enviar pacotes"
+msgstr ""
 
 #: views.py:50
 #, python-format
 msgid "User %s was updated"
-msgstr "Usuário %s foi criado"
+msgstr ""
 
 #: views.py:78 views.py:114
 #, python-format
 msgid "User %s was created"
-msgstr "Usuário %s foi criado"
+msgstr ""
 
 #: views.py:99
 msgid "Incorrect username or password"
-msgstr "Nome de usuário ou senha incorreto"
+msgstr ""
 
 #: views.py:187
 #, python-format
 msgid "Errors ocurred: %s"
-msgstr "Ocorreram erros: %s"
+msgstr ""
 
 #: views.py:193
 #, python-format
 msgid "Package (%(name)s, %(id)s) was added"
-msgstr "Pacote (%(name)s, %(id)s) foi adicionado"
+msgstr ""
 
 #: views.py:199
 #, python-format
 msgid "%s does not have a valid format. Please provide a zip file."
-msgstr "%s não possui um formato válido. Por favor, forneça um arquivo em formato zip."
+msgstr ""
 
 #: views.py:231
 #, python-format
 msgid "No packages were found for document %s"
-msgstr "Não foram encontrados pacotes para o documento %s"
+msgstr ""
 
 msgid "EventName.RETRIEVE_PACKAGE_DATA"
-msgstr "Pacote pesquisado"
+msgstr "Package searched"
 
 msgid "EventName.UPLOAD_PACKAGE"
-msgstr "Pacote enviado"
+msgstr "Package sent"
 
 msgid "EventStatus.COMPLETED"
-msgstr "Completado"
+msgstr "Completed"
 
 msgid "EventStatus.INITIATED"
-msgstr "Iniciado"
+msgstr "Initiated"
 
 msgid "EventStatus.FAILED"
-msgstr "Falha"
+msgstr "Failed"

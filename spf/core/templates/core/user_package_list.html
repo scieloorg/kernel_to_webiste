@@ -10,27 +10,28 @@ SciELO Publishing Framework - {% trans 'My packages' %}
     <h1 class="h4">{% trans 'My packages' %}</h1>
     <div class="m-3">
         {% if package_list %}
-        <table class="table table-sm table-bordered table-striped">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">{% trans 'Name' %}</th>
-                <th scope="col">{% trans 'Deposit date' %}</th>
-                <th scope="col">{% trans 'State' %}</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for pack in package_list %}
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped">
+                <thead>
                 <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ pack.name }}</td>
-                    <td>{{ pack.deposit_date }}</td>
-                    <td>{{ pack.state }}</td>
+                    <th scope="col">#</th>
+                    <th scope="col">{% trans 'Name' %}</th>
+                    <th scope="col">{% trans 'Deposit date' %}</th>
+                    <th scope="col">{% trans 'State' %}</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </ul>
-        </table>
+                </thead>
+                <tbody>
+                {% for pack in package_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ pack.name }}</td>
+                        <td>{{ pack.deposit_date }}</td>
+                        <td>{{ pack.state }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
         {% endif %}
     </div>
 </div>

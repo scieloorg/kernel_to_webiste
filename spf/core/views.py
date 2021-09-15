@@ -205,8 +205,7 @@ def article_files_list_page(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def package_upload_page(request):
-    context = {}
+def user_package_upload_page(request):
     if request.method == 'POST':
         file_input = request.FILES.get('package_file')
         # registra evento de envio de pacote novo
@@ -221,6 +220,12 @@ def package_upload_page(request):
 
             # envia arquivo para diretório temporário
             pkg_name = fs.save(file_input.name, file_input)
+
+            ip = IngressPackage()
+            ip.user = request.user
+            ip.datetime = ev.datetime
+            ip.package_name = pkg_name
+            ip.save()
 
             # envia arquivo ao MinIO
             try:
@@ -247,13 +252,13 @@ def package_upload_page(request):
             # remove arquivo de diretório temporário
             fs.delete(pkg_name)
 
-    return render(request, 'core/user_package_upload.html', context=context)
+    return render(request, 'core/user_package_upload.html')
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def package_download_page(request):
-    pid = request.GET.get('pid')
+def user_package_download_page(request):
+    pid = request.GET.get('pid', '')
     package_uri_results = {'pid': pid, 'doc_pkg': []}
     if pid:
         ev = event_manager.register_event(

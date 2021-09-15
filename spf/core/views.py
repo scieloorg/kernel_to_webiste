@@ -71,8 +71,6 @@ def activity_list_page(request):
 
 @unauthenticated_user
 def account_register_page(request):
-    form = CreateUserForm()
-
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
@@ -82,8 +80,19 @@ def account_register_page(request):
                              _('User %s was created') % username,
                              extra_tags='alert alert-success')
             return redirect('login')
+        else:
+            for key_err, key_val in form.errors.items():
+                messages.error(
+                    request,
+                    _('Errors ocurred: (%s ,%s)' % (key_err, key_val[0])),
+                    extra_tags='alert alert-danger')
 
-    context = {'form': form}
+    context = {
+        'username': request.POST.get('username', ''),
+        'email': request.POST.get('email', ''),
+        'first_name': request.POST.get('first_name', ''),
+        'last_name': request.POST.get('last_name', '')
+    }
     return render(request, 'accounts/register.html', context=context)
 
 

@@ -20,3 +20,14 @@ def to_datetime(text):
         except:
             pass
     return text
+
+
+@register.filter(name='short_group_name')
+def to_short_group_name(group_name):
+    if group_name == 'quality_analyst':
+        return 'Q. Analyst'
+    if group_name == 'operator_ingress':
+        return 'Op. Ingress'
+    if group_name == 'operator_migration':
+        return 'Op. Migration'
+    return group_name.title()

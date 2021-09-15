@@ -40,10 +40,14 @@ SciELO Publishing Framework - {% trans 'Sign up' %}
     </div>
     <button type="submit" class="btn btn-primary">{% trans 'Add user' %}</button>
 </form>
+
 {% for message in messages %}
-<div class="{{ message.tags }}" role="alert">
-    {{ message }}
-</div>
+    <div class="d-flex justify-content-center">
+        <div class="{{ message.tags }}" role="alert">
+            {{ message }}
+        </div>
+    </div>
 {% endfor %}
+
 <div class="d-flex justify-content-center"><p class="text-muted mx-1">{% trans 'Already have an account' %}?</p><a class="link-primary" href="{% url 'login' %}">{% trans 'Login' %}</a>.</div>
 {% endblock %}

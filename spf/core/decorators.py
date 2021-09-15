@@ -25,10 +25,10 @@ def allowed_users(allowed_groups=[]):
                 messages.warning(request,
                                  _('You do not have permission to access the requested page %s' % request.path),
                                  extra_tags='alert alert-warning')
-                return redirect('user_dashboard')
+                return redirect('index')
             messages.warning(request,
                              _('You do not have permission to access the requested page %s' % request.path),
                              extra_tags='alert alert-warning')
-            return redirect('user_dashboard')
+            return redirect('index')
         return wrapper
     return decorator

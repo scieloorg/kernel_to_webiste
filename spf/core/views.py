@@ -182,13 +182,13 @@ def journal_list_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def deposited_package_list_page(request):
-    deposited_package_list = ReceivedPackage.objects.all()
+    request_scope, deposited_package_list = _get_list_according_to_scope(request, IngressPackage, 'user')
 
     paginator = Paginator(deposited_package_list, 25)
     page_number = request.GET.get('page')
     deposited_package_obj = paginator.get_page(page_number)
 
-    return render(request, 'core/deposited_package_list.html', context={'deposited_package_obj': deposited_package_obj})
+    return render(request, 'core/deposited_package_list.html', context={'deposited_package_obj': deposited_package_obj, 'scope': request_scope})
 
 
 @login_required(login_url='login')

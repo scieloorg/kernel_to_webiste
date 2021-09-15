@@ -194,7 +194,7 @@ def deposited_package_list_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def article_files_list_page(request):
-    article_files_list = ArticleFiles.objects.all()
+    article_files_list = ArticleFiles.objects.all().order_by('-updated')
 
     paginator = Paginator(article_files_list, 25)
     page_number = request.GET.get('page')

@@ -286,13 +286,3 @@ def user_package_download_page(request):
     return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
 
 
-class SearchResultsView(PermissionRequiredMixin, generic.ListView):
-    permission_required = 'core.view_document'
-    model = Document
-    template_name = 'core/search_results.html'
-    paginate_by = 10
-    
-    def get_queryset(self):
-        query = self.request.GET.get('pid')
-        object_list = Document.objects.filter(pid__icontains=query)
-        return object_list

@@ -121,7 +121,45 @@ def account_login_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager'])
 def user_add_page(request):
-    return redirect('user_add')
+    context = {'user_groups': []}
+
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+
+        groups_names = request.POST.getlist('user_groups')
+        context.update({'user_groups': groups_names})
+
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            user = User.objects.get(username=username)
+
+            user_groups = Group.objects.filter(name__in=groups_names)
+            for u in user_groups:
+                user.groups.add(u)
+            user.save()
+
+            messages.success(request,
+                             _('User %s was created') % username,
+                             extra_tags='alert alert-success')
+
+        else:
+            for key_err, key_val in form.errors.items():
+                messages.error(
+                    request,
+                    _('Errors ocurred: (%s, %s)' % (key_err, key_val[0])),
+                    extra_tags='alert alert-danger')
+
+            context.update({
+                'username': request.POST.get('username', ''),
+                'email': request.POST.get('email', ''),
+                'first_name': request.POST.get('first_name', ''),
+                'last_name': request.POST.get('last_name', '')
+            })
+
+    context.update({'available_groups': Group.objects.all()})
+
+    return render(request, 'accounts/add.html', context=context)
 
 
 def logout_user(request):

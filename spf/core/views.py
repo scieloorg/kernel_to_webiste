@@ -286,3 +286,31 @@ def user_package_download_page(request):
     return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager'])
+def user_groups_edit_page(request):
+    user_list = User.objects.filter(is_superuser=False)
+    available_groups = Group.objects.all()
+
+    paginator = Paginator(user_list, 25)
+    page_number = request.GET.get('page')
+    user_obj = paginator.get_page(page_number)
+
+    if request.method == 'POST':
+        ev = event_manager.register_event(request.user, event_manager.EventName.CHANGE_USER_GROUPS)
+
+        for u in user_obj:
+            groups_names = request.POST.getlist('%s|user_groups' % u.username)
+            user_groups = Group.objects.filter(name__in=groups_names)
+            for ag in available_groups:
+                if ag not in user_groups:
+                    u.groups.remove(ag)
+
+            for ug in user_groups:
+                u.groups.add(ug)
+            u.save()
+
+        messages.success(request, _("Users' groups were updated"), extra_tags='alert alert-success')
+        event_manager.update_event(ev, {'status': event_manager.EventStatus.COMPLETED})
+
+    return render(request, 'core/user_groups_edit.html', context={'user_obj': user_obj, 'available_groups': available_groups})

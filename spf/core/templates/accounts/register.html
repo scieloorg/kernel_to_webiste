@@ -16,7 +16,7 @@ SciELO Publishing Framework - {% trans 'Sign up' %}
     {% csrf_token %}
     <div class="mb-3">
         <label for="username" class="form-label">{% trans 'Username' %}</label>
-        <input type="text" name="username" autofocus id="username" class="form-control" placeholder="{% trans 'Enter your username' %}">
+        <input type="text" name="username" autofocus id="username" class="form-control" placeholder="{% trans 'Enter your username' %}" value="{{ username }}">
     </div>
     <div class="mb-3">
         <label for="email" class="form-label">E-mail</label>

@@ -21,6 +21,15 @@ from .decorators import unauthenticated_user, allowed_users
 import os
 
 
+def _get_list_according_to_scope(request, model_class, filtering_field):
+    request_scope = request.GET.get('scope', '')
+
+    if request_scope == 'all_users' and 'manager' in [g.name for g in request.user.groups.all()]:
+        return request_scope, model_class.objects.all().order_by('-datetime')
+    else:
+        return request_scope, model_class.objects.filter(**{filtering_field: request.user}).order_by('-datetime')
+
+
 def index_page(request):
     return render(request, 'index.html', context={})
 

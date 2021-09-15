@@ -44,11 +44,11 @@ SciELO Publishing Framework - {% trans 'Journals' %}
     <ul class="pagination justify-content-center">
         {% if journal_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page=1">&laquo; First</a>
+            <a class="page-link" href="?page=1">&laquo; {% trans 'First' %}</a>
         </li>
 
         <li class="page-item">
-            <a class="page-link"  href="?page={{ journal_obj.previous_page_number }}">Previous</a>
+            <a class="page-link"  href="?page={{ journal_obj.previous_page_number }}">{% trans 'Previous' %}</a>
         </li>
         {% endif %}
 
@@ -58,10 +58,10 @@ SciELO Publishing Framework - {% trans 'Journals' %}
 
         {% if journal_obj.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ journal_obj.next_page_number }}">Next</a>
+            <a class="page-link" href="?page={{ journal_obj.next_page_number }}">{% trans 'Next' %}</a>
         </li>
         <li class="page-item">
-            <a class="page-link" href="?page={{ journal_obj.paginator.num_pages }}">Last &raquo;</a>
+            <a class="page-link" href="?page={{ journal_obj.paginator.num_pages }}">{% trans 'Last' %} &raquo;</a>
         </li>
         {% endif %}
     </ul>

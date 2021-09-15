@@ -59,11 +59,6 @@ def user_profile_edit_page(request):
 
 
 @login_required(login_url='login')
-def user_dashboard_page(request):
-    groups = request.user.groups.values_list('name', flat=True)
-    return render(request, 'core/user_dashboard.html', context={'groups': groups})
-
-
 @login_required(login_url='login')
 def user_activity_list_page(request):
     event_list = Event.objects.filter(actor=request.user).order_by('-datetime')

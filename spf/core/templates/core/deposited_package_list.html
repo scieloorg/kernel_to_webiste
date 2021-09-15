@@ -15,20 +15,18 @@ SciELO Publishing Framework - {% trans 'Deposited Packages' %}
                 <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">{% trans 'Identifier' %}</th>
-                    <th scope="col">{% trans 'File Name' %}</th>
-                    <th scope="col">{% trans 'Creation date' %}</th>
-                    <th scope="col">{% trans 'Update date' %}</th>
+                    <th scope="col">{% trans 'Username' %}</th>
+                    <th scope="col">{% trans 'Package name' %}</th>
+                    <th scope="col">{% trans 'Datetime' %}</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for dpkg in deposited_package_obj %}
                 <tr>
                     <td>{{ deposited_package_obj.start_index|add:forloop.counter0 }}</td>
-                    <td>{{ dpkg.id }}</td>
-                    <td><a href="{{ dpkg.file.uri }}">{{ dpkg.file.name }}</a></td>
-                    <td>{{ dpkg.created|date:'Y-m-d H:i' }}</td>
-                    <td>{{ dpkg.updated|date:'Y-m-d H:i' }}</td>
+                    <td>{{ dpkg.user }}</td>
+                    <td>{{ dpkg.package_name }}</td>
+                    <td>{{ dpkg.datetime|date:'Y-m-d H:i' }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -42,11 +40,11 @@ SciELO Publishing Framework - {% trans 'Deposited Packages' %}
     <ul class="pagination justify-content-center">
         {% if deposited_package_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page=1">&laquo; First</a>
+            <a class="page-link" href="?page=1{% if scope %}&scope={{ scope }}{% endif %}">&laquo; First</a>
         </li>
 
         <li class="page-item">
-            <a class="page-link"  href="?page={{ deposited_package_obj.previous_page_number }}">Previous</a>
+            <a class="page-link"  href="?page={{ deposited_package_obj.previous_page_number }}{% if scope %}&scope={{ scope }}{% endif %}">Previous</a>
         </li>
         {% endif %}
 
@@ -56,10 +54,10 @@ SciELO Publishing Framework - {% trans 'Deposited Packages' %}
 
         {% if deposited_package_obj.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ deposited_package_obj.next_page_number }}">Next</a>
+            <a class="page-link" href="?page={{ deposited_package_obj.next_page_number }}{% if scope %}&scope={{ scope }}{% endif %}">Next</a>
         </li>
         <li class="page-item">
-            <a class="page-link" href="?page={{ deposited_package_obj.paginator.num_pages }}">Last &raquo;</a>
+            <a class="page-link" href="?page={{ deposited_package_obj.paginator.num_pages }}{% if scope %}&scope={{ scope }}{% endif %}">Last &raquo;</a>
         </li>
         {% endif %}
     </ul>

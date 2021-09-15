@@ -31,16 +31,17 @@ def _get_list_according_to_scope(request, model_class, filtering_field):
 
 
 def index_page(request):
-    return render(request, 'index.html', context={})
+    return render(request, 'index.html')
 
 
 def faq_page(request):
-    return render(request, 'faq.html', context={})
+    return render(request, 'faq.html')
 
 
 @login_required(login_url='login')
 def user_profile_page(request):
-    return render(request, 'core/user_profile.html', context={})
+    groups = request.user.groups.values_list('name', flat=True)
+    return render(request, 'core/user_profile.html', context={'groups': groups})
 
 
 @login_required(login_url='login')
@@ -53,7 +54,7 @@ def user_profile_edit_page(request):
             messages.success(request,
                              _('User %s was updated') % username,
                              extra_tags='alert alert-success')
-            return redirect('user_dashboard')
+            return redirect('user_profile_edit')
     return render(request, 'core/user_profile_edit.html', context={})
 
 

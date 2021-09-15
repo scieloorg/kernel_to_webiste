@@ -21,7 +21,7 @@ class EventStatus(Enum):
     FAILED = "FAILED"
 
 
-def register_event(user, name, annotation):
+def register_event(user, name, annotation=None):
     event = Event()
     event.actor = user
     event.annotation = annotation

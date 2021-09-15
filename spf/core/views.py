@@ -98,6 +98,8 @@ def account_register_page(request):
 
 @unauthenticated_user
 def account_login_page(request):
+    context = {'username': ''}
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -111,8 +113,9 @@ def account_login_page(request):
             messages.error(request,
                           _('Incorrect username or password'),
                           extra_tags='alert alert-danger')
+            context['username'] = username
 
-    return render(request, 'accounts/login.html', context={})
+    return render(request, 'accounts/login.html', context=context)
 
 
 @login_required(login_url='login')

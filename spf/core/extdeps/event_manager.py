@@ -8,9 +8,12 @@ class EventName(Enum):
     RETRIEVE_PACKAGE_DATA = "RETRIVE_PACKAGE_DATA"
     UPLOAD_PACKAGE = "UPLOAD_PACKAGE"
 
-    # nomes de eventos associados a validação
+    # nomes de eventos associados à validação
     START_VALIDATION = "START_VALIDATION"
     FINALIZE_VALIDATION = "FINALIZE_VALIDATION"
+
+    # nomes de eventos associados à alteração de usuários
+    CHANGE_USER_GROUPS = 'CHANGE_USER_GROUPS'
 
 
 class EventStatus(Enum):
@@ -21,7 +24,7 @@ class EventStatus(Enum):
     FAILED = "FAILED"
 
 
-def register_event(user, name, annotation):
+def register_event(user, name, annotation=None):
     event = Event()
     event.actor = user
     event.annotation = annotation

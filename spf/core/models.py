@@ -5,12 +5,13 @@ from opac_schema.v1.models import *
 
 
 class IngressPackage(models.Model):
-    ...
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    package_name = models.CharField(max_length=200)
+    datetime = models.DateTimeField()
 
 
 class MigratePackage(models.Model):
     ...
-
 
 class Event(models.Model):
     # quem realiza o evento

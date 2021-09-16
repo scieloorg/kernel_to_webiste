@@ -462,6 +462,9 @@ msgstr "Paquete buscado"
 msgid "EventName.UPLOAD_PACKAGE"
 msgstr "Paquete enviado"
 
+msgid "EventName.CHANGE_USER_GROUPS"
+msgstr "Cambio de grupos de usuarios"
+
 msgid "EventStatus.COMPLETED"
 msgstr "Completado"
 

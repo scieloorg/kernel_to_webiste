@@ -407,6 +407,9 @@ msgstr "Package searched"
 msgid "EventName.UPLOAD_PACKAGE"
 msgstr "Package sent"
 
+msgid "EventName.CHANGE_USER_GROUPS"
+msgstr "Changing user groups"
+
 msgid "EventStatus.COMPLETED"
 msgstr "Completed"
 

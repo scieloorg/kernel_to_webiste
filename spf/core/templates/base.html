@@ -23,15 +23,6 @@
             <ul class="navbar-nav me-auto">
                 {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link m-1" href="{% url 'user_activity_list' %}">{% trans 'Activities' %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link m-1" href="{% url 'article_files_list' %}">{% trans 'Articles Files' %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link m-1" href="{% url 'package_list' %}">{% trans 'Packages' %}</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link m-1" href="{% url 'journal_list' %}">{% trans 'Journals' %}</a>
                 </li>
                 {% endif %}
@@ -44,7 +35,8 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle m-1" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">{{ request.user }}</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'user_dashboard' %}"><i class="fas fa-columns px-2"></i>{% translate "Dashboard" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'activity_list' %}"><i class="fas fa-columns px-2"></i>{% translate "Activities" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_profile' %}"><i class="fas fa-columns px-2"></i>{% translate "Profile" %}</a></li>
                             <li><a class="dropdown-item" href="{% url 'user_profile_edit' %}"><i class="fas fa-cog px-2"></i>{% translate "Edit profile" %}</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt px-2"></i>{% translate "Logout" %}</a></li>

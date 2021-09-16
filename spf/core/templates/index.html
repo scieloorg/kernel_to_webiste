@@ -7,21 +7,92 @@ SciELO Publishing Framework - Home
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center pt-5">
-    <h1 class="h4">{% trans 'Home' %}</h1>
+    <h1 class="h4 pt-5">{% trans 'Home' %}</h1>
     {% if user.is_authenticated %}
-        <div>
-            <ul>
-                <li>
-                    <a href="{% url 'user_package_download' %}">{% trans 'Search and download packages' %}</a>
-                </li>
-                {% if user|has_group:"manager" or user|has_group:"operator_ingress" %}
-                    <li>
-                        <a href="{% url 'user_package_upload' %}">{% trans 'Upload packages' %}</a>
-                    </li>
-                {% endif %}
-            </ul>
+    <div class="row row-cols-2 row-cols-md-3 my-3">
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'My space' %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item" href="{% url 'activity_list' %}">{% trans 'Activities' %}</a>
+                    {% if user|has_group:"manager" or user|has_group:"operator_ingress" %}
+                        <a class="list-group-item" href="{% url 'package_list' %}">{% trans "Deposited packages" %}</a>
+                    {% endif %}
+                    {% if user|has_group:"manager" or user|has_group:"operator_migration" %}
+                    <a class="list-group-item disabled" href="">{% trans "Migrated data" %}</a>
+                    {% endif %}
+                    <a class="list-group-item" href="{% url 'user_profile' %}">{% trans 'Profile' %}</a>
+                    <a class="list-group-item list-group-item-warning" href="{% url 'user_profile_edit' %}">{% trans 'Edit profile' %}</a>
+                </div>
+            </div>
         </div>
+
+        {% if user|has_group:"manager" or user|has_group:"operator_ingress" %}
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'Ingress'  %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item" href="{% url 'user_package_download' %}">{% trans 'Search package' %}</a>
+                    <a class="list-group-item" href="{% url 'user_package_upload' %}">{% trans 'Upload package' %}</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if user|has_group:"manager" or user|has_group:"operator_migration" %}
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'Migration' %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item disabled" href="">{% trans 'Migrate title' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Migrate fascicle' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Migrate document' %}</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if user|has_group:"manager" %}
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'Package management' %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item" href="{% url 'package_list' %}?scope=all_users">{% trans "All deposited packages" %}</a>
+                    <a class="list-group-item" href="{% url 'article_files_list' %}">{% trans "Articles' files" %}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'User management' %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item" href="{% url 'activity_list' %}?scope=all_users">{% trans "All activities" %}</a>
+                    <a class="list-group-item" href="{% url 'user_add' %}">{% trans "Add user" %}</a>
+                    <a class="list-group-item list-group-item-warning" href="{% url 'user_groups_edit' %}">{% trans "User groups" %}</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
     {% endif %}
-</div>
+
+    {% for message in messages %}
+        <div class="d-flex justify-content-center">
+            <div class="{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

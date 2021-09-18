@@ -60,10 +60,10 @@ python manage.py runserver
 cd core
 
 # Create the strings translated to Portuguese
-django-admin makemessages -l pt
+django-admin makemessages_no_fuzzy -l pt
 
 # Create the strings translated to Spanish
-django-admin makemessages -l es
+django-admin makemessages_no_fuzzy -l es
 
 # Compile the translated strings
 django-admin compilemessages

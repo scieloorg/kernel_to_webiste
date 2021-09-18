@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load spf_extras %}
 
 {% block title %}
 SciELO Publishing Framework - {% trans 'Deposited packages' %}
@@ -18,6 +19,7 @@ SciELO Publishing Framework - {% trans 'Deposited packages' %}
                     <th scope="col">{% trans 'Username' %}</th>
                     <th scope="col">{% trans 'Package name' %}</th>
                     <th scope="col">{% trans 'Datetime' %}</th>
+                    <th scope="col">{% trans 'Status' %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,6 +29,7 @@ SciELO Publishing Framework - {% trans 'Deposited packages' %}
                     <td>{{ dpkg.user }}</td>
                     <td>{{ dpkg.package_name }}</td>
                     <td>{{ dpkg.datetime|date:'Y-m-d H:i' }}</td>
+                    <td><span class="badge {{ dpkg.status|to_css_ingress_package_status_style }}">{{ dpkg.get_status_display }}</span></td>
                 </tr>
                 {% endfor %}
                 </tbody>

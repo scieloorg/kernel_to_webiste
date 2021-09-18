@@ -23,7 +23,7 @@ SciELO Publishing Framework - {% trans 'User groups' %}
                             <th scope="col">{% trans 'Last name' %}</th>
                             <th scope="col">{% trans 'E-mail' %}</th>
                             {% for g in available_groups %}
-                            <th class="text-center" scope="col">{{ g.name|short_group_name }}</th>
+                            <th class="text-center" scope="col">{{ g.name|to_short_group_name }}</th>
                             {% endfor %}
                         </tr>
                         </thead>

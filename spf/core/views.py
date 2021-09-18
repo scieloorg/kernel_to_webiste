@@ -1,6 +1,7 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import Group, User
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
@@ -122,6 +123,34 @@ def account_login_page(request):
             context['username'] = username
 
     return render(request, 'accounts/login.html', context=context)
+
+
+@login_required(login_url='login')
+def account_change_password_page(request):
+    context = {}
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(
+                request,
+                _('Your password was updated'),
+                extra_tags='alert alert-success'
+            )
+        else:
+            for val in form.errors.values():
+                messages.error(request, _(val[0]), extra_tags='alert alert-danger')
+            context.update({
+                'old_password': request.POST.get('old_password', ''),
+                'new_password1': request.POST.get('new_password1', ''),
+                'new_password2': request.POST.get('new_password2', ''),
+                'form': form
+                })
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'accounts/change_password.html', context=context)
 
 
 @login_required(login_url='login')

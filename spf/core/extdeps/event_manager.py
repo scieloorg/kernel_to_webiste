@@ -38,7 +38,7 @@ def register_event(user, name, annotation=None):
 def update_event(event, args):
     for k, v in args.items():
         setattr(event, k, v)
-    event.datetime = datetime.now()
+    event.datetime = datetime.utcnow()
     event.save()
 
     return event

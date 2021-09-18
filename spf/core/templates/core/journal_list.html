@@ -30,8 +30,8 @@ SciELO Publishing Framework - {% trans 'Journals' %}
                     <td>{{ jour.title }}</td>
                     <td>{{ jour.short_title }}</td>
                     <td>{{ jour.acronym }}</td>
-                    <td>{{ jour.print_issn }}</td>
-                    <td>{{ jour.eletronic_issn }}</td>
+                    <td>{{ jour.print_issn|default:'' }}</td>
+                    <td>{{ jour.eletronic_issn|default:'' }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>

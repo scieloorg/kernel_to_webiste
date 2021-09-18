@@ -227,12 +227,6 @@ def user_package_upload_page(request):
             # envia arquivo para diretório temporário
             pkg_name = fs.save(file_input.name, file_input)
 
-            ip = IngressPackage()
-            ip.user = request.user
-            ip.datetime = ev.datetime
-            ip.package_name = pkg_name
-            ip.save()
-
             # envia arquivo ao MinIO
             try:
                 ingress_results = upload_package(os.path.join(fs.base_location, pkg_name))
@@ -251,6 +245,14 @@ def user_package_upload_page(request):
                                          extra_tags='alert alert-success')
                     # registra o evento como completado com sucesso
                     ev = event_manager.update_event(ev, {'status': Event.Status.COMPLETED})
+
+                    # registra o pacote enviado
+                    ip = IngressPackage()
+                    ip.user = request.user
+                    ip.datetime = ev.datetime
+                    ip.package_name = pkg_name
+                    ip.status = IngressPackage.Status.RECEIVED
+                    ip.save()
             except ValueError:
                 messages.error(request,
                                _('%s does not have a valid format. Please provide a zip file.') % pkg_name,

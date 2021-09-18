@@ -75,7 +75,7 @@ SciELO Publishing Framework - {% trans 'Activities' %}
         {% endif %}
 
         <li class="page-item">
-            <a class="page-link">Page {{ event_obj.number }} of {{ event_obj.paginator.num_pages }}</a>
+            <a class="page-link">{% trans 'Page' %} {{ event_obj.number }} {% trans 'of' %} {{ event_obj.paginator.num_pages }}</a>
         </li>
 
         {% if event_obj.has_next %}

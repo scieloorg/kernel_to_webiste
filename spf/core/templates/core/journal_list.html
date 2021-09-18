@@ -53,7 +53,7 @@ SciELO Publishing Framework - {% trans 'Journals' %}
         {% endif %}
 
         <li class="page-item">
-            <a class="page-link">Page {{ journal_obj.number }} of {{ journal_obj.paginator.num_pages }}</a>
+            <a class="page-link">{% trans 'Page' %} {{ journal_obj.number }} {% trans 'of' %} {{ journal_obj.paginator.num_pages }}</a>
         </li>
 
         {% if journal_obj.has_next %}

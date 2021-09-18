@@ -1,5 +1,6 @@
 from django import template
 from django.contrib.auth.models import Group
+from django.utils.translation import gettext as _
 from dateutil import parser
 
 
@@ -22,12 +23,16 @@ def to_datetime(text):
     return text
 
 
-@register.filter(name='short_group_name')
-def to_short_group_name(group_name):
-    if group_name == 'quality_analyst':
-        return 'Q. Analyst'
-    if group_name == 'operator_ingress':
-        return 'Op. Ingress'
-    if group_name == 'operator_migration':
-        return 'Op. Migration'
-    return group_name.title()
+@register.filter(name='to_short_group_name')
+def to_short_group_name(group):
+    if group == 'quality_analyst':
+        return _('Q. Analyst')
+    if group == 'operator_ingress':
+        return _('Op. Ingress')
+    if group == 'operator_migration':
+        return _('Op. Migration')
+    if group == 'manager':
+        return _('Manager')
+    return group.title()
+
+

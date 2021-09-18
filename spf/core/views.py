@@ -88,12 +88,8 @@ def account_register_page(request):
                              extra_tags='alert alert-success')
             return redirect('login')
         else:
-            for key_err, key_val in form.errors.items():
-                messages.error(
-                    request,
-                    _('Errors ocurred: (%(msg_key)s, %(msg_value)s)' % {'msg_key': key_err, 'msg_value': key_val[0]}),
-                    extra_tags='alert alert-danger')
-
+            for val in form.errors.values():
+                messages.error(request, _(val[0]), extra_tags='alert alert-danger')
     context = {
         'username': request.POST.get('username', ''),
         'email': request.POST.get('email', ''),
@@ -179,11 +175,8 @@ def user_add_page(request):
                              extra_tags='alert alert-success')
 
         else:
-            for key_err, key_val in form.errors.items():
-                messages.error(
-                    request,
-                    _('Errors ocurred: (%(msg_key)s, %(msg_value)s)' % {'msg_key': key_err, 'msg_value': key_val[0]}),
-                    extra_tags='alert alert-danger')
+            for val in form.errors.values():
+                messages.error(request, _(val[0]), extra_tags='alert alert-danger')
 
             context.update({
                 'username': request.POST.get('username', ''),

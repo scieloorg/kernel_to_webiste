@@ -229,7 +229,7 @@ def user_package_upload_page(request):
 
             # envia arquivo ao MinIO
             try:
-                ingress_results = upload_package(os.path.join(fs.base_location, pkg_name))
+                ingress_results = dsm_ingress.upload_package(path.join(fs.base_location, pkg_name))
 
                 if len(ingress_results['errors']) > 0:
                     messages.error(request,
@@ -277,7 +277,7 @@ def user_package_download_page(request):
             Event.Name.RETRIEVE_PACKAGE,
             str(str({'pid': pid}))
         )
-        package_uri_results = get_package_uri_by_pid(pid)
+        package_uri_results = dsm_ingress.get_package_uri_by_pid(pid)
 
         if len(package_uri_results['errors']) > 0:
             for e in package_uri_results['errors']:

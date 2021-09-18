@@ -90,7 +90,7 @@ def account_register_page(request):
             for key_err, key_val in form.errors.items():
                 messages.error(
                     request,
-                    _('Errors ocurred: (%s ,%s)' % (key_err, key_val[0])),
+                    _('Errors ocurred: (%(msg_key)s, %(msg_value)s)' % {'msg_key': key_err, 'msg_value': key_val[0]}),
                     extra_tags='alert alert-danger')
 
     context = {
@@ -153,7 +153,7 @@ def user_add_page(request):
             for key_err, key_val in form.errors.items():
                 messages.error(
                     request,
-                    _('Errors ocurred: (%s, %s)' % (key_err, key_val[0])),
+                    _('Errors ocurred: (%(msg_key)s, %(msg_value)s)' % {'msg_key': key_err, 'msg_value': key_val[0]}),
                     extra_tags='alert alert-danger')
 
             context.update({
@@ -255,7 +255,7 @@ def user_package_upload_page(request):
                     ip.save()
             except ValueError:
                 messages.error(request,
-                               _('%s does not have a valid format. Please provide a zip file.') % pkg_name,
+                               pkg_name + _(' does not have a valid format. Please provide a zip file.'),
                                extra_tags='alert alert-danger')
                 # registra o evento como completado com falha
                 ev = event_manager.update_event(ev, {'status': Event.Status.FAILED})

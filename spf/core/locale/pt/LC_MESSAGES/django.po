@@ -1,0 +1,433 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-13 15:28-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: decorators.py:26 decorators.py:30
+#, fuzzy, python-format
+#| msgid "You do not have permission to access the requested page"
+msgid "You do not have permission to access the requested page %s"
+msgstr "Você não tem permissão para acessar a página solicitada"
+
+#: forms.py:14 forms.py:38 templates/accounts/login.html:19
+#: templates/accounts/register.html:19
+msgid "Enter your username"
+msgstr "Digite seu nome de usuário"
+
+#: forms.py:18 forms.py:43 templates/accounts/register.html:23
+#: templates/core/user_profile_edit.html:22
+msgid "Enter your e-mail"
+msgstr "Digite seu e-mail"
+
+#: forms.py:22 forms.py:47 templates/accounts/register.html:27
+#: templates/core/user_profile_edit.html:26
+msgid "Enter your first name"
+msgstr "Digite seu nome"
+
+#: forms.py:26 forms.py:51 templates/accounts/register.html:31
+#: templates/core/user_profile_edit.html:30
+msgid "Enter your last name"
+msgstr "Digite seu sobrenome"
+
+#: templates/accounts/add.html:7 templates/accounts/login.html:34
+#: templates/accounts/register.html:7 templates/base.html:58
+msgid "Sign up"
+msgstr "Registrar-se"
+
+#: templates/accounts/add.html:18 templates/accounts/login.html:18
+#: templates/accounts/register.html:18 templates/core/user_dashboard.html:48
+#: templates/core/user_profile_edit.html:17
+msgid "Username"
+msgstr "Usuário"
+
+#: templates/accounts/add.html:19
+#, fuzzy
+#| msgid "Enter your username"
+msgid "Enter the username"
+msgstr "Digite seu nome de usuário"
+
+#: templates/accounts/add.html:23
+#, fuzzy
+#| msgid "Enter your e-mail"
+msgid "Enter the user e-mail"
+msgstr "Digite seu e-mail"
+
+#: templates/accounts/add.html:26 templates/accounts/login.html:22
+#: templates/accounts/register.html:34
+msgid "Password"
+msgstr "Senha"
+
+#: templates/accounts/add.html:27
+#, fuzzy
+#| msgid "Enter your password"
+msgid "Enter the user password"
+msgstr "Digite sua senha"
+
+#: templates/accounts/add.html:30 templates/core/user_dashboard.html:53
+msgid "Groups"
+msgstr "Grupos"
+
+#: templates/accounts/add.html:38 templates/accounts/register.html:41
+#: templates/index.html:25
+msgid "Add user"
+msgstr "Adicionar usuário"
+
+#: templates/accounts/login.html:7 templates/accounts/login.html:25
+#: templates/accounts/register.html:48 templates/base.html:55
+msgid "Login"
+msgstr "Entrar"
+
+#: templates/accounts/login.html:23 templates/accounts/register.html:35
+msgid "Enter your password"
+msgstr "Digite sua senha"
+
+#: templates/accounts/login.html:34
+msgid "Don't have an account"
+msgstr "Já possui uma conta"
+
+#: templates/accounts/register.html:26 templates/core/user_dashboard.html:49
+#: templates/core/user_profile_edit.html:25
+msgid "First name"
+msgstr "Nome"
+
+#: templates/accounts/register.html:30 templates/core/user_dashboard.html:50
+#: templates/core/user_profile_edit.html:29
+msgid "Last name"
+msgstr "Sobrenome"
+
+#: templates/accounts/register.html:38
+msgid "Confirm your password"
+msgstr "Confirme sua senha"
+
+#: templates/accounts/register.html:39
+msgid "Re-enter your password"
+msgstr "Digite sua senha novamente"
+
+#: templates/accounts/register.html:48
+msgid "Already have an account"
+msgstr "Já possui uma conta"
+
+#: templates/base.html:26 templates/core/user_activity_list.html:5
+#: templates/core/user_activity_list.html:10
+msgid "Activities"
+msgstr "Atividades"
+
+#: templates/base.html:29
+#, fuzzy
+#| msgid "Articles"
+msgid "Articles Files"
+msgstr "Arquivos de Artigos"
+
+#: templates/base.html:32
+msgid "Packages"
+msgstr "Pacotes"
+
+#: templates/base.html:35 templates/core/journal_list.html:5
+#: templates/core/journal_list.html:10
+msgid "Journals"
+msgstr "Periódicos"
+
+#: templates/base.html:47 templates/core/user_dashboard.html:6
+#: templates/core/user_dashboard.html:11
+msgid "Dashboard"
+msgstr "Painel"
+
+#: templates/base.html:48 templates/core/user_profile_edit.html:7
+#: templates/core/user_profile_edit.html:12
+msgid "Edit profile"
+msgstr "Editar perfil"
+
+#: templates/base.html:50
+msgid "Logout"
+msgstr "Sair"
+
+#: templates/core/article_files_list.html:5
+#: templates/core/article_files_list.html:9
+#, fuzzy
+#| msgid "Articles"
+msgid "Articles files"
+msgstr "Arquivos de artigos"
+
+#: templates/core/article_files_list.html:17
+#: templates/core/deposited_package_list.html:18
+msgid "Identifier"
+msgstr "Identificador do documento"
+
+#: templates/core/article_files_list.html:18
+#: templates/core/deposited_package_list.html:20
+#: templates/core/user_package_download.html:39
+msgid "Creation date"
+msgstr "Data de criação"
+
+#: templates/core/article_files_list.html:19
+#: templates/core/deposited_package_list.html:21
+#: templates/core/user_package_download.html:40
+#, fuzzy
+#| msgid "Updated"
+msgid "Update date"
+msgstr "Data de atualização"
+
+#: templates/core/article_files_list.html:20
+#: templates/core/user_package_download.html:37
+msgid "Package name"
+msgstr "Nome do pacote"
+
+#: templates/core/article_files_list.html:21
+msgid "XML"
+msgstr ""
+
+#: templates/core/article_files_list.html:22
+msgid "Assets"
+msgstr ""
+
+#: templates/core/article_files_list.html:23
+msgid "Renditions"
+msgstr ""
+
+#: templates/core/deposited_package_list.html:5
+msgid "Deposited Packages"
+msgstr "Pacotes Depositados"
+
+#: templates/core/deposited_package_list.html:10
+msgid "Deposited packages"
+msgstr "Pacotes depositados"
+
+#: templates/core/deposited_package_list.html:19
+msgid "File Name"
+msgstr "Nome do arquivo"
+
+#: templates/core/journal_list.html:18
+msgid "Title"
+msgstr "Título"
+
+#: templates/core/journal_list.html:19
+msgid "Short Title"
+msgstr "Título abreviado"
+
+#: templates/core/journal_list.html:20
+msgid "Acronym"
+msgstr "Acrônimo"
+
+#: templates/core/journal_list.html:21
+msgid "Print ISSN"
+msgstr "Print ISSN"
+
+#: templates/core/journal_list.html:22
+msgid "Online ISSN"
+msgstr "Online ISSN"
+
+#: templates/core/package_search_results.html:5
+#: templates/core/search_results.html:20
+msgid "Package"
+msgstr "Pacote"
+
+#: templates/core/package_search_results.html:10
+msgid "Document Package"
+msgstr "Nome do documento"
+
+#: templates/core/package_search_results.html:13
+msgid "Document identifier "
+msgstr "Identificador do documento"
+
+#: templates/core/search_results.html:5 templates/core/search_results.html:10
+msgid "Documents"
+msgstr "Documentos"
+
+#: templates/core/search_results.html:17
+msgid "Document name"
+msgstr "Nome do documento"
+
+#: templates/core/search_results.html:18 templates/core/user_dashboard.html:21
+#: templates/core/user_package_download.html:21
+msgid "Document identifier"
+msgstr "Identificador do documento"
+
+#: templates/core/search_results.html:19
+msgid "Journal"
+msgstr "Periódicos"
+
+#: templates/core/search_results.html:39
+msgid "No results"
+msgstr "Não foram encontrados resultados"
+
+#: templates/core/user_activity_list.html:17
+msgid "Activity"
+msgstr "Atividade"
+
+#: templates/core/user_activity_list.html:18
+msgid "Annotation"
+msgstr "Anotação"
+
+#: templates/core/user_activity_list.html:19
+msgid "Status"
+msgstr "Estado"
+
+#: templates/core/user_activity_list.html:20
+msgid "Timestamp"
+msgstr "Data"
+
+#: templates/core/user_dashboard.html:15
+#: templates/core/user_package_download.html:15
+msgid "Search package"
+msgstr "Procurar pacote"
+
+#: templates/core/user_dashboard.html:22
+#: templates/core/user_package_download.html:22
+msgid "Enter a document identifier"
+msgstr "Digite um identificador de documento"
+
+#: templates/core/user_dashboard.html:24
+#: templates/core/user_package_download.html:24
+msgid "Search"
+msgstr "Procurar"
+
+#: templates/core/user_dashboard.html:34
+#: templates/core/user_package_upload.html:17
+msgid "Upload package"
+msgstr "Enviar pacote"
+
+#: templates/core/user_dashboard.html:37
+#: templates/core/user_package_upload.html:20
+msgid "Upload"
+msgstr "Enviar"
+
+#: templates/core/user_dashboard.html:45
+msgid "User profile"
+msgstr "Editar perfil"
+
+#: templates/core/user_dashboard.html:51
+msgid "E-mail"
+msgstr "E-mail"
+
+#: templates/core/user_dashboard.html:52
+msgid "Last login date"
+msgstr "Data do último acesso"
+
+#: templates/core/user_package_download.html:6
+msgid "Download Package"
+msgstr "Baixar pacote"
+
+#: templates/core/user_package_download.html:11
+msgid "Search packages"
+msgstr "Meus pacotes"
+
+#: templates/core/user_package_download.html:31
+msgid "Results for document"
+msgstr "Procurar documento"
+
+#: templates/core/user_package_download.html:38
+msgid "Package address"
+msgstr "Endereço do pacote"
+
+#: templates/core/user_package_list.html:5
+#: templates/core/user_package_list.html:10
+msgid "My packages"
+msgstr "Meus pacotes"
+
+#: templates/core/user_package_list.html:18
+msgid "Name"
+msgstr "Nome"
+
+#: templates/core/user_package_list.html:19
+msgid "Deposit date"
+msgstr "Data de depósito"
+
+#: templates/core/user_package_list.html:20
+msgid "State"
+msgstr "Estado"
+
+#: templates/core/user_package_upload.html:5
+#: templates/core/user_package_upload.html:10
+msgid "Upload Package"
+msgstr "Enviar Pacote"
+
+#: templates/core/user_profile.html:5 templates/core/user_profile.html:10
+msgid "Profile"
+msgstr "Perfil"
+
+#: templates/core/user_profile_edit.html:32
+msgid "Update user"
+msgstr "Atualizar usuário"
+
+#: templates/faq.html:5 templates/faq.html:10
+msgid "Frequently Asked Questions"
+msgstr "Perguntas Frequentes"
+
+#: templates/index.html:11
+msgid "Home"
+msgstr "Início"
+
+#: templates/index.html:16
+msgid "Search and download packages"
+msgstr "Procurar e baixar pacotes"
+
+#: templates/index.html:20
+msgid "Upload packages"
+msgstr "Enviar pacotes"
+
+#: views.py:50
+#, python-format
+msgid "User %s was updated"
+msgstr "Usuário %s foi criado"
+
+#: views.py:78 views.py:114
+#, python-format
+msgid "User %s was created"
+msgstr "Usuário %s foi criado"
+
+#: views.py:99
+msgid "Incorrect username or password"
+msgstr "Nome de usuário ou senha incorreto"
+
+#: views.py:187
+#, python-format
+msgid "Errors ocurred: %s"
+msgstr "Ocorreram erros: %s"
+
+#: views.py:193
+#, python-format
+msgid "Package (%(name)s, %(id)s) was added"
+msgstr "Pacote (%(name)s, %(id)s) foi adicionado"
+
+#: views.py:199
+#, python-format
+msgid "%s does not have a valid format. Please provide a zip file."
+msgstr "%s não possui um formato válido. Por favor, forneça um arquivo em formato zip."
+
+#: views.py:231
+#, python-format
+msgid "No packages were found for document %s"
+msgstr "Não foram encontrados pacotes para o documento %s"
+
+msgid "EventName.RETRIEVE_PACKAGE_DATA"
+msgstr "Pacote pesquisado"
+
+msgid "EventName.UPLOAD_PACKAGE"
+msgstr "Pacote enviado"
+
+msgid "EventName.CHANGE_USER_GROUPS"
+msgstr "Alteração de grupos de usuários"
+
+msgid "EventStatus.COMPLETED"
+msgstr "Completado"
+
+msgid "EventStatus.INITIATED"
+msgstr "Iniciado"
+
+msgid "EventStatus.FAILED"
+msgstr "Falha"

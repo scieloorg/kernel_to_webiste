@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Journals' %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-5">
+    <h1 class="h4">{% trans 'Journals' %}</h1>
+    <div class="m-3">
+        {% if journal_obj %}
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{% trans 'Title' %}</th>
+                    <th scope="col">{% trans 'Short Title' %}</th>
+                    <th scope="col">{% trans 'Acronym' %}</th>
+                    <th scope="col">{% trans 'Print ISSN' %}</th>
+                    <th scope="col">{% trans 'Online ISSN' %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for jour in journal_obj %}
+                <tr>
+                    <td>{{ journal_obj.start_index|add:forloop.counter0 }}</td>
+                    <td>{{ jour.title }}</td>
+                    <td>{{ jour.short_title }}</td>
+                    <td>{{ jour.acronym }}</td>
+                    <td>{{ jour.print_issn }}</td>
+                    <td>{{ jour.eletronic_issn }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<nav aria-label="Journal navigation">
+    <ul class="pagination justify-content-center">
+        {% if journal_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1">&laquo; {% trans 'First' %}</a>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link"  href="?page={{ journal_obj.previous_page_number }}">{% trans 'Previous' %}</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item">
+            <a class="page-link">Page {{ journal_obj.number }} of {{ journal_obj.paginator.num_pages }}</a>
+        </li>
+
+        {% if journal_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ journal_obj.next_page_number }}">{% trans 'Next' %}</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ journal_obj.paginator.num_pages }}">{% trans 'Last' %} &raquo;</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}

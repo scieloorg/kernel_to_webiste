@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load spf_extras %}
 
 {% block title %}
 SciELO Publishing Framework - {% trans 'Profile' %}
@@ -9,8 +10,8 @@ SciELO Publishing Framework - {% trans 'Profile' %}
 <h1 class="h4 pt-5">{% trans 'Profile' %}</h1>
 
 <div class="row row-cols-2 row-cols-md-3 my-3">
-    <div class="col mb-4">
-        <div class="card my-3">
+    <div class="col">
+        <div class="card">
             <div class="card-header">{% trans 'User profile' %}</div>
             <div class="card-body">
                 <ul class="list-unstyled">
@@ -21,7 +22,7 @@ SciELO Publishing Framework - {% trans 'Profile' %}
                     <li>{% trans 'Last login date' %}: {{ request.user.last_login }}</li>
                     <li>{% trans 'Groups' %}:
                     {% for g in groups %}
-                        <span class="badge bg-secondary mx-1">{{ g }}</span>
+                        <span class="badge bg-secondary mx-1">{{ g|to_short_group_name }}</span>
                     {% endfor %}
                     </li>
                 </ul>

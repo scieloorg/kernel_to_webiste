@@ -25,6 +25,11 @@ pip install -r requirements.txt
 ## Set the environment variables (see config.ini.template)
 Set the necessary environment variables under a developer machine through the following command: `export $(cat config.ini.template | xargs) `
 
+## Create a Postgres database
+```shell
+create database spf;
+```
+
 ## Prepare and run the application
 ```shell
 # Access the spf root directory
@@ -40,10 +45,15 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-_Add example data to the application database_
+_Add default groups to the application database_
 ```shell
 # Add content to the application tables
 python manage.py loaddata group
+```
+
+_Add example users to the application database (only in development environments)_
+```shell
+# Add content to the application tables
 python manage.py loaddata user
 ```
 
@@ -60,10 +70,10 @@ python manage.py runserver
 cd core
 
 # Create the strings translated to Portuguese
-django-admin makemessages -l pt
+django-admin makemessages_no_fuzzy -l pt
 
 # Create the strings translated to Spanish
-django-admin makemessages -l es
+django-admin makemessages_no_fuzzy -l es
 
 # Compile the translated strings
 django-admin compilemessages
@@ -76,4 +86,4 @@ After following the installing and running instructions, the application must be
 
 ## Observations
 Keep in mind that this is an initial version of our application. 
-The idea, at this moment, is to provide a simple interface where users can register and login into the system.
+The idea, at this moment, is to provide a simple interface where users can authenticate, search and send packages.

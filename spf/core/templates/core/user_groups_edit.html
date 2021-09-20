@@ -3,12 +3,12 @@
 {% load spf_extras %}
 
 {% block title %}
-SciELO Publishing Framework - {% trans 'User Groups' %}
+SciELO Publishing Framework - {% trans 'User groups' %}
 {% endblock %}
 
 {% block content %}
 <div class="row justify-content-center pt-5">
-    <h1 class="h4">{% trans 'User Groups' %}</h1>
+    <h1 class="h4">{% trans 'User groups' %}</h1>
     <div class="m-3">
         {% if user_obj %}
             <form method="POST">
@@ -23,7 +23,7 @@ SciELO Publishing Framework - {% trans 'User Groups' %}
                             <th scope="col">{% trans 'Last name' %}</th>
                             <th scope="col">{% trans 'E-mail' %}</th>
                             {% for g in available_groups %}
-                            <th class="text-center" scope="col">{{ g.name|short_group_name }}</th>
+                            <th class="text-center" scope="col">{{ g.name|to_short_group_name }}</th>
                             {% endfor %}
                         </tr>
                         </thead>
@@ -69,24 +69,24 @@ SciELO Publishing Framework - {% trans 'User Groups' %}
     <ul class="pagination justify-content-center">
         {% if user_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page=1">&laquo; First</a>
+            <a class="page-link" href="?page=1">&laquo; {% trans 'First' %}</a>
         </li>
 
         <li class="page-item">
-            <a class="page-link"  href="?page={{ user_obj.previous_page_number }}">Previous</a>
+            <a class="page-link"  href="?page={{ user_obj.previous_page_number }}">{% trans 'Previous' %}</a>
         </li>
         {% endif %}
 
         <li class="page-item">
-            <a class="page-link">Page {{ user_obj.number }} of {{ user_obj.paginator.num_pages }}</a>
+            <a class="page-link">{% trans 'Page' %} {{ user_obj.number }} {% trans 'of' %} {{ user_obj.paginator.num_pages }}</a>
         </li>
 
         {% if user_obj.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ user_obj.next_page_number }}">Next</a>
+            <a class="page-link" href="?page={{ user_obj.next_page_number }}">{% trans 'Next' %}</a>
         </li>
         <li class="page-item">
-            <a class="page-link" href="?page={{ user_obj.paginator.num_pages }}">Last &raquo;</a>
+            <a class="page-link" href="?page={{ user_obj.paginator.num_pages }}">{% trans 'Last' %} &raquo;</a>
         </li>
         {% endif %}
     </ul>

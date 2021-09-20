@@ -32,19 +32,13 @@ SciELO Publishing Framework - {% trans 'Activities' %}
                         {% if user|has_group:"manager" %}
                             <td>{{ ev.actor }}</th>
                         {% endif %}
-                        <td>{% trans ev.name %}</td>
+                        <td>{{ ev.get_name_display }}</td>
                         {% if ev.annotation %}
                             <td>{{ ev.annotation }}</td>
                         {% else %}
                             <td></td>
                         {% endif %}
-                        {% if ev.status == 'EventStatus.COMPLETED' %}
-                            <td><span class="badge bg-success">{% trans ev.status %}</span></td>
-                        {% elif ev.status == 'EventStatus.FAILED' %}
-                            <td><span class="badge bg-danger">{% trans ev.status %}</span></td>
-                        {% else %}
-                            <td><span class="badge bg-secondary">{% trans ev.status %}</span></td>
-                        {% endif %}
+                        <td><span class="badge {{ ev.status|to_css_event_status_style }}">{{ ev.get_status_display }}</span></td>
                         <td>{{ ev.datetime }}</td>
                     </tr>
                 {% endfor %}
@@ -75,7 +69,7 @@ SciELO Publishing Framework - {% trans 'Activities' %}
         {% endif %}
 
         <li class="page-item">
-            <a class="page-link">Page {{ event_obj.number }} of {{ event_obj.paginator.num_pages }}</a>
+            <a class="page-link">{% trans 'Page' %} {{ event_obj.number }} {% trans 'of' %} {{ event_obj.paginator.num_pages }}</a>
         </li>
 
         {% if event_obj.has_next %}

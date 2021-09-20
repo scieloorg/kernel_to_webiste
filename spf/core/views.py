@@ -1,24 +1,31 @@
-from core.extdeps import event_manager
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import Group
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import Group, User
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
-
-from dsm.ingress import get_package_uri_by_pid, upload_package
+from core.extdeps import event_manager
+from core.models import (
+    IngressPackage,
+    Event
+)
+from core.forms import (
+    CreateUserForm,
+    UpdateUserForm
+)
+from core.decorators import (
+    unauthenticated_user,
+    allowed_users
+)
 from spf import settings
-
 from opac_schema.v1.models import Journal as OPACJournal
 from opac_schema.v2.models import ArticleFiles
+from os import path
 
-from .models import *
-from .forms import CreateUserForm, UpdateUserForm
-from .decorators import unauthenticated_user, allowed_users
-
-import os
+import dsm.ingress as dsm_ingress
 
 
 def _get_list_according_to_scope(request, model_class, filtering_field):
@@ -81,12 +88,8 @@ def account_register_page(request):
                              extra_tags='alert alert-success')
             return redirect('login')
         else:
-            for key_err, key_val in form.errors.items():
-                messages.error(
-                    request,
-                    _('Errors ocurred: (%s ,%s)' % (key_err, key_val[0])),
-                    extra_tags='alert alert-danger')
-
+            for val in form.errors.values():
+                messages.error(request, _(val[0]), extra_tags='alert alert-danger')
     context = {
         'username': request.POST.get('username', ''),
         'email': request.POST.get('email', ''),
@@ -119,6 +122,34 @@ def account_login_page(request):
 
 
 @login_required(login_url='login')
+def account_change_password_page(request):
+    context = {}
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(
+                request,
+                _('Your password was updated'),
+                extra_tags='alert alert-success'
+            )
+        else:
+            for val in form.errors.values():
+                messages.error(request, _(val[0]), extra_tags='alert alert-danger')
+            context.update({
+                'old_password': request.POST.get('old_password', ''),
+                'new_password1': request.POST.get('new_password1', ''),
+                'new_password2': request.POST.get('new_password2', ''),
+                'form': form
+                })
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'accounts/change_password.html', context=context)
+
+
+@login_required(login_url='login')
 @allowed_users(allowed_groups=['manager'])
 def user_add_page(request):
     context = {'user_groups': []}
@@ -144,11 +175,8 @@ def user_add_page(request):
                              extra_tags='alert alert-success')
 
         else:
-            for key_err, key_val in form.errors.items():
-                messages.error(
-                    request,
-                    _('Errors ocurred: (%s, %s)' % (key_err, key_val[0])),
-                    extra_tags='alert alert-danger')
+            for val in form.errors.values():
+                messages.error(request, _(val[0]), extra_tags='alert alert-danger')
 
             context.update({
                 'username': request.POST.get('username', ''),
@@ -211,7 +239,7 @@ def user_package_upload_page(request):
         # registra evento de envio de pacote novo
         ev = event_manager.register_event(
             request.user,
-            event_manager.EventName.UPLOAD_PACKAGE,
+            Event.Name.UPLOAD_PACKAGE,
             str({'file_name': file_input.name})
         )
 
@@ -221,33 +249,38 @@ def user_package_upload_page(request):
             # envia arquivo para diretório temporário
             pkg_name = fs.save(file_input.name, file_input)
 
-            ip = IngressPackage()
-            ip.user = request.user
-            ip.datetime = ev.datetime
-            ip.package_name = pkg_name
-            ip.save()
-
             # envia arquivo ao MinIO
             try:
-                ingress_results = upload_package(os.path.join(fs.base_location, pkg_name))
+                ingress_results = dsm_ingress.upload_package(path.join(fs.base_location, pkg_name))
 
                 if len(ingress_results['errors']) > 0:
                     messages.error(request,
                                    _('Errors ocurred: %s') % ingress_results['errors'],
                                    extra_tags='alert alert-danger')
-                    ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.FAILED})
+                    # registra o evento como completado com falha
+                    ev = event_manager.update_event(ev, {'status': Event.Status.FAILED})
                 else:
                     for d in ingress_results['docs']:
                         messages.success(request,
                                          _('Package (%(name)s, %(id)s) was added')
                                          % {'name': d['name'], 'id': d['id']},
                                          extra_tags='alert alert-success')
-                    ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.COMPLETED})
+                    # registra o evento como completado com sucesso
+                    ev = event_manager.update_event(ev, {'status': Event.Status.COMPLETED})
+
+                    # registra o pacote enviado
+                    ip = IngressPackage()
+                    ip.user = request.user
+                    ip.datetime = ev.datetime
+                    ip.package_name = pkg_name
+                    ip.status = IngressPackage.Status.RECEIVED
+                    ip.save()
             except ValueError:
                 messages.error(request,
-                               _('%s does not have a valid format. Please provide a zip file.') % pkg_name,
+                               pkg_name + _(' does not have a valid format. Please provide a zip file.'),
                                extra_tags='alert alert-danger')
-                ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.FAILED})
+                # registra o evento como completado com falha
+                ev = event_manager.update_event(ev, {'status': Event.Status.FAILED})
 
             # remove arquivo de diretório temporário
             fs.delete(pkg_name)
@@ -263,10 +296,10 @@ def user_package_download_page(request):
     if pid:
         ev = event_manager.register_event(
             request.user,
-            event_manager.EventName.RETRIEVE_PACKAGE_DATA,
+            Event.Name.RETRIEVE_PACKAGE,
             str(str({'pid': pid}))
         )
-        package_uri_results = get_package_uri_by_pid(pid)
+        package_uri_results = dsm_ingress.get_package_uri_by_pid(pid)
 
         if len(package_uri_results['errors']) > 0:
             for e in package_uri_results['errors']:
@@ -274,14 +307,14 @@ def user_package_download_page(request):
                     request,
                     e,
                     extra_tags='alert alert-danger')
-            ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.FAILED})
+            ev = event_manager.update_event(ev, {'status': Event.Status.FAILED})
         elif len(package_uri_results['doc_pkg']) == 0:
             messages.warning(
                 request,
                 _('No packages were found for document %s') % pid,
                 extra_tags='alert alert-warning')
         else:
-            ev = event_manager.update_event(ev, {'status': event_manager.EventStatus.COMPLETED})
+            ev = event_manager.update_event(ev, {'status': Event.Status.COMPLETED})
 
     return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
 
@@ -297,7 +330,7 @@ def user_groups_edit_page(request):
     user_obj = paginator.get_page(page_number)
 
     if request.method == 'POST':
-        ev = event_manager.register_event(request.user, event_manager.EventName.CHANGE_USER_GROUPS)
+        ev = event_manager.register_event(request.user, Event.Name.CHANGE_USER_GROUPS)
 
         for u in user_obj:
             groups_names = request.POST.getlist('%s|user_groups' % u.username)
@@ -311,6 +344,6 @@ def user_groups_edit_page(request):
             u.save()
 
         messages.success(request, _("Users' groups were updated"), extra_tags='alert alert-success')
-        event_manager.update_event(ev, {'status': event_manager.EventStatus.COMPLETED})
+        event_manager.update_event(ev, {'status': Event.Status.COMPLETED})
 
     return render(request, 'core/user_groups_edit.html', context={'user_obj': user_obj, 'available_groups': available_groups})

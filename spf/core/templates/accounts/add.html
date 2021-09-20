@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% load i18n %}
-
+{% load spf_extras %}
 {% load static %}
 
 {% block title %}
-SciELO Publishing Framework - {% trans 'Add User' %}
+SciELO Publishing Framework - {% trans 'Add user' %}
 {% endblock %}
 
 {% block content %}
@@ -39,7 +39,7 @@ SciELO Publishing Framework - {% trans 'Add User' %}
             {% else %}
                 <input class="form-check-input" type="checkbox" name="user_groups" value="{{ g.name }}" id="group_{{ g.name }}" checked>
             {% endif %}
-            <label class="form-check-label" for="group_{{ g.name }}">{{ g.name }}</label>
+            <label class="form-check-label" for="group_{{ g.name }}">{{ g.name|to_short_group_name }}</label>
         </div>
         {% endfor %}
     </div>

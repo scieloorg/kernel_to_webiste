@@ -26,8 +26,8 @@ def faq_page(request):
 
 @login_required(login_url='login')
 def user_profile_page(request):
-    groups = request.user.groups.values_list('name', flat=True)
-    return render(request, 'core/user_profile.html', context={'groups': groups})
+    groups_names = controller.get_groups_names_from_user(request.user)
+    return render(request, 'core/user_profile.html', context={'groups': groups_names})
 
 
 @login_required(login_url='login')
@@ -45,8 +45,9 @@ def user_profile_edit_page(request):
 
 
 @login_required(login_url='login')
-    request_scope, event_list = _get_list_according_to_scope(request, Event, 'actor')
 def event_list_page(request):
+    request_scope = request.GET.get('scope', '')
+    event_list = controller.get_events_from_user_and_scope(request.user, request_scope)
 
     paginator = Paginator(event_list, 25)
     page_number = request.GET.get('page')
@@ -142,12 +143,9 @@ def user_add_page(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            user = User.objects.get(username=username)
-
-            user_groups = Group.objects.filter(name__in=groups_names)
-            for u in user_groups:
-                user.groups.add(u)
-            user.save()
+            user = controller.get_user_from_username(username)
+            user_groups = controller.get_groups_from_groups_names(groups_names)
+            controller.update_user_groups(user, user_groups)
 
             messages.success(request,
                              _('User %s was created') % username,
@@ -164,7 +162,7 @@ def user_add_page(request):
                 'last_name': request.POST.get('last_name', '')
             })
 
-    context.update({'available_groups': Group.objects.all()})
+    context.update({'available_groups': controller.get_groups()})
 
     return render(request, 'accounts/add.html', context=context)
 
@@ -177,7 +175,7 @@ def logout_user(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def journal_list_page(request):
-    journal_list = OPACJournal.objects.all()
+    journal_list = controller.get_opac_journals()
 
     paginator = Paginator(journal_list, 25)
     page_number = request.GET.get('page')
@@ -189,7 +187,8 @@ def journal_list_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def deposited_package_list_page(request):
-    request_scope, deposited_package_list = _get_list_according_to_scope(request, IngressPackage, 'user')
+    request_scope = request.GET.get('scope', '')
+    deposited_package_list = controller.get_deposited_packages_from_user_and_scope(request.user, request_scope)
 
     paginator = Paginator(deposited_package_list, 25)
     page_number = request.GET.get('page')
@@ -201,7 +200,7 @@ def deposited_package_list_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def article_files_list_page(request):
-    article_files_list = ArticleFiles.objects.all().order_by('-updated')
+    article_files_list = controller.get_articles_files()
 
     paginator = Paginator(article_files_list, 25)
     page_number = request.GET.get('page')
@@ -216,11 +215,7 @@ def user_package_upload_page(request):
     if request.method == 'POST':
         file_input = request.FILES.get('package_file')
         # registra evento de envio de pacote novo
-        ev = event_manager.register_event(
-            request.user,
-            Event.Name.UPLOAD_PACKAGE,
-            str({'file_name': file_input.name})
-        )
+        ev = controller.add_event(request.user, Event.Name.UPLOAD_PACKAGE, {'file_name': file_input.name})
 
         if file_input:
             fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
@@ -230,14 +225,15 @@ def user_package_upload_page(request):
 
             # envia arquivo ao MinIO
             try:
-                ingress_results = dsm_ingress.upload_package(path.join(fs.base_location, pkg_name))
+                file_path = path.join(fs.base_location, pkg_name)
+                ingress_results = dsm_ingress.upload_package(file_path)
 
                 if len(ingress_results['errors']) > 0:
                     messages.error(request,
                                    _('Errors ocurred: %s') % ingress_results['errors'],
                                    extra_tags='alert-danger')
                     # registra o evento como completado com falha
-                    ev = event_manager.update_event(ev, {'status': Event.Status.FAILED})
+                    ev = controller.update_event(ev, {'status': Event.Status.FAILED})
                 else:
                     for d in ingress_results['docs']:
                         messages.success(request,
@@ -245,21 +241,16 @@ def user_package_upload_page(request):
                                          % {'name': d['name'], 'id': d['id']},
                                          extra_tags='alert-success')
                     # registra o evento como completado com sucesso
-                    ev = event_manager.update_event(ev, {'status': Event.Status.COMPLETED})
+                    ev = controller.update_event(ev, {'status': Event.Status.COMPLETED})
 
                     # registra o pacote enviado
-                    ip = IngressPackage()
-                    ip.user = request.user
-                    ip.datetime = ev.datetime
-                    ip.package_name = pkg_name
-                    ip.status = IngressPackage.Status.RECEIVED
-                    ip.save()
+                    controller.add_ingress_package(request.user, ev.datetime, pkg_name)
             except ValueError:
                 messages.error(request,
                                pkg_name + _(' does not have a valid format. Please provide a zip file.'),
                                extra_tags='alert-danger')
                 # registra o evento como completado com falha
-                ev = event_manager.update_event(ev, {'status': Event.Status.FAILED})
+                ev = controller.update_event(ev, {'status': Event.Status.FAILED})
 
             # remove arquivo de diretório temporário
             fs.delete(pkg_name)
@@ -273,11 +264,7 @@ def user_package_download_page(request):
     pid = request.GET.get('pid', '')
     package_uri_results = {'pid': pid, 'doc_pkg': []}
     if pid:
-        ev = event_manager.register_event(
-            request.user,
-            Event.Name.RETRIEVE_PACKAGE,
-            str(str({'pid': pid}))
-        )
+        ev = controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid})
         package_uri_results = dsm_ingress.get_package_uri_by_pid(pid)
 
         if len(package_uri_results['errors']) > 0:
@@ -286,14 +273,14 @@ def user_package_download_page(request):
                     request,
                     e,
                     extra_tags='alert-danger')
-            ev = event_manager.update_event(ev, {'status': Event.Status.FAILED})
+            ev = controller.update_event(ev, {'status': Event.Status.FAILED})
         elif len(package_uri_results['doc_pkg']) == 0:
             messages.warning(
                 request,
                 _('No packages were found for document %s') % pid,
                 extra_tags='alert-warning')
         else:
-            ev = event_manager.update_event(ev, {'status': Event.Status.COMPLETED})
+            ev = controller.update_event(ev, {'status': Event.Status.COMPLETED})
 
     return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
 
@@ -301,28 +288,22 @@ def user_package_download_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager'])
 def user_groups_edit_page(request):
-    user_list = User.objects.filter(is_superuser=False)
-    available_groups = Group.objects.all()
+    user_list = controller.get_users()
+    available_groups = controller.get_groups()
 
     paginator = Paginator(user_list, 25)
     page_number = request.GET.get('page')
     user_obj = paginator.get_page(page_number)
 
     if request.method == 'POST':
-        ev = event_manager.register_event(request.user, Event.Name.CHANGE_USER_GROUPS)
+        ev = controller.add_event(request.user, Event.Name.CHANGE_USER_GROUPS)
 
         for u in user_obj:
             groups_names = request.POST.getlist('%s|user_groups' % u.username)
-            user_groups = Group.objects.filter(name__in=groups_names)
-            for ag in available_groups:
-                if ag not in user_groups:
-                    u.groups.remove(ag)
-
-            for ug in user_groups:
-                u.groups.add(ug)
-            u.save()
+            user_groups = controller.get_groups_from_groups_names(groups_names)
+            controller.update_user_groups(u, user_groups)
 
         messages.success(request, _("Users' groups were updated"), extra_tags='alert-success')
-        event_manager.update_event(ev, {'status': Event.Status.COMPLETED})
+        controller.update_event(ev, {'status': Event.Status.COMPLETED})
 
     return render(request, 'core/user_groups_edit.html', context={'user_obj': user_obj, 'available_groups': available_groups})

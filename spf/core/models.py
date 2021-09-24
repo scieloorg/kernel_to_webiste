@@ -3,6 +3,14 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 
 
+GROUP_MANAGER = 'manager'
+GROUP_OPERATOR_INGRESS = 'operator_ingress'
+GROUP_OPERATOR_MIGRATION = 'operator_migration'
+GROUP_QUALITY_ANALYST = 'quality_analyst'
+
+SCOPE_ALL_USERS = 'all_users'
+
+
 class IngressPackage(models.Model):
     class Status(models.TextChoices):
         RECEIVED = 'R', _('Received')

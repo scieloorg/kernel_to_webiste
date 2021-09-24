@@ -35,7 +35,7 @@ class Event(models.Model):
         CHANGE_USER_GROUPS = 'CUG', _('Change user groups')
 
     # quem realiza o evento
-    actor = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
 
     # momento em que o evento foi iniciado
     datetime = models.DateTimeField(auto_now=True)

@@ -103,3 +103,25 @@ After following the installing and running instructions, the application must be
 ## Observations
 Keep in mind that this is an initial version of our application. 
 The idea, at this moment, is to provide a simple interface where users can authenticate, search and send packages.
+
+## List of environmental variables
+
+Variable | Example value | Description
+---------|---------------|------------
+MINIO_HOST | `172.17.0.2:9000` | MinIO host address
+MINIO_ACCESS_KEY | `minioadmin` | MinIO username
+MINIO_SECRET_KEY | `minioadmin` | MinIO password
+MINIO_TIMEOUT | `10000` | MinIO connection timeout
+MINIO_SECURE | `false` | MinIO SSL flag (`true` or `false`)
+MINIO_SCIELO_COLLECTION | `spf_brazil` | MinIO collection name
+MINIO_SPF_DIR | `packages` | MinIO storage main directory
+PID_DATABASE_DSN | `postgresql`+psycopg2://postgres:alemanha@172.17.0.4:5432/pidmanager | PID manager (PostgreSQL) string connection
+DATABASE_CONNECT_URL | `mongodb`://172.17.0.3:27017/opac | OPAC/Kernel database (MongoDB) string connection
+DJANGO_DEBUG | `1` | Django flag to see DEBUG messages)
+DJANGO_SECRET_KEY | `my_django_secret_key` |
+DJANGO_ALLOWED_HOSTS | `localhost`;127.0.0.1;[::1] |
+POSTGRES_DB | `spf` | SciELO Publishing Framework database name
+POSTGRES_USER | `postgres` | SciELO Publishing Framework database user
+POSTGRES_PASSWORD | `my_postgres_password` | SciELO Publishing Framework database user password
+POSTGRES_HOST | `172.17.0.4` | SciELO Publishing Framework database hostname
+POSTGRES_PORT | `5432` | SciELO Publishing Framework database host port

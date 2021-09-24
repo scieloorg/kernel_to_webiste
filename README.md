@@ -86,13 +86,13 @@ _How to translate the interface content to other languages_
 cd core
 
 # Create the strings translated to Portuguese
-django-admin makemessages_no_fuzzy -l pt
+python ../manage.py make_messages_no_fuzzy -l pt
 
 # Create the strings translated to Spanish
-django-admin makemessages_no_fuzzy -l es
+python ../manage.py make_messages_no_fuzzy -l es
 
 # Compile the translated strings
-django-admin compilemessages
+python ../manage.py compilemessages
 ```
 
 

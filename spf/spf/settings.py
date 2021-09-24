@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!7(@-1@4d8e*iittyl$32m_+(_iz2*ggsuhu)qku!+m7k6e3mz'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '!7(@-1@4d8e*iittyl$32m_+(_iz2*ggsuhu)qku!+m7k6e3mz')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(os.environ.get('DJANGO_DEBUG', 0))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(';')
 
 
 # Application definition
@@ -78,13 +78,13 @@ WSGI_APPLICATION = 'spf.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'spf',
-        'USER': 'postgres',
-        'PASSWORD': 'alemanha',
-        'HOST': '172.17.0.6',
-        'PORT': 5432,
-    }
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('POSTGRES_DB', 'spf'),
+        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'alemanha'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
+        'PORT': int(os.environ.get('POSTGRES_PORT', '5432')),
+    },
 }
 
 

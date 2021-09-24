@@ -60,7 +60,7 @@ def user_profile_edit_page(request):
             username = form.cleaned_data.get('username')
             messages.success(request,
                              _('User %s was updated') % username,
-                             extra_tags='alert alert-success')
+                             extra_tags='alert-success')
             return redirect('user_profile_edit')
     return render(request, 'core/user_profile_edit.html', context={})
 
@@ -85,11 +85,11 @@ def account_register_page(request):
             username = form.cleaned_data.get('username')
             messages.success(request,
                              _('User %s was created') % username,
-                             extra_tags='alert alert-success')
+                             extra_tags='alert-success')
             return redirect('login')
         else:
             for val in form.errors.values():
-                messages.error(request, _(val[0]), extra_tags='alert alert-danger')
+                messages.error(request, _(val[0]), extra_tags='alert-danger')
     context = {
         'username': request.POST.get('username', ''),
         'email': request.POST.get('email', ''),
@@ -115,7 +115,7 @@ def account_login_page(request):
         else:
             messages.error(request,
                           _('Incorrect username or password'),
-                          extra_tags='alert alert-danger')
+                          extra_tags='alert-danger')
             context['username'] = username
 
     return render(request, 'accounts/login.html', context=context)
@@ -132,11 +132,11 @@ def account_change_password_page(request):
             messages.success(
                 request,
                 _('Your password was updated'),
-                extra_tags='alert alert-success'
+                extra_tags='alert-success'
             )
         else:
             for val in form.errors.values():
-                messages.error(request, _(val[0]), extra_tags='alert alert-danger')
+                messages.error(request, _(val[0]), extra_tags='alert-danger')
             context.update({
                 'old_password': request.POST.get('old_password', ''),
                 'new_password1': request.POST.get('new_password1', ''),
@@ -172,11 +172,11 @@ def user_add_page(request):
 
             messages.success(request,
                              _('User %s was created') % username,
-                             extra_tags='alert alert-success')
+                             extra_tags='alert-success')
 
         else:
             for val in form.errors.values():
-                messages.error(request, _(val[0]), extra_tags='alert alert-danger')
+                messages.error(request, _(val[0]), extra_tags='alert-danger')
 
             context.update({
                 'username': request.POST.get('username', ''),
@@ -256,7 +256,7 @@ def user_package_upload_page(request):
                 if len(ingress_results['errors']) > 0:
                     messages.error(request,
                                    _('Errors ocurred: %s') % ingress_results['errors'],
-                                   extra_tags='alert alert-danger')
+                                   extra_tags='alert-danger')
                     # registra o evento como completado com falha
                     ev = event_manager.update_event(ev, {'status': Event.Status.FAILED})
                 else:
@@ -264,7 +264,7 @@ def user_package_upload_page(request):
                         messages.success(request,
                                          _('Package (%(name)s, %(id)s) was added')
                                          % {'name': d['name'], 'id': d['id']},
-                                         extra_tags='alert alert-success')
+                                         extra_tags='alert-success')
                     # registra o evento como completado com sucesso
                     ev = event_manager.update_event(ev, {'status': Event.Status.COMPLETED})
 
@@ -278,7 +278,7 @@ def user_package_upload_page(request):
             except ValueError:
                 messages.error(request,
                                pkg_name + _(' does not have a valid format. Please provide a zip file.'),
-                               extra_tags='alert alert-danger')
+                               extra_tags='alert-danger')
                 # registra o evento como completado com falha
                 ev = event_manager.update_event(ev, {'status': Event.Status.FAILED})
 
@@ -306,13 +306,13 @@ def user_package_download_page(request):
                 messages.error(
                     request,
                     e,
-                    extra_tags='alert alert-danger')
+                    extra_tags='alert-danger')
             ev = event_manager.update_event(ev, {'status': Event.Status.FAILED})
         elif len(package_uri_results['doc_pkg']) == 0:
             messages.warning(
                 request,
                 _('No packages were found for document %s') % pid,
-                extra_tags='alert alert-warning')
+                extra_tags='alert-warning')
         else:
             ev = event_manager.update_event(ev, {'status': Event.Status.COMPLETED})
 
@@ -343,7 +343,7 @@ def user_groups_edit_page(request):
                 u.groups.add(ug)
             u.save()
 
-        messages.success(request, _("Users' groups were updated"), extra_tags='alert alert-success')
+        messages.success(request, _("Users' groups were updated"), extra_tags='alert-success')
         event_manager.update_event(ev, {'status': Event.Status.COMPLETED})
 
     return render(request, 'core/user_groups_edit.html', context={'user_obj': user_obj, 'available_groups': available_groups})

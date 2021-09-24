@@ -46,13 +46,4 @@ SciELO Publishing Framework - {% trans 'Add user' %}
     <button type="submit" class="btn btn-primary">{% trans 'Add user' %}</button>
 </form>
 
-{% for message in messages %}
-<div class="d-flex justify-content-center">
-    <div class="{{ message.tags }}" role="alert">
-        {{ message }}
-    </div>
-</div>
-{% endfor %}
-
-
 {% endblock %}

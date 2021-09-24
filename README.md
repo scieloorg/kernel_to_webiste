@@ -1,16 +1,19 @@
-# SPF
+# SciELO Publishing Framework
 
-## Dependencies
+
+## Installation under a Python virtual environment
+
+_System dependencies_
+
 Be sure that you have the necessary operational system dependencies:
+
 ```shell
 gettext
 python 3.9
 ```
 
-
-## Installation
-
 _Create a virtual environment and install the application dependencies_
+
 ```shell
 # Create a virtual environment
 virtualenv -p python3.9 .venv
@@ -20,51 +23,64 @@ source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Install packages
+pip install .
 ```
 
-## Set the environment variables (see config.ini.template)
-Set the necessary environment variables under a developer machine through the following command: `export $(cat config.ini.template | xargs) `
+_Set the environment variables_
 
-## Create a Postgres database
 ```shell
+export $(cat dev.ini | xargs)
+```
+
+_Create a PostgreSQL database named "spf"_
+
+```shell
+# Through a Docker container with a PostgreSQL database
+docker exec --user postgres -it scielo-postgres-1 psql -c 'create database spf;'
+
+# Or through psql
+psql --user postgres;
 create database spf;
 ```
 
-## Prepare and run the application
-```shell
-# Access the spf root directory
-cd spf
+_Prepare and run the application_
 
+```shell
 # Make migrations related to the database (at this moment, we're using a simple database - sqlite)
-python manage.py makemigrations
+python spf/manage.py makemigrations
 
 # Migrate database (this operation construct all the necessary database tables)
-python manage.py migrate
+python spf/manage.py migrate
 
 # Create the superuser (take note of the credentials)
-python manage.py createsuperuser
+python spf/manage.py createsuperuser
 ```
 
 _Add default groups to the application database_
+
 ```shell
-# Add content to the application tables
-python manage.py loaddata group
+# Add default groups to the application database
+python spf/manage.py loaddata group
 ```
 
 _Add example users to the application database (only in development environments)_
+
 ```shell
-# Add content to the application tables
-python manage.py loaddata user
+# Add example users to the application database
+python spf/manage.py loaddata user
 ```
 
 _Run the application_
+
 ```shell
 # Start the application
-python manage.py runserver
+python spf/manage.py runserver
 ```
 
+_How to translate the interface content to other languages_
 
-## How to translate the interface content to other languages
 ```shell
 # Access the core project directory
 cd core
@@ -87,3 +103,25 @@ After following the installing and running instructions, the application must be
 ## Observations
 Keep in mind that this is an initial version of our application. 
 The idea, at this moment, is to provide a simple interface where users can authenticate, search and send packages.
+
+## List of environmental variables
+
+Variable | Example value | Description
+---------|---------------|------------
+MINIO_HOST | `172.17.0.2:9000` | MinIO host address
+MINIO_ACCESS_KEY | `minioadmin` | MinIO username
+MINIO_SECRET_KEY | `minioadmin` | MinIO password
+MINIO_TIMEOUT | `10000` | MinIO connection timeout
+MINIO_SECURE | `false` | MinIO SSL flag (`true` or `false`)
+MINIO_SCIELO_COLLECTION | `spf_brazil` | MinIO collection name
+MINIO_SPF_DIR | `packages` | MinIO storage main directory
+PID_DATABASE_DSN | `postgresql`+psycopg2://postgres:alemanha@172.17.0.4:5432/pidmanager | PID manager (PostgreSQL) string connection
+DATABASE_CONNECT_URL | `mongodb`://172.17.0.3:27017/opac | OPAC/Kernel database (MongoDB) string connection
+DJANGO_DEBUG | `1` | Django flag to see DEBUG messages)
+DJANGO_SECRET_KEY | `my_django_secret_key` |
+DJANGO_ALLOWED_HOSTS | `localhost`;127.0.0.1;[::1] |
+POSTGRES_DB | `spf` | SciELO Publishing Framework database name
+POSTGRES_USER | `postgres` | SciELO Publishing Framework database user
+POSTGRES_PASSWORD | `my_postgres_password` | SciELO Publishing Framework database user password
+POSTGRES_HOST | `172.17.0.4` | SciELO Publishing Framework database hostname
+POSTGRES_PORT | `5432` | SciELO Publishing Framework database host port

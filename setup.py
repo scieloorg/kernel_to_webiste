@@ -13,6 +13,7 @@ requires = [
     'python-dateutil',
     'sqlparse',
     'minio',
+    'lxml',
     'opac_schema',
     'dsm',
     'scielo_v3_manager',

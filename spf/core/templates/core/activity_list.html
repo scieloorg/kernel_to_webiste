@@ -7,54 +7,46 @@ SciELO Publishing Framework - {% trans 'Activities' %}
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center pt-5">
-    <h1 class="h4">{% trans 'Activities' %}</h1>
-    <div class="m-3">
-        {% if event_obj %}
-        <div class="table-responsive">
-            <table class="table table-sm table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        {% if user|has_group:"manager" %}
-                            <th scope="col">{% trans 'Username' %}</th>
-                        {% endif %}
-                        <th scope="col">{% trans 'Activity' %}</th>
-                        <th scope="col">{% trans 'Annotation' %}</th>
-                        <th scope="col">{% trans 'Status' %}</th>
-                        <th scope="col">{% trans 'Timestamp' %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for ev in event_obj %}
-                    <tr>
-                        <td>{{ event_obj.start_index|add:forloop.counter0 }}</td>
-                        {% if user|has_group:"manager" %}
-                            <td>{{ ev.actor }}</th>
-                        {% endif %}
-                        <td>{{ ev.get_name_display }}</td>
-                        {% if ev.annotation %}
-                            <td>{{ ev.annotation }}</td>
-                        {% else %}
-                            <td></td>
-                        {% endif %}
-                        <td><span class="badge {{ ev.status|to_css_event_status_style }}">{{ ev.get_status_display }}</span></td>
-                        <td>{{ ev.datetime }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
-    </div>
+<h1 class="h4 pt-5">{% trans 'Activities' %}</h1>
 
-    {% for message in messages %}
-        <div class="d-flex justify-content-center">
-            <div class="{{ message.tags }}" role="alert">
-                {{ message }}
-            </div>
-        </div>
-    {% endfor %}
+<div class="row justify-content-center my-3">
+    {% if event_obj %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    {% if user|has_group:"manager" %}
+                        <th scope="col">{% trans 'Username' %}</th>
+                    {% endif %}
+                    <th scope="col">{% trans 'Activity' %}</th>
+                    <th scope="col">{% trans 'Annotation' %}</th>
+                    <th scope="col">{% trans 'Status' %}</th>
+                    <th scope="col">{% trans 'Timestamp' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ev in event_obj %}
+                <tr>
+                    <td>{{ event_obj.start_index|add:forloop.counter0 }}</td>
+                    {% if user|has_group:"manager" %}
+                        <td>{{ ev.actor }}</th>
+                    {% endif %}
+                    <td>{{ ev.get_name_display }}</td>
+                    {% if ev.annotation %}
+                        <td>{{ ev.annotation }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    <td><span class="badge {{ ev.status|to_css_event_status_style }}">{{ ev.get_status_display }}</span></td>
+                    <td>{{ ev.datetime }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
 
 <nav aria-label="Event navigation">
     <ul class="pagination justify-content-center">
@@ -84,4 +76,3 @@ SciELO Publishing Framework - {% trans 'Activities' %}
 </nav>
 
 {% endblock %}
-</div>

@@ -66,14 +66,14 @@ def user_profile_edit_page(request):
 
 
 @login_required(login_url='login')
-def activity_list_page(request):
     request_scope, event_list = _get_list_according_to_scope(request, Event, 'actor')
+def event_list_page(request):
 
     paginator = Paginator(event_list, 25)
     page_number = request.GET.get('page')
     event_obj = paginator.get_page(page_number)
 
-    return render(request, 'core/activity_list.html', context={'event_obj': event_obj, 'scope': request_scope})
+    return render(request, 'core/event_list.html', context={'event_obj': event_obj, 'scope': request_scope})
 
 
 @unauthenticated_user

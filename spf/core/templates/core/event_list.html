@@ -3,11 +3,11 @@
 {% load spf_extras %}
 
 {% block title %}
-SciELO Publishing Framework - {% trans 'Activities' %}
+SciELO Publishing Framework - {% trans 'Events' %}
 {% endblock %}
 
 {% block content %}
-<h1 class="h4 pt-5">{% trans 'Activities' %}</h1>
+<h1 class="h4 pt-5">{% trans 'Events' %}</h1>
 
 <div class="row justify-content-center my-3">
     {% if event_obj %}
@@ -30,7 +30,7 @@ SciELO Publishing Framework - {% trans 'Activities' %}
                 <tr>
                     <td>{{ event_obj.start_index|add:forloop.counter0 }}</td>
                     {% if user|has_group:"manager" %}
-                        <td>{{ ev.actor }}</th>
+                        <td>{{ ev.user }}</th>
                     {% endif %}
                     <td>{{ ev.get_name_display }}</td>
                     {% if ev.annotation %}

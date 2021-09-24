@@ -2,29 +2,17 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib.auth.models import Group, User
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
-from core.extdeps import event_manager
-from core.models import (
-    IngressPackage,
-    Event
-)
-from core.forms import (
-    CreateUserForm,
-    UpdateUserForm
-)
-from core.decorators import (
-    unauthenticated_user,
-    allowed_users
-)
+from core.forms import CreateUserForm, UpdateUserForm
+from core.decorators import unauthenticated_user, allowed_users
+from core.models import Event
 from spf import settings
-from opac_schema.v1.models import Journal as OPACJournal
-from opac_schema.v2.models import ArticleFiles
 from os import path
 
+import core.controller as controller
 import dsm.ingress as dsm_ingress
 
 

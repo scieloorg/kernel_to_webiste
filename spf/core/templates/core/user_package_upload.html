@@ -22,12 +22,5 @@ SciELO Publishing Framework - {% trans 'Upload package' %}
             </div>
         </div>
     </div>
-    {% for message in messages %}
-        <div class="d-flex justify-content-center">
-            <div class="{{ message.tags }}" role="alert">
-                {{ message }}
-            </div>
-        </div>
-    {% endfor %}
 {% endblock %}
 </div>

@@ -35,12 +35,12 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle m-1" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">{{ request.user }}</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'activity_list' %}"><i class="fas fa-columns px-2"></i>{% translate "Activities" %}</a></li>
-                            <li><a class="dropdown-item" href="{% url 'user_profile' %}"><i class="fas fa-columns px-2"></i>{% translate "Profile" %}</a></li>
-                            <li><a class="dropdown-item" href="{% url 'user_profile_edit' %}"><i class="fas fa-cog px-2"></i>{% translate "Edit profile" %}</a></li>
-                            <li><a class="dropdown-item" href="{% url 'change_password' %}"><i class="fas fa-cog px-2"></i>{% translate "Change password" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'event_list' %}"><i class="fas fa-columns px-2"></i>{% trans "Events" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_profile' %}"><i class="fas fa-columns px-2"></i>{% trans "Profile" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_profile_edit' %}"><i class="fas fa-cog px-2"></i>{% trans "Edit profile" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'change_password' %}"><i class="fas fa-cog px-2"></i>{% trans "Change password" %}</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt px-2"></i>{% translate "Logout" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt px-2"></i>{% trans "Logout" %}</a></li>
                         </ul>
                     </li>
                 {% else %}

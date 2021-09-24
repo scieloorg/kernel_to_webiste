@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-18 23:33+0000\n"
+"POT-Creation-Date: 2021-09-24 02:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,8 +27,9 @@ msgstr "Você não possui permissão para acessar a página requisitada "
 msgid "Enter your username"
 msgstr "Digite seu nome de usuário"
 
-#: forms.py:18 forms.py:43 templates/accounts/register.html:23
-#: templates/core/user_profile_edit.html:22
+#: forms.py:18 forms.py:43
+#: templates/accounts/password_reset/password_reset.html:18
+#: templates/accounts/register.html:23 templates/core/user_profile_edit.html:22
 msgid "Enter your e-mail"
 msgstr "Digite seu e-mail"
 
@@ -42,71 +43,73 @@ msgstr "Digite seu nome"
 msgid "Enter your last name"
 msgstr "Digite seu sobrenome"
 
-#: models.py:8
+#: models.py:16
 msgid "Received"
 msgstr "Recebido"
 
-#: models.py:9
+#: models.py:17
 msgid "Queued for validation"
 msgstr "Agendado para validação"
 
-#: models.py:10
+#: models.py:18
 msgid "Validating"
 msgstr "Validando"
 
-#: models.py:11
+#: models.py:19
 msgid "Validation failure"
 msgstr "Validação falhou"
 
-#: models.py:12
+#: models.py:20
 msgid "Validated"
 msgstr "Validado"
 
-#: models.py:26
+#: models.py:34
 msgid "Initiated"
 msgstr "Iniciado"
 
-#: models.py:27
+#: models.py:35
 msgid "Completed"
 msgstr "Completado"
 
-#: models.py:28
+#: models.py:36
 msgid "Failed"
 msgstr "Falhou"
 
-#: models.py:31
+#: models.py:39
 msgid "Retrieve package"
 msgstr "Procurar pacote"
 
-#: models.py:32 templates/core/user_package_upload.html:5
-#: templates/core/user_package_upload.html:10
-#: templates/core/user_package_upload.html:17 templates/index.html:40
+#: models.py:40 templates/core/user_package_upload.html:5
+#: templates/core/user_package_upload.html:9
+#: templates/core/user_package_upload.html:18 templates/index.html:41
 msgid "Upload package"
 msgstr "Enviar pacote"
 
-#: models.py:33
+#: models.py:41
 msgid "Start validation"
 msgstr "Iniciar validação"
 
-#: models.py:34
+#: models.py:42
 msgid "Finalize validation"
 msgstr "Finalizar validação"
 
-#: models.py:35
+#: models.py:43
 msgid "Change user groups"
 msgstr "Alterar grupos de usuários"
 
 #: templates/accounts/add.html:7 templates/accounts/add.html:46
-#: templates/accounts/change_password.html:7
-#: templates/accounts/register.html:41 templates/index.html:81
+#: templates/accounts/password_reset/password_reset_complete.html:7
+#: templates/accounts/password_reset/password_reset_confirm.html:7
+#: templates/accounts/password_reset/password_reset_done.html:7
+#: templates/accounts/register.html:41 templates/index.html:82
 msgid "Add user"
 msgstr "Adicionar usuário"
 
 #: templates/accounts/add.html:18 templates/accounts/login.html:18
-#: templates/accounts/register.html:18 templates/core/activity_list.html:20
+#: templates/accounts/register.html:18
 #: templates/core/deposited_package_list.html:19
-#: templates/core/user_groups_edit.html:21 templates/core/user_profile.html:18
-#: templates/core/user_profile_edit.html:17
+#: templates/core/event_list.html:20 templates/core/user_groups_edit.html:21
+#: templates/core/user_profile.html:18 templates/core/user_profile_edit.html:17
 msgid "Username"
 msgstr "Usuário"
 
@@ -139,36 +142,39 @@ msgstr "Digita a senha novamente"
 msgid "Groups"
 msgstr "Grupos"
 
-#: templates/accounts/change_password.html:18
-msgid "Old password"
-msgstr "Senha antiga"
-
-#: templates/accounts/change_password.html:19
-msgid "Enter your old password"
-msgstr "Digite sua senha antiga"
-
-#: templates/accounts/change_password.html:22
-msgid "New password"
-msgstr "Senha nova"
-
-#: templates/accounts/change_password.html:23
-msgid "Enter your new password"
-msgstr "Digita sua senha nova"
-
-#: templates/accounts/change_password.html:26
-msgid "Confirm new password"
-msgstr "Confirme sua senha nova"
-
-#: templates/accounts/change_password.html:27
-msgid "Re-enter your new password"
-msgstr "Digite sua senha nova novamente"
-
-#: templates/accounts/change_password.html:29 templates/base.html:41
+#: templates/accounts/change_password.html:7
+#: templates/accounts/change_password.html:12
+#: templates/accounts/change_password.html:27 templates/base.html:41
+#: templates/index.html:28
 msgid "Change password"
 msgstr "Alterar senha"
 
+#: templates/accounts/change_password.html:16
+msgid "Old password"
+msgstr "Senha antiga"
+
+#: templates/accounts/change_password.html:17
+msgid "Enter your old password"
+msgstr "Digite sua senha antiga"
+
+#: templates/accounts/change_password.html:20
+msgid "New password"
+msgstr "Senha nova"
+
+#: templates/accounts/change_password.html:21
+msgid "Enter your new password"
+msgstr "Digita sua senha nova"
+
+#: templates/accounts/change_password.html:24
+msgid "Confirm new password"
+msgstr "Confirme sua senha nova"
+
+#: templates/accounts/change_password.html:25
+msgid "Re-enter your new password"
+msgstr "Digite sua senha nova novamente"
+
 #: templates/accounts/login.html:7 templates/accounts/login.html:25
-#: templates/accounts/register.html:52 templates/base.html:48
+#: templates/accounts/register.html:44 templates/base.html:48
 msgid "Login"
 msgstr "Entrar"
 
@@ -176,14 +182,23 @@ msgstr "Entrar"
 msgid "Enter your password"
 msgstr "Digite sua senha"
 
-#: templates/accounts/login.html:34
+#: templates/accounts/login.html:27
 msgid "Don't have an account"
 msgstr "Não possui uma conta"
 
-#: templates/accounts/login.html:34 templates/accounts/register.html:7
+#: templates/accounts/login.html:27 templates/accounts/register.html:7
 #: templates/base.html:51
 msgid "Sign up"
 msgstr "Registrar-se"
+
+#: templates/accounts/password_reset/password_reset.html:7
+#: templates/accounts/password_reset/password_reset.html:12
+msgid "Reset password"
+msgstr "Redefinir senha"
+
+#: templates/accounts/password_reset/password_reset.html:20
+msgid "Send e-mail"
+msgstr "Enviar e-mail"
 
 #: templates/accounts/register.html:26 templates/core/user_groups_edit.html:22
 #: templates/core/user_profile.html:19 templates/core/user_profile_edit.html:25
@@ -203,7 +218,7 @@ msgstr "Confirme sua senha"
 msgid "Re-enter your password"
 msgstr "Digite sua senha novamente"
 
-#: templates/accounts/register.html:52
+#: templates/accounts/register.html:44
 msgid "Already have an account"
 msgstr "Já possui uma conta"
 
@@ -212,10 +227,10 @@ msgstr "Já possui uma conta"
 msgid "Journals"
 msgstr "Periódicos"
 
-#: templates/base.html:38 templates/core/activity_list.html:6
-#: templates/core/activity_list.html:11 templates/index.html:19
-msgid "Activities"
-msgstr "Atividades"
+#: templates/base.html:38 templates/core/event_list.html:6
+#: templates/core/event_list.html:10 templates/index.html:19
+msgid "Events"
+msgstr "Ações"
 
 #: templates/base.html:39 templates/core/user_profile.html:6
 #: templates/core/user_profile.html:10 templates/index.html:26
@@ -223,7 +238,7 @@ msgid "Profile"
 msgstr "Perfil"
 
 #: templates/base.html:40 templates/core/user_profile_edit.html:7
-#: templates/core/user_profile_edit.html:12 templates/index.html:27
+#: templates/core/user_profile_edit.html:11 templates/index.html:27
 msgid "Edit profile"
 msgstr "Editar perfil"
 
@@ -231,104 +246,87 @@ msgstr "Editar perfil"
 msgid "Logout"
 msgstr "Sair"
 
-#: templates/core/activity_list.html:22
-msgid "Activity"
-msgstr "Atividade"
-
-#: templates/core/activity_list.html:23
-msgid "Annotation"
-msgstr "Anotação"
-
-#: templates/core/activity_list.html:24
-#: templates/core/deposited_package_list.html:22
-msgid "Status"
-msgstr "Estado"
-
-#: templates/core/activity_list.html:25
-msgid "Timestamp"
-msgstr "Data e hora"
-
-#: templates/core/activity_list.html:63
-#: templates/core/article_files_list.html:54
-#: templates/core/deposited_package_list.html:46
-#: templates/core/journal_list.html:48 templates/core/user_groups_edit.html:72
-msgid "First"
-msgstr "Primeiro"
-
-#: templates/core/activity_list.html:67
-#: templates/core/article_files_list.html:58
-#: templates/core/deposited_package_list.html:50
-#: templates/core/journal_list.html:52 templates/core/user_groups_edit.html:76
-msgid "Previous"
-msgstr "Anterior"
-
-#: templates/core/activity_list.html:72
-#: templates/core/article_files_list.html:63
-#: templates/core/deposited_package_list.html:55
-#: templates/core/journal_list.html:57 templates/core/user_groups_edit.html:81
-msgid "Page"
-msgstr "Página"
-
-#: templates/core/activity_list.html:72
-#: templates/core/article_files_list.html:63
-#: templates/core/deposited_package_list.html:55
-#: templates/core/journal_list.html:57 templates/core/user_groups_edit.html:81
-msgid "of"
-msgstr "de"
-
-#: templates/core/activity_list.html:77
-#: templates/core/article_files_list.html:68
-#: templates/core/deposited_package_list.html:60
-#: templates/core/journal_list.html:62 templates/core/user_groups_edit.html:86
-msgid "Next"
-msgstr "Próximo"
-
-#: templates/core/activity_list.html:80
-#: templates/core/article_files_list.html:71
-#: templates/core/deposited_package_list.html:63
-#: templates/core/journal_list.html:65 templates/core/user_groups_edit.html:89
-msgid "Last"
-msgstr "Último"
-
 #: templates/core/article_files_list.html:5
-#: templates/core/article_files_list.html:9 templates/index.html:69
+#: templates/core/article_files_list.html:9 templates/index.html:70
 msgid "Articles' files"
 msgstr "Arquivos de artigos"
 
-#: templates/core/article_files_list.html:17
+#: templates/core/article_files_list.html:18
 msgid "Identifier"
 msgstr "Identificador de documento"
 
-#: templates/core/article_files_list.html:18
-#: templates/core/user_package_download.html:39
+#: templates/core/article_files_list.html:19
+#: templates/core/user_package_download.html:41
 msgid "Creation date"
 msgstr "Data de criação"
 
-#: templates/core/article_files_list.html:19
-#: templates/core/user_package_download.html:40
+#: templates/core/article_files_list.html:20
+#: templates/core/user_package_download.html:42
 msgid "Update date"
 msgstr "Data de atualização"
 
-#: templates/core/article_files_list.html:20
+#: templates/core/article_files_list.html:21
 #: templates/core/deposited_package_list.html:20
-#: templates/core/user_package_download.html:37
+#: templates/core/user_package_download.html:39
 msgid "Package name"
 msgstr "Nome do pacote"
 
-#: templates/core/article_files_list.html:21
+#: templates/core/article_files_list.html:22
 msgid "XML"
 msgstr ""
 
-#: templates/core/article_files_list.html:22
+#: templates/core/article_files_list.html:23
 msgid "Assets"
 msgstr ""
 
-#: templates/core/article_files_list.html:23
+#: templates/core/article_files_list.html:24
 msgid "Renditions"
 msgstr ""
 
+#: templates/core/article_files_list.html:54
+#: templates/core/deposited_package_list.html:45
+#: templates/core/event_list.html:55 templates/core/journal_list.html:46
+#: templates/core/user_groups_edit.html:63
+msgid "First"
+msgstr "Primeiro"
+
+#: templates/core/article_files_list.html:58
+#: templates/core/deposited_package_list.html:49
+#: templates/core/event_list.html:59 templates/core/journal_list.html:50
+#: templates/core/user_groups_edit.html:67
+msgid "Previous"
+msgstr "Anterior"
+
+#: templates/core/article_files_list.html:63
+#: templates/core/deposited_package_list.html:54
+#: templates/core/event_list.html:64 templates/core/journal_list.html:55
+#: templates/core/user_groups_edit.html:72
+msgid "Page"
+msgstr "Página"
+
+#: templates/core/article_files_list.html:63
+#: templates/core/deposited_package_list.html:54
+#: templates/core/event_list.html:64 templates/core/journal_list.html:55
+#: templates/core/user_groups_edit.html:72
+msgid "of"
+msgstr "de"
+
+#: templates/core/article_files_list.html:68
+#: templates/core/deposited_package_list.html:59
+#: templates/core/event_list.html:69 templates/core/journal_list.html:60
+#: templates/core/user_groups_edit.html:77
+msgid "Next"
+msgstr "Próximo"
+
+#: templates/core/article_files_list.html:71
+#: templates/core/deposited_package_list.html:62
+#: templates/core/event_list.html:72 templates/core/journal_list.html:63
+#: templates/core/user_groups_edit.html:80
+msgid "Last"
+msgstr "Último"
+
 #: templates/core/deposited_package_list.html:6
-#: templates/core/deposited_package_list.html:11 templates/index.html:21
+#: templates/core/deposited_package_list.html:10 templates/index.html:21
 msgid "Deposited packages"
 msgstr "Pacotes depositados"
 
@@ -336,28 +334,45 @@ msgstr "Pacotes depositados"
 msgid "Datetime"
 msgstr "Data e hora"
 
-#: templates/core/journal_list.html:19
+#: templates/core/deposited_package_list.html:22
+#: templates/core/event_list.html:24
+msgid "Status"
+msgstr "Estado"
+
+#: templates/core/event_list.html:22
+msgid "Activity"
+msgstr "Atividade"
+
+#: templates/core/event_list.html:23
+msgid "Annotation"
+msgstr "Anotação"
+
+#: templates/core/event_list.html:25
+msgid "Timestamp"
+msgstr "Data e hora"
+
+#: templates/core/journal_list.html:18
 msgid "Title"
 msgstr "Título"
 
-#: templates/core/journal_list.html:20
+#: templates/core/journal_list.html:19
 msgid "Short title"
 msgstr "Título abreviado"
 
-#: templates/core/journal_list.html:21
+#: templates/core/journal_list.html:20
 msgid "Acronym"
 msgstr "Acrônimo"
 
-#: templates/core/journal_list.html:22
+#: templates/core/journal_list.html:21
 msgid "Print ISSN"
 msgstr "Print ISSN"
 
-#: templates/core/journal_list.html:23
+#: templates/core/journal_list.html:22
 msgid "Online ISSN"
 msgstr "Online ISSN"
 
 #: templates/core/user_groups_edit.html:6
-#: templates/core/user_groups_edit.html:11 templates/index.html:82
+#: templates/core/user_groups_edit.html:10 templates/index.html:83
 msgid "User groups"
 msgstr "Grupos de usuário"
 
@@ -370,32 +385,32 @@ msgid "Update users' groups"
 msgstr "Atualizar grupos de usuários"
 
 #: templates/core/user_package_download.html:6
-#: templates/core/user_package_download.html:11
-#: templates/core/user_package_download.html:15 templates/index.html:39
+#: templates/core/user_package_download.html:10
+#: templates/core/user_package_download.html:16 templates/index.html:40
 msgid "Search package"
 msgstr "Procurar pacote"
 
-#: templates/core/user_package_download.html:21
+#: templates/core/user_package_download.html:22
 msgid "Document identifier"
 msgstr "Identificador de documento"
 
-#: templates/core/user_package_download.html:22
+#: templates/core/user_package_download.html:23
 msgid "Enter a document identifier"
 msgstr "Digite um identificador de documento"
 
-#: templates/core/user_package_download.html:24
+#: templates/core/user_package_download.html:25
 msgid "Search"
 msgstr "Procurar"
 
-#: templates/core/user_package_download.html:31
+#: templates/core/user_package_download.html:33
 msgid "Results for document"
 msgstr "Resultados para o documento"
 
-#: templates/core/user_package_download.html:38
+#: templates/core/user_package_download.html:40
 msgid "Package address"
 msgstr "Endereço do pacote"
 
-#: templates/core/user_package_upload.html:20
+#: templates/core/user_package_upload.html:21
 msgid "Upload"
 msgstr "Enviar"
 
@@ -427,41 +442,41 @@ msgstr "Meu espaço"
 msgid "Migrated data"
 msgstr "Dados migrados"
 
-#: templates/index.html:36
+#: templates/index.html:37
 msgid "Ingress"
 msgstr "Ingresso"
 
-#: templates/index.html:50
+#: templates/index.html:51
 msgid "Migration"
 msgstr "Migração"
 
-#: templates/index.html:53
+#: templates/index.html:54
 msgid "Migrate title"
 msgstr "Migrar periódico"
 
-#: templates/index.html:54
+#: templates/index.html:55
 msgid "Migrate fascicle"
 msgstr "Migrar fascículo"
 
-#: templates/index.html:55
+#: templates/index.html:56
 msgid "Migrate document"
 msgstr "Migrar artigo"
 
-#: templates/index.html:65
+#: templates/index.html:66
 msgid "Package management"
 msgstr "Gerenciamento de pacotes"
 
-#: templates/index.html:68
+#: templates/index.html:69
 msgid "All deposited packages"
 msgstr "Todo os pacotes depositados"
 
-#: templates/index.html:77
+#: templates/index.html:78
 msgid "User management"
 msgstr "Gerenciamento de usuário"
 
-#: templates/index.html:80
-msgid "All activities"
-msgstr "Todas as atividades"
+#: templates/index.html:81
+msgid "All events"
+msgstr "Todas as ações"
 
 #: templatetags/spf_extras.py:29
 msgid "Q. Analyst"
@@ -479,47 +494,53 @@ msgstr "Op. de Migração"
 msgid "Manager"
 msgstr "Gerente"
 
-#: views.py:62
+#: views.py:41
 #, python-format
 msgid "User %s was updated"
 msgstr "Usuário %s foi atualizado"
 
-#: views.py:87 views.py:179
+#: views.py:67 views.py:151
 #, python-format
 msgid "User %s was created"
 msgstr "Usuário %s foi criado"
 
-#: views.py:117
+#: views.py:97
 msgid "Incorrect username or password"
 msgstr "Nome de usuário ou senha incorreto"
 
-#: views.py:134
+#: views.py:114
 msgid "Your password was updated"
 msgstr "Sua senha foi atualizada"
 
-#: views.py:263
+#: views.py:233
 #, python-format
 msgid "Errors ocurred: %s"
 msgstr "Ocorreram erros: %s"
 
-#: views.py:270
+#: views.py:240
 #, python-format
 msgid "Package (%(name)s, %(id)s) was added"
 msgstr "Pacote (%(name)s, %(id)s) foi adicionado"
 
-#: views.py:285
+#: views.py:250
 msgid " does not have a valid format. Please provide a zip file."
 msgstr ""
 " não possui um formato válido. Por favor, forneça um arquivo em formato zip."
 
-#: views.py:319
+#: views.py:280
 #, python-format
 msgid "No packages were found for document %s"
 msgstr "Não foram encontrados pacotes para o documento %s"
 
-#: views.py:351
+#: views.py:306
 msgid "Users' groups were updated"
 msgstr "Grupos de usuários foram atualizados"
 
-msgid "The two password fields didn’t match."
-msgstr "As duas senhas são diferentes."
+#~ msgid "Activities"
+#~ msgstr "Atividades"
+
+#~ msgid "All activities"
+#~ msgstr "Todas as atividades"
+
+#~ msgid "The two password fields didn’t match."
+#~ msgstr "As duas senhas são diferentes."

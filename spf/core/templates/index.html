@@ -17,10 +17,10 @@ SciELO Publishing Framework - Home
                 </div>
                 <div class="list-group list-group-flush">
                     <a class="list-group-item" href="{% url 'activity_list' %}">{% trans 'Activities' %}</a>
-                    {% if user|has_group:"manager" or user|has_group:"operator_ingress" %}
+                    {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_ingress" %}
                         <a class="list-group-item" href="{% url 'package_list' %}">{% trans "Deposited packages" %}</a>
                     {% endif %}
-                    {% if user|has_group:"manager" or user|has_group:"operator_migration" %}
+                    {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_migration" %}
                     <a class="list-group-item disabled" href="">{% trans "Migrated data" %}</a>
                     {% endif %}
                     <a class="list-group-item" href="{% url 'user_profile' %}">{% trans 'Profile' %}</a>
@@ -30,7 +30,7 @@ SciELO Publishing Framework - Home
             </div>
         </div>
 
-        {% if user|has_group:"manager" or user|has_group:"operator_ingress" %}
+        {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_ingress" %}
         <div class="col mb-4">
             <div class="card">
                 <div class="card-header">
@@ -44,7 +44,7 @@ SciELO Publishing Framework - Home
         </div>
         {% endif %}
 
-        {% if user|has_group:"manager" or user|has_group:"operator_migration" %}
+        {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_migration" %}
         <div class="col mb-4">
             <div class="card">
                 <div class="card-header">
@@ -59,7 +59,7 @@ SciELO Publishing Framework - Home
         </div>
         {% endif %}
 
-        {% if user|has_group:"manager" %}
+        {% if user.is_superuser or user|has_group:"manager" %}
         <div class="col mb-4">
             <div class="card">
                 <div class="card-header">

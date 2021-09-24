@@ -1,16 +1,19 @@
-# SPF
+# SciELO Publishing Framework
 
-## Dependencies
+
+## Installation under a Python virtual environment
+
+_System dependencies_
+
 Be sure that you have the necessary operational system dependencies:
+
 ```shell
 gettext
 python 3.9
 ```
 
-
-## Installation
-
 _Create a virtual environment and install the application dependencies_
+
 ```shell
 # Create a virtual environment
 virtualenv -p python3.9 .venv
@@ -20,51 +23,64 @@ source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Install packages
+pip install .
 ```
 
-## Set the environment variables (see config.ini.template)
-Set the necessary environment variables under a developer machine through the following command: `export $(cat config.ini.template | xargs) `
+_Set the environment variables_
 
-## Create a Postgres database
 ```shell
+export $(cat dev.ini | xargs)
+```
+
+_Create a PostgreSQL database named "spf"_
+
+```shell
+# Through a Docker container with a PostgreSQL database
+docker exec --user postgres -it scielo-postgres-1 psql -c 'create database spf;'
+
+# Or through psql
+psql --user postgres;
 create database spf;
 ```
 
-## Prepare and run the application
-```shell
-# Access the spf root directory
-cd spf
+_Prepare and run the application_
 
+```shell
 # Make migrations related to the database (at this moment, we're using a simple database - sqlite)
-python manage.py makemigrations
+python spf/manage.py makemigrations
 
 # Migrate database (this operation construct all the necessary database tables)
-python manage.py migrate
+python spf/manage.py migrate
 
 # Create the superuser (take note of the credentials)
-python manage.py createsuperuser
+python spf/manage.py createsuperuser
 ```
 
 _Add default groups to the application database_
+
 ```shell
-# Add content to the application tables
-python manage.py loaddata group
+# Add default groups to the application database
+python spf/manage.py loaddata group
 ```
 
 _Add example users to the application database (only in development environments)_
+
 ```shell
-# Add content to the application tables
-python manage.py loaddata user
+# Add example users to the application database
+python spf/manage.py loaddata user
 ```
 
 _Run the application_
+
 ```shell
 # Start the application
-python manage.py runserver
+python spf/manage.py runserver
 ```
 
+_How to translate the interface content to other languages_
 
-## How to translate the interface content to other languages
 ```shell
 # Access the core project directory
 cd core

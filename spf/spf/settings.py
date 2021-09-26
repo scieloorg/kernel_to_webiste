@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_INGRESS_TEMP = os.path.join(BASE_DIR, 'media', 'ingress', 'temp')
+
+CELERY_BROKER_URL = 'pyamqp://172.17.0.5:5672'
+CELERY_RESULT_BACKEND = 'django-db'

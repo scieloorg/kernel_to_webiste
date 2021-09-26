@@ -295,28 +295,26 @@ def user_package_upload_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def user_package_download_page(request):
-    pid = request.GET.get('pid', '')
-    package_uri_results = {'pid': pid, 'doc_pkg': []}
-    if pid:
-        ev = controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid})
-        package_uri_results = dsm_ingress.get_package_uri_by_pid(pid)
+    if 'job' in request.GET:
+        job_id = request.GET['job']
+        job = AsyncResult(job_id)
 
-        if len(package_uri_results['errors']) > 0:
-            for e in package_uri_results['errors']:
-                messages.error(
-                    request,
-                    e,
-                    extra_tags='alert-danger')
-            ev = controller.update_event(ev, {'status': Event.Status.FAILED})
-        elif len(package_uri_results['doc_pkg']) == 0:
-            messages.warning(
-                request,
-                _('No packages were found for document %s') % pid,
-                extra_tags='alert-warning')
-        else:
-            ev = controller.update_event(ev, {'status': Event.Status.COMPLETED})
+        context = {
+            'pid': request.GET.get('pid', ''),
+            'check_status': 1,
+            'data': '',
+            'state': 'STARTING...',
+            'task_id': job_id
+        }
+        return render(request, 'core/user_package_download.html', context)
 
-    return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
+    elif 'pid' not in request.GET:
+        return render(request, 'core/user_package_download.html')
+
+    else:
+        pid = request.GET.get('pid', '')
+        job = task_get_package_uri_by_pid.delay(pid)
+        return HttpResponseRedirect(reverse('user_package_download') + '?job=' + job.id + '&pid=' + pid)
 
 
 @login_required(login_url='login')

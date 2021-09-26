@@ -1,14 +1,18 @@
+from celery.result import AsyncResult
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
+from django.urls import reverse
+from django.http.response import HttpResponseRedirect, JsonResponse
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
 from core.forms import CreateUserForm, UpdateUserForm
 from core.decorators import unauthenticated_user, allowed_users
 from core.models import Event
+from core.tasks import task_get_package_uri_by_pid
 from spf import settings
 from os import path
 
@@ -18,6 +22,36 @@ import dsm.ingress as dsm_ingress
 
 def index_page(request):
     return render(request, 'index.html')
+
+
+def update_status(request):
+    print ("Update on: {}.".format(request.GET))
+    if 'task_id' in request.GET.keys():
+        task_id = request.GET['task_id']
+        task = AsyncResult(task_id)
+
+        result = task.result
+        status = task.status
+    else:
+        status = 'UNDEFINED!'
+        result = 'UNDEFINED!'
+
+    try:
+        json_data = {
+            'status': status,
+            'state': 'PROGRESS',
+            'iter' : 1,
+            'data': result,
+            }
+    except TypeError:
+        json_data = {
+            'status': status,
+            'state': 'FINISHED',
+            'iter' : -1,
+            'data': result,
+            }
+
+    return JsonResponse(json_data)
 
 
 def faq_page(request):

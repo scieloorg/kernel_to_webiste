@@ -45,6 +45,12 @@ psql --user postgres;
 create database spf;
 ```
 
+_Run the Message Broker RabbitMQ_
+```shell
+# See https://www.rabbitmq.com/download.html to obtain more information
+docker run -d -p 5672:5672 rabbitmq
+```
+
 _Prepare and run the application_
 
 ```shell
@@ -75,6 +81,9 @@ python spf/manage.py loaddata user
 _Run the application_
 
 ```shell
+# Start Celery
+celery -A spf worker -l INFO
+
 # Start the application
 python spf/manage.py runserver
 ```
@@ -125,3 +134,5 @@ POSTGRES_USER | `postgres` | SciELO Publishing Framework database user
 POSTGRES_PASSWORD | `my_postgres_password` | SciELO Publishing Framework database user password
 POSTGRES_HOST | `172.17.0.4` | SciELO Publishing Framework database hostname
 POSTGRES_PORT | `5432` | SciELO Publishing Framework database host port
+CELERY_BROKER_URL | `pyamqp://172.17.0.5:5672` | RabbitMQ address
+CELERY_RESULT_BACKEND | `django-db` | Celery flag to use Django Database for persisting messages

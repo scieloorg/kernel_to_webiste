@@ -24,6 +24,8 @@ def index_page(request):
     return render(request, 'index.html')
 
 
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration', 'quality_analyst'])
 def update_status(request):
     print ("Update on: {}.".format(request.GET))
     if 'task_id' in request.GET.keys():

@@ -27,31 +27,21 @@ def index_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration', 'quality_analyst'])
 def update_status(request):
-    print ("Update on: {}.".format(request.GET))
-    if 'task_id' in request.GET.keys():
+    """Obtém status (STARTING, FAILURY, PROGRESS, SUCCESS ou UNDEFINED) de task executada."""
+    try:
         task_id = request.GET['task_id']
         task = AsyncResult(task_id)
-
         result = task.result
         status = task.status
-    else:
-        status = 'UNDEFINED!'
-        result = 'UNDEFINED!'
+    except:
+        result = 'UNDEFINED'
+        status = 'UNDEFINED'
 
-    try:
-        json_data = {
-            'status': status,
-            'state': 'PROGRESS',
-            'iter' : 1,
-            'data': result,
-            }
-    except TypeError:
-        json_data = {
-            'status': status,
-            'state': 'FINISHED',
-            'iter' : -1,
-            'data': result,
-            }
+    json_data = {
+        'status': status,
+        'state': 'PROGRESS',
+        'data': result,
+    }
 
     return JsonResponse(json_data)
 

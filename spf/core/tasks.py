@@ -5,20 +5,15 @@ import dsm.ingress as dsm_ingress
 
 @shared_task
 def task_get_package_uri_by_pid(pid):
-    job_started = False
+    result = dsm_ingress.get_package_uri_by_pid(pid)
 
-    while True:
-        if not job_started:
-            job_started = True
-            result = dsm_ingress.get_package_uri_by_pid(pid)
+    current_task.update_state(
+        state='PROGRESS',
+        meta={
+            'status': 'LOADING...',
+        })
 
-        current_task.update_state(
-            state='PROGRESS',
-            meta={
-                'status': 'LOADING...',
-            })
+    return result
 
-        if result:
-            return result
 
 

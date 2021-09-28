@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '!7(@-1@4d8e*iittyl$32m_+(_iz2*ggsuhu)qku!+m7k6e3mz')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get('DJANGO_DEBUG', 0))
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.apps.CoreConfig',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_INGRESS_TEMP = os.path.join(BASE_DIR, 'media', 'ingress', 'temp')
+
+CELERY_BROKER_URL = 'pyamqp://172.17.0.5:5672'
+CELERY_RESULT_BACKEND = 'django-db'

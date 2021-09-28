@@ -7,8 +7,10 @@ with open(os.path.join(here, "README.md")) as f:
 
 requires = [
     'asgiref',
+    'celery',
     'confusable-homoglyphs',
     'Django',
+    'django-celery-results',
     'pytz',
     'python-dateutil',
     'sqlparse',

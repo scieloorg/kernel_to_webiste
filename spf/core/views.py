@@ -1,14 +1,18 @@
+from celery.result import AsyncResult
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
+from django.urls import reverse
+from django.http.response import HttpResponseRedirect, JsonResponse
 from django.utils.translation import gettext as _
 from django.shortcuts import render, redirect
 from core.forms import CreateUserForm, UpdateUserForm
 from core.decorators import unauthenticated_user, allowed_users
 from core.models import Event
+from core.tasks import task_get_package_uri_by_pid
 from spf import settings
 from os import path
 
@@ -18,6 +22,28 @@ import dsm.ingress as dsm_ingress
 
 def index_page(request):
     return render(request, 'index.html')
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration', 'quality_analyst'])
+def update_status(request):
+    """Obtém status (STARTING, FAILURY, PROGRESS, SUCCESS ou UNDEFINED) de task executada."""
+    try:
+        task_id = request.GET['task_id']
+        task = AsyncResult(task_id)
+        result = task.result
+        status = task.status
+    except:
+        result = 'UNDEFINED'
+        status = 'UNDEFINED'
+
+    json_data = {
+        'status': status,
+        'state': 'PROGRESS',
+        'data': result,
+    }
+
+    return JsonResponse(json_data)
 
 
 def faq_page(request):
@@ -262,27 +288,28 @@ def user_package_upload_page(request):
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def user_package_download_page(request):
     pid = request.GET.get('pid', '')
-    package_uri_results = {'pid': pid, 'doc_pkg': []}
-    if pid:
-        ev = controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid})
-        package_uri_results = dsm_ingress.get_package_uri_by_pid(pid)
+    job_id = request.GET.get('job', '')
 
-        if len(package_uri_results['errors']) > 0:
-            for e in package_uri_results['errors']:
-                messages.error(
-                    request,
-                    e,
-                    extra_tags='alert-danger')
-            ev = controller.update_event(ev, {'status': Event.Status.FAILED})
-        elif len(package_uri_results['doc_pkg']) == 0:
-            messages.warning(
-                request,
-                _('No packages were found for document %s') % pid,
-                extra_tags='alert-warning')
-        else:
-            ev = controller.update_event(ev, {'status': Event.Status.COMPLETED})
+    # Há task sendo executada: renderiza template para mostrar resultados (ou aguardar por eles)
+    if job_id:
+        job = AsyncResult(job_id)
 
-    return render(request, 'core/user_package_download.html', context={'pid': pid, 'pkgs': package_uri_results['doc_pkg']})
+        context = {
+            'pid': pid,
+            'check_status': 1,
+            'data': '',
+            'state': 'STARTING',
+            'task_id': job_id
+        }
+        return render(request, 'core/user_package_download.html', context)
+
+    # Inicializa task para o PID informado e redireciona para a própria página aguardando resultado
+    elif pid:
+        job = task_get_package_uri_by_pid.delay(pid)
+        return HttpResponseRedirect(reverse('user_package_download') + '?job=' + job.id + '&pid=' + pid)
+
+    # Abre template pela primeira vez para digitar PID
+    return render(request, 'core/user_package_download.html')
 
 
 @login_required(login_url='login')

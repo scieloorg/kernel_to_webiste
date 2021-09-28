@@ -287,26 +287,29 @@ def user_package_upload_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def user_package_download_page(request):
-    if 'job' in request.GET:
-        job_id = request.GET['job']
+    pid = request.GET.get('pid', '')
+    job_id = request.GET.get('job', '')
+
+    # Há task sendo executada: renderiza template para mostrar resultados (ou aguardar por eles)
+    if job_id:
         job = AsyncResult(job_id)
 
         context = {
-            'pid': request.GET.get('pid', ''),
+            'pid': pid,
             'check_status': 1,
             'data': '',
-            'state': 'STARTING...',
+            'state': 'STARTING',
             'task_id': job_id
         }
         return render(request, 'core/user_package_download.html', context)
 
-    elif 'pid' not in request.GET:
-        return render(request, 'core/user_package_download.html')
-
-    else:
-        pid = request.GET.get('pid', '')
+    # Inicializa task para o PID informado e redireciona para a própria página aguardando resultado
+    elif pid:
         job = task_get_package_uri_by_pid.delay(pid)
         return HttpResponseRedirect(reverse('user_package_download') + '?job=' + job.id + '&pid=' + pid)
+
+    # Abre template pela primeira vez para digitar PID
+    return render(request, 'core/user_package_download.html')
 
 
 @login_required(login_url='login')

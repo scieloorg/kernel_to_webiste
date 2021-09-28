@@ -45,7 +45,7 @@ SciELO Publishing Framework - {% trans 'Search package' %}
                     <th>{% trans 'Update date' %}</th>
                 </tr>
                 </thead>
-                <tbody id="table-body">
+                <tbody id="resultSearchPackagesTableBody">
                 </tbody>
         </table>
     </div>
@@ -53,20 +53,25 @@ SciELO Publishing Framework - {% trans 'Search package' %}
 </div>
 <script type="text/javascript">
     var xhr;
-    var checkStatus = "{{ check_status }}";
+    var checkStatus = '{{ check_status }}';
     var intervals = {}
 
     function update(){
-        var task_id = "{{ task_id }}";
-        var state = "{{ state }}";
-
         xhr = $.ajax({
             url: 'update_status/?task_id={{ task_id }}',
             type: 'GET',
             success: function(result) {
-                $('#state-field').val(result.state);
-                $('#status-field').val(result.status);
-                $('table-body').innerHTML = '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
+                divSpinner = document.createElement('div');
+                divSpinner.classList.add('spinner-border');
+                divSpinner.setAttribute('role', 'status');
+
+                spanLoading = document.createElement('span');
+                spanLoading.classList.add('sr-only');
+                spanLoading.text = "{% trans 'Loading' %}...";
+
+                divSpinner.appendChild(spanLoading);
+
+                $('user-package-download-results').add(divSpinner);
 
                 if (result.data && 'doc_pkg' in result.data) {
                     clearInterval(intervals[0]);
@@ -83,25 +88,25 @@ SciELO Publishing Framework - {% trans 'Search package' %}
     }
 
     function createTable(data){
-        table_body = document.getElementById('table-body')
+        tableBody = document.getElementById('resultSearchPackagesTableBody')
 
         for (k in data['doc_pkg']){
-            ito = data['doc_pkg'][k];
-            trow = table_body.insertRow(-1);
+            els = data['doc_pkg'][k];
+            row = tableBody.insertRow(-1);
 
-            ito_uri = document.createElement('a')
-            ito_uri.text = ito['name'];
-            ito_uri.href = ito['uri'];
-            ito_uri.classList.add('link');
+            aResult = document.createElement('a')
+            aResult.text = els['name'];
+            aResult.href = els['uri'];
+            aResult.classList.add('link');
 
-            cell2 = trow.insertCell(-1);
-            cell2.appendChild(ito_uri);
+            tdUri = row.insertCell(-1);
+            tdUri.appendChild(aResult);
 
-            cell4 = trow.insertCell(-1);
-            cell4.innerHTML = ito['created'];
+            tdCreated = row.insertCell(-1);
+            tdCreated.innerHTML = els['created'];
 
-            cell5 = trow.insertCell(-1);
-            cell5.innerHTML = ito['updated'];
+            tdUpdated = row.insertCell(-1);
+            tdUpdated.innerHTML = els['updated'];
         }
 
         if (data['doc_pkg'].length > 0) {
@@ -110,20 +115,20 @@ SciELO Publishing Framework - {% trans 'Search package' %}
             var resultErrors = document.getElementById('resultErrors');
             resultErrors.style.display = 'block';
             for (k in data['errors']){
-                ito = data['errors'][k];
-                resultErrors.append(ito);
+                els = data['errors'][k];
+                resultErrors.append(els);
             }
         }
     }
 
     function toggleSpinner(){
         var btnSearchPackage = document.getElementById('btnSearchPackage');
-        var spinner = document.getElementById('searchPackageLoading');
-        if (spinner.style.display == "none") {
-            spinner.style.display = 'block';
+        var divSpinner = document.getElementById('searchPackageLoading');
+        if (divSpinner.style.display == "none") {
+            divSpinner.style.display = 'block';
             btnSearchPackage.setAttribute('disabled', 'disabled');
         } else {
-            spinner.style.display = 'none';
+            divSpinner.style.display = 'none';
             btnSearchPackage.removeAttribute('disabled');
         }
     }

@@ -1,0 +1,28 @@
+{% extends "core/article/base.html" %}
+
+{% load i18n %}
+
+{% block modal-article-title %}
+    <h2 class="h5">{% trans 'Renditions of PID' %} {{ doc_files.id }}</h5>
+{% endblock %}
+
+{% block modal-article-content %}
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>{% trans 'Rendition name' %}</th>
+            <th>{% trans 'Rendition uri' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in doc_files.renditions %}
+            <tr>
+                <td>{{ i.name }}</td>
+                <td>{{ i.uri }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

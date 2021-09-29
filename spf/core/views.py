@@ -236,6 +236,34 @@ def article_files_list_page(request):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress', 'quality_analyst'])
+def article_files_detail(request):
+    pid = request.GET.get('pid', '')
+    content_type = request.GET.get('content_type', '')
+
+    if pid:
+        doc_files = controller.get_article_files(pid)
+        context = {'doc_files': doc_files}
+
+        if content_type == 'assets':
+            return render(request, 'core/article/assets.html', context)
+        elif content_type == 'renditions':
+            return render(request, 'core/article/renditions.html', context)
+
+    return redirect('login')
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress', 'quality_analyst'])
+def article_metadata(request):
+    pid = request.GET.get('pid', '')
+    if pid:
+        doc_metadata = controller.get_article_metadata(pid)
+        context = {'doc_metadata': doc_metadata}
+        return render(request, 'core/article/metadata.html', context)
+
+
+@login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def user_package_upload_page(request):
     if request.method == 'POST':

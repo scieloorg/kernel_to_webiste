@@ -1,0 +1,21 @@
+{% load i18n %}
+
+<div class="modal" id="modalArticleFiles">
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          {% block modal-article-title %}
+          {% endblock %}
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {% block modal-article-content %}
+          {% endblock %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans 'Close' %}</button>
+          <button type="button" class="btn btn-primary" disabled>{% trans 'Save changes' %}</button>
+        </div>
+      </div>
+    </div>
+  </div>

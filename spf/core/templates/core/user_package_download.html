@@ -75,8 +75,8 @@ SciELO Publishing Framework - {% trans 'Search package' %}
 
                 if (result.data && 'doc_pkg' in result.data) {
                     clearInterval(intervals[0]);
-                    createTable(result.data);
-                    toggleSpinner();
+                    userPackageDownloadCreateTable(result.data);
+                    userPackageDownloadToggleSpinner();
                 }
             }
         });
@@ -84,54 +84,7 @@ SciELO Publishing Framework - {% trans 'Search package' %}
 
     if (checkStatus) {
         intervals[0] = setInterval(update, 200);
-        toggleSpinner();
+        userPackageDownloadToggleSpinner();
     }
-
-    function createTable(data){
-        tableBody = document.getElementById('resultSearchPackagesTableBody')
-
-        for (k in data['doc_pkg']){
-            els = data['doc_pkg'][k];
-            row = tableBody.insertRow(-1);
-
-            aResult = document.createElement('a')
-            aResult.text = els['name'];
-            aResult.href = els['uri'];
-            aResult.classList.add('link');
-
-            tdUri = row.insertCell(-1);
-            tdUri.appendChild(aResult);
-
-            tdCreated = row.insertCell(-1);
-            tdCreated.innerHTML = els['created'];
-
-            tdUpdated = row.insertCell(-1);
-            tdUpdated.innerHTML = els['updated'];
-        }
-
-        if (data['doc_pkg'].length > 0) {
-            document.getElementById('resultSearchPackages').style.display = 'block';
-        } else {
-            var resultErrors = document.getElementById('resultErrors');
-            resultErrors.style.display = 'block';
-            for (k in data['errors']){
-                els = data['errors'][k];
-                resultErrors.append(els);
-            }
-        }
-    }
-
-    function toggleSpinner(){
-        var btnSearchPackage = document.getElementById('btnSearchPackage');
-        var divSpinner = document.getElementById('searchPackageLoading');
-        if (divSpinner.style.display == "none") {
-            divSpinner.style.display = 'block';
-            btnSearchPackage.setAttribute('disabled', 'disabled');
-        } else {
-            divSpinner.style.display = 'none';
-            btnSearchPackage.removeAttribute('disabled');
-        }
-    }
-
 </script>
 {% endblock %}

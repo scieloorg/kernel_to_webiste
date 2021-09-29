@@ -21,4 +21,6 @@ urlpatterns = [
     path('user/profile/edit', views.user_profile_edit_page, name='user_profile_edit'),
     path('user/groups/edit', views.user_groups_edit_page, name='user_groups_edit'),
     url(r'^[\s\S]*/update_status/$', views.update_status, name='update_status'),
+    url(r'^[\s\S]*/detail/$', views.article_files_detail, name='article_files_detail'),
+    url(r'^[\s\S]*/metadata/$', views.article_metadata, name='article_metadata')
 ]

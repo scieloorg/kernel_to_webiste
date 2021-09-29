@@ -8,20 +8,21 @@ SciELO Publishing Framework - {% trans "Articles' files" %}
 {% block content %}
 <h1 class="h4 pt-5">{% trans "Articles' files" %}</h1>
 
+<div id="modalArticleFilesContainer">
+</div>
+
 <div class="row justify-content-center my-3">
     {% if article_files_obj %}
     <div class="table-responsive">
-        <table class="table table-sm table-bordered table-striped">
+        <table class="table table-bordered table-striped">
             <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">{% trans 'Identifier' %}</th>
                 <th scope="col">{% trans 'Creation date' %}</th>
                 <th scope="col">{% trans 'Update date' %}</th>
-                <th scope="col">{% trans 'Package name' %}</th>
-                <th scope="col">{% trans 'XML' %}</th>
-                <th scope="col">{% trans 'Assets' %}</th>
-                <th scope="col">{% trans 'Renditions' %}</th>
+                <th scope="col">{% trans 'Metadata' %}</th>
+                <th scope="col" colspan="4">{% trans 'Files' %}</th>
             </tr>
             </thead>
             <tbody>
@@ -35,10 +36,27 @@ SciELO Publishing Framework - {% trans "Articles' files" %}
                 {% else %}
                 <td></td>
                 {% endif %}
-                <td><a href="{{ art.file.uri }}">{{ art.file.name }}</a></td>
-                <td><a href="{{ art.xml.uri }}">{{ art.xml }}</a></td>
-                <td>{{ art.assets|length }}</td>
-                <td>{{ art.renditions|length }}</td>
+                <td>
+                    <a class="btn btn-danger open-modal" data-url="{% url 'article_metadata'%}?pid={{ art.id }}">
+                        {% trans 'Metadata' %}
+                    </a>
+                </td>
+                <td class="text-center"><a class="btn btn-warning" target="_new" href="{{ art.file.uri }}">Zip</a></td>
+                <td class="text-center"><a class="btn btn-primary" target="_new" href="{{ art.xml.uri }}">XML</a></td>
+                <td class="text-center">
+                    {% if art.assets|length > 0 %}
+                        <a class="btn btn-secondary open-modal" data-url="{% url 'article_files_detail'%}?pid={{ art.id }}&content_type=assets">
+                        Assets ({{ art.assets|length }})
+                        </a>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    {% if art.renditions %}
+                        <a class="btn btn-secondary open-modal" data-url="{% url 'article_files_detail'%}?pid={{ art.id }}&content_type=renditions">
+                            Renditions ({{ art.renditions|length }})
+                        </a>
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
             </tbody>
@@ -73,5 +91,21 @@ SciELO Publishing Framework - {% trans "Articles' files" %}
         {% endif %}
     </ul>
 </nav>
+
+<script type="text/javascript">
+$(".open-modal").on("click", function() {
+    var divModalArticleFilesContainer = $("#modalArticleFilesContainer");
+
+    $.ajax({
+        url: $(this).attr("data-url"),
+        success: function(data) {
+            divModalArticleFilesContainer.html(data);
+
+            var divModalArticleFiles = new bootstrap.Modal(document.getElementById('modalArticleFiles'));
+            divModalArticleFiles.toggle();
+        }
+    });
+});
+</script>
 
 {% endblock %}

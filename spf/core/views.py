@@ -254,6 +254,16 @@ def article_files_detail(request):
 
 
 @login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress', 'quality_analyst'])
+def article_metadata(request):
+    pid = request.GET.get('pid', '')
+    if pid:
+        doc_metadata = controller.get_article_metadata(pid)
+        context = {'doc_metadata': doc_metadata}
+        return render(request, 'core/article/metadata.html', context)
+
+
+@login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def user_package_upload_page(request):
     if request.method == 'POST':

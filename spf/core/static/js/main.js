@@ -19,3 +19,47 @@ function createMessage(msg){
     return divAlert;
 }
 
+function userPackageDownloadToggleSpinner(){
+    var btnSearchPackage = document.getElementById('btnSearchPackage');
+    var divSpinner = document.getElementById('searchPackageLoading');
+    if (divSpinner.style.display == "none") {
+        divSpinner.style.display = 'block';
+        btnSearchPackage.setAttribute('disabled', 'disabled');
+    } else {
+        divSpinner.style.display = 'none';
+        btnSearchPackage.removeAttribute('disabled');
+    }
+}
+
+function userPackageDownloadCreateTable(data){
+    tableBody = document.getElementById('resultSearchPackagesTableBody')
+
+    for (k in data['doc_pkg']){
+        els = data['doc_pkg'][k];
+        row = tableBody.insertRow(-1);
+
+        aResult = document.createElement('a')
+        aResult.text = els['name'];
+        aResult.href = els['uri'];
+        aResult.classList.add('link');
+
+        tdUri = row.insertCell(-1);
+        tdUri.appendChild(aResult);
+
+        tdCreated = row.insertCell(-1);
+        tdCreated.innerHTML = els['created'];
+
+        tdUpdated = row.insertCell(-1);
+        tdUpdated.innerHTML = els['updated'];
+    }
+
+    if (data['doc_pkg'].length > 0) {
+        document.getElementById('resultSearchPackages').style.display = 'block';
+    } else {
+        var divBaseMessages = document.getElementById('baseMessages');
+        for (k in data['errors']){
+            element_message = createMessage(data['errors'][k]);
+            divBaseMessages.append(element_message);
+        }
+    }
+}

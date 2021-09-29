@@ -1,0 +1,16 @@
+{% extends "core/article/base.html" %}
+
+{% load i18n %}
+
+{% block modal-article-title %}
+  <h2 class="h5">{% trans 'Document metadata of PID' %} {{ doc_metadata.id }}</h5>
+{% endblock %}
+
+{% block modal-article-content %}
+  <div>
+      <p>DOI: {{ doc_metadata.doi }}</p>
+      <p>Title: {{ doc_metadata.title }}</p>
+      <p>Journal: {{ doc_metadata.journal }}</p>
+    </form>
+  </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "core/article/base.html" %}
+
+{% load i18n %}
+
+{% block modal-article-title %}
+    <h2 class="h5">{% trans 'Assets of PID' %} {{ doc_files.id }}</h5>
+{% endblock %}
+
+{% block modal-article-content %}
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>{% trans 'Asset name' %}</th>
+            <th>{% trans 'Asset uri' %}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in doc_files.assets %}
+            <tr>
+                <td>{{ i.name }}</td>
+                <td>{{ i.uri }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+version: "3.2"
+
+services:
+    broker:
+        image: rabbitmq:3-alpine
+        container_name: 'spf_broker_1'
+        ports:
+            - 5672:5672
+        networks:
+            - net
+    worker:
+        build:
+            context: .
+        container_name: 'spf_worker_1'
+        command: sh docker-start-worker.sh
+        env_file:
+            - ./prod.env
+        depends_on:
+            - broker
+        external_links:
+            - scielo-postgres-1
+        networks:
+            - net
+    web:
+        build: .
+        container_name: 'spf_web_1'
+        command: python spf/manage.py runserver 0.0.0.0:8000
+        volumes:
+            - ./data:/data
+        ports:
+            - 8000:8000
+        depends_on:
+            - broker
+            - worker
+        env_file:
+            - ./prod.env
+        external_links:
+            - scielo-postgres-1
+            - opac_opac_mongo_1
+        networks:
+            - net
+networks:
+    net:
+        driver: bridge

@@ -1,63 +1,65 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load spf_extras %}
 
 {% block title %}
-SciELO Publishing Framework - {% trans 'Deposited Packages' %}
+SciELO Publishing Framework - {% trans 'Deposited packages' %}
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center pt-5">
-    <h1 class="h4">{% trans 'Deposited Packages' %}</h1>
-    <div class="m-3">
-        {% if deposited_package_obj %}
-        <div class="table-responsive">
-            <table class="table table-sm table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">{% trans 'Username' %}</th>
-                    <th scope="col">{% trans 'Package name' %}</th>
-                    <th scope="col">{% trans 'Datetime' %}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for dpkg in deposited_package_obj %}
-                <tr>
-                    <td>{{ deposited_package_obj.start_index|add:forloop.counter0 }}</td>
-                    <td>{{ dpkg.user }}</td>
-                    <td>{{ dpkg.package_name }}</td>
-                    <td>{{ dpkg.datetime|date:'Y-m-d H:i' }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
+<h1 class="h4 pt-5">{% trans 'Deposited packages' %}</h1>
+
+<div class="row justify-content-center my-3">
+    {% if deposited_package_obj %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">{% trans 'Username' %}</th>
+                <th scope="col">{% trans 'Package name' %}</th>
+                <th scope="col">{% trans 'Datetime' %}</th>
+                <th scope="col">{% trans 'Status' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for dpkg in deposited_package_obj %}
+            <tr>
+                <td>{{ deposited_package_obj.start_index|add:forloop.counter0 }}</td>
+                <td>{{ dpkg.user }}</td>
+                <td>{{ dpkg.package_name }}</td>
+                <td>{{ dpkg.datetime|date:'Y-m-d H:i' }}</td>
+                <td><span class="badge {{ dpkg.status|to_css_ingress_package_status_style }}">{{ dpkg.get_status_display }}</span></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
+    {% endif %}
 </div>
 
 <nav aria-label="Deposited package navigation">
     <ul class="pagination justify-content-center">
         {% if deposited_package_obj.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page=1{% if scope %}&scope={{ scope }}{% endif %}">&laquo; First</a>
+            <a class="page-link" href="?page=1{% if scope %}&scope={{ scope }}{% endif %}">&laquo; {% trans 'First' %}</a>
         </li>
 
         <li class="page-item">
-            <a class="page-link"  href="?page={{ deposited_package_obj.previous_page_number }}{% if scope %}&scope={{ scope }}{% endif %}">Previous</a>
+            <a class="page-link"  href="?page={{ deposited_package_obj.previous_page_number }}{% if scope %}&scope={{ scope }}{% endif %}">{% trans 'Previous' %}</a>
         </li>
         {% endif %}
 
         <li class="page-item">
-            <a class="page-link">Page {{ deposited_package_obj.number }} of {{ deposited_package_obj.paginator.num_pages }}</a>
+            <a class="page-link">{% trans 'Page' %} {{ deposited_package_obj.number }} {% trans 'of' %} {{ deposited_package_obj.paginator.num_pages }}</a>
         </li>
 
         {% if deposited_package_obj.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ deposited_package_obj.next_page_number }}{% if scope %}&scope={{ scope }}{% endif %}">Next</a>
+            <a class="page-link" href="?page={{ deposited_package_obj.next_page_number }}{% if scope %}&scope={{ scope }}{% endif %}">{% trans 'Next' %}</a>
         </li>
         <li class="page-item">
-            <a class="page-link" href="?page={{ deposited_package_obj.paginator.num_pages }}{% if scope %}&scope={{ scope }}{% endif %}">Last &raquo;</a>
+            <a class="page-link" href="?page={{ deposited_package_obj.paginator.num_pages }}{% if scope %}&scope={{ scope }}{% endif %}">{% trans 'Last' %} &raquo;</a>
         </li>
         {% endif %}
     </ul>

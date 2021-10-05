@@ -4,3 +4,7 @@
     padding: 0;
     margin: 0 auto;
 }
+
+.is-no-rounded {
+    border-radius: 0;
+}

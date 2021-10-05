@@ -3,12 +3,13 @@
 {% load spf_extras %}
 
 {% block title %}
-SciELO Publishing Framework - {% trans 'Search Package' %}
+SciELO Publishing Framework - {% trans 'Search package' %}
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <h1 class="h4 pt-5">{% trans 'Search Package' %}</h1>
+<h1 class="h4 pt-5">{% trans 'Search package' %}</h1>
+
+<div class="row my-3">
     <div class="col-sm-5 mb-3">
         <div class="card my-3">
             <div class="card-header">
@@ -21,47 +22,69 @@ SciELO Publishing Framework - {% trans 'Search Package' %}
                         <label for="pid" class="form-label">{% trans 'Document identifier' %}</label>
                         <input required type="text" name="pid" autofocus id="pid" class="form-control" placeholder="{% trans 'Enter a document identifier' %}" value="{{ pid }}">
                     </div>
-                    <button type="submit" class="btn btn-primary">{% trans 'Search' %}</button>
+                    <button id="btnSearchPackage" type="submit" class="btn btn-primary">{% trans 'Search' %}</button>
                 </form>
             </div>
         </div>
+        <div id='searchPackageLoading' style="display: none;" role="status">
+            <div class="spinner-border text-primary">
+                <span class="sr-only">{% trans 'Loading' %}...</span>
+            </div>
+            <span class="text-primary px-1 fw-bold">{% trans 'Collecting resources' %}</span>
+        </div>
+        <div class="alert alert-danger" id="resultErrors" style="display: none;"></div>
     </div>
-    <div>
-    {% if pkgs %}
+
+    <div id="resultSearchPackages" class="table-responsive" style="display: none;">
         <h2 class="h4">{% trans 'Results for document' %} <strong>{{ pid }}</strong></h2>
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
+        <table class="table table-bordered" id="table">
+            <thead>
                 <tr>
-                    <th>#</th>
-                    <th>{% trans 'Package name' %}</th>
-                    <th>{% trans 'Package address' %}</th>
+                    <th>{% trans 'Package' %}</th>
                     <th>{% trans 'Creation date' %}</th>
                     <th>{% trans 'Update date' %}</th>
                 </tr>
                 </thead>
-                <tbody>
-                {% for pkg in pkgs %}
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ pkg.name }}</td>
-                    <td>
-                        <a href="{{ pkg.uri }}" class="link">{{ pkg.uri }}</a>
-                    </td>
-                    <td>
-                        {{ pkg.created|to_datetime|date:'Y-m-d H:i' }}</td>
-                    <td>{{ pkg.updated|date:'Y-m-d H:i' }}</td>
-                {% endfor %}
+                <tbody id="resultSearchPackagesTableBody">
                 </tbody>
-            </table>
-        </div>
-    {% endif %}
-    {% for message in messages %}
-        <div class="d-flex justify-content-center">
-            <div class="{{ message.tags }}" role="alert">
-                {{ message }}
-            </div>
-        </div>
-    {% endfor %}
+        </table>
     </div>
-{% endblock %}
+
 </div>
+<script type="text/javascript">
+    var xhr;
+    var checkStatus = '{{ check_status }}';
+    var intervals = {}
+
+    function update(){
+        xhr = $.ajax({
+            url: 'update_status/?task_id={{ task_id }}',
+            type: 'GET',
+            success: function(result) {
+                divSpinner = document.createElement('div');
+                divSpinner.classList.add('spinner-border');
+                divSpinner.setAttribute('role', 'status');
+
+                spanLoading = document.createElement('span');
+                spanLoading.classList.add('sr-only');
+                spanLoading.text = "{% trans 'Loading' %}...";
+
+                divSpinner.appendChild(spanLoading);
+
+                $('user-package-download-results').add(divSpinner);
+
+                if (result.data && 'doc_pkg' in result.data) {
+                    clearInterval(intervals[0]);
+                    userPackageDownloadCreateTable(result.data);
+                    userPackageDownloadToggleSpinner();
+                }
+            }
+        });
+    }
+
+    if (checkStatus) {
+        intervals[0] = setInterval(update, 200);
+        userPackageDownloadToggleSpinner();
+    }
+</script>
+{% endblock %}

@@ -31,8 +31,11 @@ def faq_page(request):
     return render(request, 'faq.html')
 
 
+################
+### user views #
+################
 @unauthenticated_user
-def account_register_page(request):
+def user_register_page(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
@@ -51,11 +54,11 @@ def account_register_page(request):
         'first_name': request.POST.get('first_name', ''),
         'last_name': request.POST.get('last_name', '')
     }
-    return render(request, 'accounts/register.html', context=context)
+    return render(request, 'user/register.html', context=context)
 
 
 @unauthenticated_user
-def account_login_page(request):
+def user_login_page(request):
     context = {'username': ''}
 
     if request.method == 'POST':
@@ -73,35 +76,13 @@ def account_login_page(request):
                           extra_tags='alert-danger')
             context['username'] = username
 
-    return render(request, 'accounts/login.html', context=context)
+    return render(request, 'user/login.html', context=context)
 
 
 @login_required(login_url='login')
-def account_change_password_page(request):
-    context = {}
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(
-                request,
-                _('Your password was updated'),
-                extra_tags='alert-success'
-            )
-        else:
-            for val in form.errors.values():
-                messages.error(request, _(val[0]), extra_tags='alert-danger')
-            context.update({
-                'old_password': request.POST.get('old_password', ''),
-                'new_password1': request.POST.get('new_password1', ''),
-                'new_password2': request.POST.get('new_password2', ''),
-                'form': form
-                })
-    else:
-        form = PasswordChangeForm(request.user)
-
-    return render(request, 'accounts/change_password.html', context=context)
+def user_logout(request):
+    logout(request)
+    return redirect('login')
 
 
 @login_required(login_url='login')
@@ -139,49 +120,79 @@ def user_add_page(request):
 
     context.update({'available_groups': controller.get_groups()})
 
-    return render(request, 'accounts/add.html', context=context)
-
-
-def logout_user(request):
-    logout(request)
-    return redirect('login')
+    return render(request, 'user/add.html', context=context)
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def journal_list_page(request):
-    journal_list = dsm_ingress._journals_manager.get_journals()
+def user_change_password_page(request):
+    context = {}
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(
+                request,
+                _('Your password was updated'),
+                extra_tags='alert-success'
+            )
+        else:
+            for val in form.errors.values():
+                messages.error(request, _(val[0]), extra_tags='alert-danger')
+            context.update({
+                'old_password': request.POST.get('old_password', ''),
+                'new_password1': request.POST.get('new_password1', ''),
+                'new_password2': request.POST.get('new_password2', ''),
+                'form': form
+                })
+    else:
+        form = PasswordChangeForm(request.user)
 
-    paginator = Paginator(journal_list, 25)
-    page_number = request.GET.get('page')
-    journal_obj = paginator.get_page(page_number)
-
-    return render(request, 'core/journal_list.html', context={'journal_obj': journal_obj})
+    return render(request, 'user/change_password.html', context=context)
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def deposited_package_list_page(request):
-    request_scope = request.GET.get('scope', '')
-    deposited_package_list = controller.get_deposited_packages_from_user_and_scope(request.user, request_scope)
+@allowed_users(allowed_groups=['manager'])
+def user_groups_edit_page(request):
+    user_list = controller.get_users()
+    available_groups = controller.get_groups()
 
-    paginator = Paginator(deposited_package_list, 25)
+    paginator = Paginator(user_list, 25)
     page_number = request.GET.get('page')
-    deposited_package_obj = paginator.get_page(page_number)
+    user_obj = paginator.get_page(page_number)
 
-    return render(request, 'core/deposited_package_list.html', context={'deposited_package_obj': deposited_package_obj, 'scope': request_scope})
+    if request.method == 'POST':
+        ev = controller.add_event(request.user, Event.Name.CHANGE_USER_GROUPS)
+
+        for u in user_obj:
+            groups_names = request.POST.getlist('%s|user_groups' % u.username)
+            user_groups = controller.get_groups_from_groups_names(groups_names)
+            controller.update_user_groups(u, user_groups)
+
+        messages.success(request, _("Users' groups were updated"), extra_tags='alert-success')
+        controller.update_event(ev, {'status': Event.Status.COMPLETED})
+
+    return render(request, 'user/groups_edit.html', context={'user_obj': user_obj, 'available_groups': available_groups})
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def article_files_list_page(request):
-    article_files_list = dsm_ingress._docs_manager.get_articles_files()
+def user_profile_page(request):
+    groups_names = controller.get_groups_names_from_user(request.user)
+    return render(request, 'user/profile.html', context={'groups': groups_names})
 
-    paginator = Paginator(article_files_list, 25)
-    page_number = request.GET.get('page')
-    article_files_obj = paginator.get_page(page_number)
 
-    return render(request, 'core/article_files_list.html', context={'article_files_obj': article_files_obj})
+@login_required(login_url='login')
+def user_profile_edit_page(request):
+    if request.method == 'POST':
+        form = UpdateUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request,
+                             _('User %s was updated') % username,
+                             extra_tags='alert-success')
+            return redirect('user_profile_edit')
+    return render(request, 'user/profile_edit.html', context={})
 
 
 @login_required(login_url='login')

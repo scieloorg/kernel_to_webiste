@@ -8,6 +8,13 @@ general = [
     path('faq/', views.faq_page, name='faq'),
 ]
 
+user = [
+    path('register/', views.user_register_page, name='register'),
+    path('login/', views.user_login_page, name='login'),
+    path('logout/', views.user_logout, name='logout'),
+    path('user/add/', views.user_add_page, name='user_add'),
+    path('user/change_password/', views.user_change_password_page, name='user_change_password'),
     path('user/groups/edit', views.user_groups_edit_page, name='user_groups_edit'),
-    url(r'^[\s\S]*/update_status/$', views.update_status, name='update_status'),
+    path('user/profile/', views.user_profile_page, name='user_profile'),
+    path('user/profile/edit/', views.user_profile_edit_page, name='user_profile_edit'),
 ]

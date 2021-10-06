@@ -39,6 +39,7 @@ SciELO Publishing Framework - {% trans 'Journals' %}
     {% endif %}
 </div>
 
+{% if journal_obj %}
 <nav aria-label="Journal navigation">
     <ul class="pagination justify-content-center">
         {% if journal_obj.has_previous %}
@@ -65,5 +66,6 @@ SciELO Publishing Framework - {% trans 'Journals' %}
         {% endif %}
     </ul>
 </nav>
+{% endif %}
 
 {% endblock %}

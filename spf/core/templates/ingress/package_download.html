@@ -16,7 +16,7 @@ SciELO Publishing Framework - {% trans 'Search package' %}
                 {% trans 'Search package' %}
             </div>
             <div class="card-body">
-                <form class="bg-white form-user" method="GET" action="{% url 'user_package_download' %}">
+                <form class="bg-white form-user" method="GET" action="{% url 'ingress_package_download' %}">
                     {% csrf_token %}
                     <div class="mb-3">
                         <label for="pid" class="form-label">{% trans 'Document identifier' %}</label>
@@ -58,7 +58,7 @@ SciELO Publishing Framework - {% trans 'Search package' %}
 
     function update(){
         xhr = $.ajax({
-            url: 'update_status/?task_id={{ task_id }}',
+            url: '/task/update_status/?task_id={{ task_id }}',
             type: 'GET',
             success: function(result) {
                 divSpinner = document.createElement('div');
@@ -75,8 +75,8 @@ SciELO Publishing Framework - {% trans 'Search package' %}
 
                 if (result.data && 'doc_pkg' in result.data) {
                     clearInterval(intervals[0]);
-                    userPackageDownloadCreateTable(result.data);
-                    userPackageDownloadToggleSpinner();
+                    ingressPackageDownloadCreateTable(result.data);
+                    ingressPackageDownloadToggleSpinner();
                 }
             }
         });
@@ -84,7 +84,7 @@ SciELO Publishing Framework - {% trans 'Search package' %}
 
     if (checkStatus) {
         intervals[0] = setInterval(update, 200);
-        userPackageDownloadToggleSpinner();
+        ingressPackageDownloadToggleSpinner();
     }
 </script>
 {% endblock %}

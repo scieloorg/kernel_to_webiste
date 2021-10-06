@@ -30,3 +30,9 @@ ingress = [
 journal = [
     path('journal/list/', views.journal_list_page, name='journal_list'),
 ]
+
+tracking = [
+    path('event/list/', views.event_list_page, name='event_list'),
+    path('task/update_status/', views.task_update_status, name='task_update_status'),
+]
+

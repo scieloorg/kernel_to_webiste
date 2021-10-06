@@ -36,3 +36,5 @@ tracking = [
     path('task/update_status/', views.task_update_status, name='task_update_status'),
 ]
 
+
+urlpatterns = general + user + ingress + journal +  tracking

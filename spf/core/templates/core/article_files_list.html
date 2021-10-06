@@ -47,6 +47,7 @@ SciELO Publishing Framework - {% trans "Articles' files" %}
     {% endif %}
 </div>
 
+{% if article_files_obj %}
 <nav aria-label="Articles' files navigation">
     <ul class="pagination justify-content-center">
         {% if article_files_obj.has_previous %}
@@ -73,5 +74,6 @@ SciELO Publishing Framework - {% trans "Articles' files" %}
         {% endif %}
     </ul>
 </nav>
+{% endif %}
 
 {% endblock %}

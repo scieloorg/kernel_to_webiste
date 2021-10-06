@@ -1,8 +1,5 @@
 from datetime import datetime
 from django.contrib.auth.models import Group, User
-from opac_schema.v2.models import ArticleFiles
-from opac_schema.v1.models import Journal as OPACJournal
-
 from core.models import GROUP_MANAGER, SCOPE_ALL_USERS, IngressPackage, Event
 
 
@@ -57,14 +54,6 @@ def get_groups_from_groups_names(groups_names):
 
 def get_groups():
     return Group.objects.all()
-
-
-def get_articles_files():
-    return ArticleFiles.objects.all()
-
-
-def get_opac_journals():
-    return OPACJournal.objects.all()
 
 
 def add_event(user, event_name, annotation=None):

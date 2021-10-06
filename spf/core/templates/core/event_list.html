@@ -48,6 +48,7 @@ SciELO Publishing Framework - {% trans 'Events' %}
     {% endif %}
 </div>
 
+{% if event_obj %}
 <nav aria-label="Event navigation">
     <ul class="pagination justify-content-center">
         {% if event_obj.has_previous %}
@@ -74,5 +75,6 @@ SciELO Publishing Framework - {% trans 'Events' %}
         {% endif %}
     </ul>
 </nav>
+{% endif %}
 
 {% endblock %}

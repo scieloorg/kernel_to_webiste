@@ -27,6 +27,9 @@
                 <li class="nav-item">
                     <a class="nav-link m-1" href="{% url 'journal_list' %}">{% trans 'Journals' %}</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link m-1 disabled" href="">{% trans 'Documents' %}</a>
+                </li>
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link m-1" href="{% url 'faq' %}">FAQ</a>
@@ -57,6 +60,7 @@
         </div>
     </div>
 </nav>
+
 <div id="baseMessages">
 {% for message in messages %}
     <div class="alert {{ message.tags }} alert-dismissible fade show is-no-rounded m-0 p-2" role="alert">

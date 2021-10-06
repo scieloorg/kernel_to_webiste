@@ -38,6 +38,7 @@ SciELO Publishing Framework - {% trans 'Deposited packages' %}
     {% endif %}
 </div>
 
+{% if deposited_package_obj %}
 <nav aria-label="Deposited package navigation">
     <ul class="pagination justify-content-center">
         {% if deposited_package_obj.has_previous %}
@@ -64,5 +65,6 @@ SciELO Publishing Framework - {% trans 'Deposited packages' %}
         {% endif %}
     </ul>
 </nav>
+{% endif %}
 
 {% endblock %}

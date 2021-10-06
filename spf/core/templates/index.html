@@ -42,6 +42,23 @@ SciELO Publishing Framework - Home
                 </div>
             </div>
         </div>
+
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'Document management' %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item disabled" href="">{% trans 'Add article to issue' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Include errata into article' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Schedule article for publication' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Edit article assets and renditions' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Edit article metadata' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Find problems' %}</a>
+                </div>
+            </div>
+        </div>
+
         {% endif %}
 
         {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_migration" %}

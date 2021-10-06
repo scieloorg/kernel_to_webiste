@@ -104,14 +104,29 @@ python ../manage.py make_messages_no_fuzzy -l es
 python ../manage.py compilemessages
 ```
 
+## Installation under Docker
 
-## Usage
-After following the installing and running instructions, the application must be accessible through the address http://127.0.0.1:8000.
+```shell
+# Ensure you are in the project root directory. Executing `ls .` will list the following files/directories:
+dev.env
+docker-compose.yml
+docker-entrypoint.sh
+Dockerfile
+LICENSE
+prod.env
+README.md
+requirements.txt
+setup.py
+spf
 
+# Build image
+docker-compose -f docker-compose.yml build
 
-## Observations
-Keep in mind that this is an initial version of our application. 
-The idea, at this moment, is to provide a simple interface where users can authenticate, search and send packages.
+# Create and start a container with the image built
+docker-compose up
+
+# Make sure PostgreSQL and MongoDB databases are in the same network as the spf application
+```
 
 ## List of environmental variables
 
@@ -134,5 +149,8 @@ POSTGRES_USER | `postgres` | SciELO Publishing Framework database user
 POSTGRES_PASSWORD | `password` | SciELO Publishing Framework database user password
 POSTGRES_HOST | `172.17.0.4` | SciELO Publishing Framework database hostname
 POSTGRES_PORT | `5432` | SciELO Publishing Framework database host port
+DJANGO_MANAGE_MIGRATE | `1` | Django flag to run `managep.py migrate`
+DJANGO_MANAGE_LOAD | `1` | Django flag to run `manage.py loaddata group`
+DJANGO_ADMIN_TRANSLATE | `1` | Django flag to run `django-admin compile_messages`
 CELERY_BROKER_URL | `pyamqp://172.17.0.5:5672` | RabbitMQ address
 CELERY_RESULT_BACKEND | `django-db` | Celery flag to use Django Database for persisting messages

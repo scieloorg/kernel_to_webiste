@@ -81,9 +81,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ.get('POSTGRES_DB', 'spf'),
-        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'alemanha'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
+        'USER': os.environ.get('POSTGRES_USER', 'user'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'scielo-postgres-1'),
         'PORT': int(os.environ.get('POSTGRES_PORT', '5432')),
     },
 }
@@ -146,5 +146,5 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_INGRESS_TEMP = os.path.join(BASE_DIR, 'media', 'ingress', 'temp')
 
-CELERY_BROKER_URL = 'pyamqp://172.17.0.5:5672'
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'pyamqp://broker:5672'),
 CELERY_RESULT_BACKEND = 'django-db'

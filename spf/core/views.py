@@ -315,6 +315,22 @@ def ingress_articles_files_page(request):
     return render(request, 'core/user_groups_edit.html', context={'user_obj': user_obj, 'available_groups': available_groups})
 
 
+#################
+# journal views #
+#################
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+def journal_list_page(request):
+    journal_list = dsm_ingress._journals_manager.get_journals()
+
+    paginator = Paginator(journal_list, 25)
+    page_number = request.GET.get('page')
+    journal_obj = paginator.get_page(page_number)
+
+    return render(request, 'journal/journal_list.html', context={'journal_obj': journal_obj})
+
+
+
 ##################
 # tracking views #
 ##################

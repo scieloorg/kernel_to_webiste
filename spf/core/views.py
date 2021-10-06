@@ -300,21 +300,6 @@ def ingress_articles_files_page(request):
     return render(request, 'ingress/article_files_list.html', context={'article_files_obj': article_files_obj})
 
 
-
-    if request.method == 'POST':
-        ev = controller.add_event(request.user, Event.Name.CHANGE_USER_GROUPS)
-
-        for u in user_obj:
-            groups_names = request.POST.getlist('%s|user_groups' % u.username)
-            user_groups = controller.get_groups_from_groups_names(groups_names)
-            controller.update_user_groups(u, user_groups)
-
-        messages.success(request, _("Users' groups were updated"), extra_tags='alert-success')
-        controller.update_event(ev, {'status': Event.Status.COMPLETED})
-
-    return render(request, 'core/user_groups_edit.html', context={'user_obj': user_obj, 'available_groups': available_groups})
-
-
 #################
 # journal views #
 #################
@@ -328,7 +313,6 @@ def journal_list_page(request):
     journal_obj = paginator.get_page(page_number)
 
     return render(request, 'journal/journal_list.html', context={'journal_obj': journal_obj})
-
 
 
 ##################
@@ -366,5 +350,3 @@ def task_update_status(request):
     }
 
     return JsonResponse(json_data)
-
-

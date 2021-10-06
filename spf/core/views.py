@@ -195,9 +195,12 @@ def user_profile_edit_page(request):
     return render(request, 'user/profile_edit.html', context={})
 
 
+#################
+# ingress views #
+#################
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def user_package_upload_page(request):
+def ingress_package_upload_page(request):
     if request.method == 'POST':
         file_input = request.FILES.get('package_file')
         # registra evento de envio de pacote novo
@@ -241,12 +244,12 @@ def user_package_upload_page(request):
             # remove arquivo de diretório temporário
             fs.delete(pkg_name)
 
-    return render(request, 'core/user_package_upload.html')
+    return render(request, 'ingress/package_upload.html')
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def user_package_download_page(request):
+def ingress_package_download_page(request):
     pid = request.GET.get('pid', '')
     job_id = request.GET.get('job', '')
 
@@ -261,26 +264,42 @@ def user_package_download_page(request):
             'state': 'STARTING',
             'task_id': job_id
         }
-        return render(request, 'core/user_package_download.html', context)
+        return render(request, 'ingress/package_download.html', context)
 
     # Inicializa task para o PID informado e redireciona para a própria página aguardando resultado
     elif pid:
         job = task_get_package_uri_by_pid.delay(pid)
-        return HttpResponseRedirect(reverse('user_package_download') + '?job=' + job.id + '&pid=' + pid)
+        return HttpResponseRedirect(reverse('ingress_package_download') + '?job=' + job.id + '&pid=' + pid)
 
     # Abre template pela primeira vez para digitar PID
-    return render(request, 'core/user_package_download.html')
+    return render(request, 'ingress/package_download.html')
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager'])
-def user_groups_edit_page(request):
-    user_list = controller.get_users()
-    available_groups = controller.get_groups()
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+def ingress_package_list_page(request):
+    request_scope = request.GET.get('scope', '')
+    deposited_package_list = controller.get_ingress_packages_from_user_and_scope(request.user, request_scope)
 
-    paginator = Paginator(user_list, 25)
+    paginator = Paginator(deposited_package_list, 25)
     page_number = request.GET.get('page')
-    user_obj = paginator.get_page(page_number)
+    deposited_package_obj = paginator.get_page(page_number)
+
+    return render(request, 'ingress/package_list.html', context={'deposited_package_obj': deposited_package_obj, 'scope': request_scope})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+def ingress_articles_files_page(request):
+    article_files_list = dsm_ingress._docs_manager.get_articles_files()
+
+    paginator = Paginator(article_files_list, 25)
+    page_number = request.GET.get('page')
+    article_files_obj = paginator.get_page(page_number)
+
+    return render(request, 'ingress/article_files_list.html', context={'article_files_obj': article_files_obj})
+
+
 
     if request.method == 'POST':
         ev = controller.add_event(request.user, Event.Name.CHANGE_USER_GROUPS)

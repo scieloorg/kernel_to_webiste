@@ -20,6 +20,7 @@ SciELO Publishing Framework - {% trans 'Journals' %}
                 <th scope="col">{% trans 'Acronym' %}</th>
                 <th scope="col">{% trans 'Print ISSN' %}</th>
                 <th scope="col">{% trans 'Online ISSN' %}</th>
+                <th scope="col">{% trans 'SciELO ISSN' %}</th>
             </tr>
             </thead>
             <tbody>
@@ -31,6 +32,7 @@ SciELO Publishing Framework - {% trans 'Journals' %}
                 <td>{{ jour.acronym }}</td>
                 <td>{{ jour.print_issn|default:'' }}</td>
                 <td>{{ jour.eletronic_issn|default:'' }}</td>
+                <td>{{ jour.scielo_issn|default:'' }}</td>
             </tr>
             {% endfor %}
             </tbody>

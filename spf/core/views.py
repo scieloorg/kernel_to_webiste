@@ -20,66 +20,15 @@ import core.controller as controller
 import dsm.ingress as dsm_ingress
 
 
+###################
+### general views #
+###################
 def index_page(request):
     return render(request, 'index.html')
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration', 'quality_analyst'])
-def update_status(request):
-    """Obtém status (STARTING, FAILURY, PROGRESS, SUCCESS ou UNDEFINED) de task executada."""
-    try:
-        task_id = request.GET['task_id']
-        task = AsyncResult(task_id)
-        result = task.result
-        status = task.status
-    except:
-        result = 'UNDEFINED'
-        status = 'UNDEFINED'
-
-    json_data = {
-        'status': status,
-        'state': 'PROGRESS',
-        'data': result,
-    }
-
-    return JsonResponse(json_data)
-
-
 def faq_page(request):
     return render(request, 'faq.html')
-
-
-@login_required(login_url='login')
-def user_profile_page(request):
-    groups_names = controller.get_groups_names_from_user(request.user)
-    return render(request, 'core/user_profile.html', context={'groups': groups_names})
-
-
-@login_required(login_url='login')
-def user_profile_edit_page(request):
-    if request.method == 'POST':
-        form = UpdateUserForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request,
-                             _('User %s was updated') % username,
-                             extra_tags='alert-success')
-            return redirect('user_profile_edit')
-    return render(request, 'core/user_profile_edit.html', context={})
-
-
-@login_required(login_url='login')
-def event_list_page(request):
-    request_scope = request.GET.get('scope', '')
-    event_list = controller.get_events_from_user_and_scope(request.user, request_scope)
-
-    paginator = Paginator(event_list, 25)
-    page_number = request.GET.get('page')
-    event_obj = paginator.get_page(page_number)
-
-    return render(request, 'core/event_list.html', context={'event_obj': event_obj, 'scope': request_scope})
 
 
 @unauthenticated_user

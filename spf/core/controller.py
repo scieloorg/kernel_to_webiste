@@ -4,7 +4,7 @@ from core.models import GROUP_MANAGER, SCOPE_ALL_USERS, IngressPackage, Event
 
 
 def _is_privileged_user(user):
-    return GROUP_MANAGER in get_groups_names_from_user(user) or user.is_superuser() or user.is_staff()
+    return GROUP_MANAGER in get_groups_names_from_user(user) or user.is_superuser or user.is_staff
 
 
 def _get_objects_from_user_and_scope(user, scope, model_class):
@@ -14,7 +14,7 @@ def _get_objects_from_user_and_scope(user, scope, model_class):
         return model_class.objects.filter(user=user)
 
 
-def get_deposited_packages_from_user_and_scope(user, scope):
+def get_ingress_packages_from_user_and_scope(user, scope):
     return _get_objects_from_user_and_scope(user, scope, IngressPackage)
 
 

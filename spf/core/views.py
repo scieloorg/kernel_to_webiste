@@ -20,70 +20,22 @@ import core.controller as controller
 import dsm.ingress as dsm_ingress
 
 
+###################
+### general views #
+###################
 def index_page(request):
     return render(request, 'index.html')
-
-
-@login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration', 'quality_analyst'])
-def update_status(request):
-    """Obtém status (STARTING, FAILURY, PROGRESS, SUCCESS ou UNDEFINED) de task executada."""
-    try:
-        task_id = request.GET['task_id']
-        task = AsyncResult(task_id)
-        result = task.result
-        status = task.status
-    except:
-        result = 'UNDEFINED'
-        status = 'UNDEFINED'
-
-    json_data = {
-        'status': status,
-        'state': 'PROGRESS',
-        'data': result,
-    }
-
-    return JsonResponse(json_data)
 
 
 def faq_page(request):
     return render(request, 'faq.html')
 
 
-@login_required(login_url='login')
-def user_profile_page(request):
-    groups_names = controller.get_groups_names_from_user(request.user)
-    return render(request, 'core/user_profile.html', context={'groups': groups_names})
-
-
-@login_required(login_url='login')
-def user_profile_edit_page(request):
-    if request.method == 'POST':
-        form = UpdateUserForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            messages.success(request,
-                             _('User %s was updated') % username,
-                             extra_tags='alert-success')
-            return redirect('user_profile_edit')
-    return render(request, 'core/user_profile_edit.html', context={})
-
-
-@login_required(login_url='login')
-def event_list_page(request):
-    request_scope = request.GET.get('scope', '')
-    event_list = controller.get_events_from_user_and_scope(request.user, request_scope)
-
-    paginator = Paginator(event_list, 25)
-    page_number = request.GET.get('page')
-    event_obj = paginator.get_page(page_number)
-
-    return render(request, 'core/event_list.html', context={'event_obj': event_obj, 'scope': request_scope})
-
-
+################
+### user views #
+################
 @unauthenticated_user
-def account_register_page(request):
+def user_register_page(request):
     if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
@@ -102,11 +54,11 @@ def account_register_page(request):
         'first_name': request.POST.get('first_name', ''),
         'last_name': request.POST.get('last_name', '')
     }
-    return render(request, 'accounts/register.html', context=context)
+    return render(request, 'user/register.html', context=context)
 
 
 @unauthenticated_user
-def account_login_page(request):
+def user_login_page(request):
     context = {'username': ''}
 
     if request.method == 'POST':
@@ -124,35 +76,13 @@ def account_login_page(request):
                           extra_tags='alert-danger')
             context['username'] = username
 
-    return render(request, 'accounts/login.html', context=context)
+    return render(request, 'user/login.html', context=context)
 
 
 @login_required(login_url='login')
-def account_change_password_page(request):
-    context = {}
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(
-                request,
-                _('Your password was updated'),
-                extra_tags='alert-success'
-            )
-        else:
-            for val in form.errors.values():
-                messages.error(request, _(val[0]), extra_tags='alert-danger')
-            context.update({
-                'old_password': request.POST.get('old_password', ''),
-                'new_password1': request.POST.get('new_password1', ''),
-                'new_password2': request.POST.get('new_password2', ''),
-                'form': form
-                })
-    else:
-        form = PasswordChangeForm(request.user)
-
-    return render(request, 'accounts/change_password.html', context=context)
+def user_logout(request):
+    logout(request)
+    return redirect('login')
 
 
 @login_required(login_url='login')
@@ -190,54 +120,87 @@ def user_add_page(request):
 
     context.update({'available_groups': controller.get_groups()})
 
-    return render(request, 'accounts/add.html', context=context)
-
-
-def logout_user(request):
-    logout(request)
-    return redirect('login')
+    return render(request, 'user/add.html', context=context)
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def journal_list_page(request):
-    journal_list = dsm_ingress._journals_manager.get_journals()
+def user_change_password_page(request):
+    context = {}
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(
+                request,
+                _('Your password was updated'),
+                extra_tags='alert-success'
+            )
+        else:
+            for val in form.errors.values():
+                messages.error(request, _(val[0]), extra_tags='alert-danger')
+            context.update({
+                'old_password': request.POST.get('old_password', ''),
+                'new_password1': request.POST.get('new_password1', ''),
+                'new_password2': request.POST.get('new_password2', ''),
+                'form': form
+                })
+    else:
+        form = PasswordChangeForm(request.user)
 
-    paginator = Paginator(journal_list, 25)
+    return render(request, 'user/change_password.html', context=context)
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager'])
+def user_groups_edit_page(request):
+    user_list = controller.get_users()
+    available_groups = controller.get_groups()
+
+    paginator = Paginator(user_list, 25)
     page_number = request.GET.get('page')
-    journal_obj = paginator.get_page(page_number)
+    user_obj = paginator.get_page(page_number)
 
-    return render(request, 'core/journal_list.html', context={'journal_obj': journal_obj})
+    if request.method == 'POST':
+        ev = controller.add_event(request.user, Event.Name.CHANGE_USER_GROUPS)
 
+        for u in user_obj:
+            groups_names = request.POST.getlist('%s|user_groups' % u.username)
+            user_groups = controller.get_groups_from_groups_names(groups_names)
+            controller.update_user_groups(u, user_groups)
 
-@login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def deposited_package_list_page(request):
-    request_scope = request.GET.get('scope', '')
-    deposited_package_list = controller.get_deposited_packages_from_user_and_scope(request.user, request_scope)
+        messages.success(request, _("Users' groups were updated"), extra_tags='alert-success')
+        controller.update_event(ev, {'status': Event.Status.COMPLETED})
 
-    paginator = Paginator(deposited_package_list, 25)
-    page_number = request.GET.get('page')
-    deposited_package_obj = paginator.get_page(page_number)
-
-    return render(request, 'core/deposited_package_list.html', context={'deposited_package_obj': deposited_package_obj, 'scope': request_scope})
+    return render(request, 'user/groups_edit.html', context={'user_obj': user_obj, 'available_groups': available_groups})
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def article_files_list_page(request):
-    article_files_list = dsm_ingress._docs_manager.get_articles_files()
-
-    paginator = Paginator(article_files_list, 25)
-    page_number = request.GET.get('page')
-    article_files_obj = paginator.get_page(page_number)
-
-    return render(request, 'core/article_files_list.html', context={'article_files_obj': article_files_obj})
+def user_profile_page(request):
+    groups_names = controller.get_groups_names_from_user(request.user)
+    return render(request, 'user/profile.html', context={'groups': groups_names})
 
 
 @login_required(login_url='login')
+def user_profile_edit_page(request):
+    if request.method == 'POST':
+        form = UpdateUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request,
+                             _('User %s was updated') % username,
+                             extra_tags='alert-success')
+            return redirect('user_profile_edit')
+    return render(request, 'user/profile_edit.html', context={})
+
+
+#################
+# ingress views #
+#################
+@login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def user_package_upload_page(request):
+def ingress_package_upload_page(request):
     if request.method == 'POST':
         file_input = request.FILES.get('package_file')
         # registra evento de envio de pacote novo
@@ -281,12 +244,12 @@ def user_package_upload_page(request):
             # remove arquivo de diretório temporário
             fs.delete(pkg_name)
 
-    return render(request, 'core/user_package_upload.html')
+    return render(request, 'ingress/package_upload.html')
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def user_package_download_page(request):
+def ingress_package_download_page(request):
     pid = request.GET.get('pid', '')
     job_id = request.GET.get('job', '')
 
@@ -301,36 +264,89 @@ def user_package_download_page(request):
             'state': 'STARTING',
             'task_id': job_id
         }
-        return render(request, 'core/user_package_download.html', context)
+        return render(request, 'ingress/package_download.html', context)
 
     # Inicializa task para o PID informado e redireciona para a própria página aguardando resultado
     elif pid:
         job = task_get_package_uri_by_pid.delay(pid)
-        return HttpResponseRedirect(reverse('user_package_download') + '?job=' + job.id + '&pid=' + pid)
+        return HttpResponseRedirect(reverse('ingress_package_download') + '?job=' + job.id + '&pid=' + pid)
 
     # Abre template pela primeira vez para digitar PID
-    return render(request, 'core/user_package_download.html')
+    return render(request, 'ingress/package_download.html')
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_groups=['manager'])
-def user_groups_edit_page(request):
-    user_list = controller.get_users()
-    available_groups = controller.get_groups()
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+def ingress_package_list_page(request):
+    request_scope = request.GET.get('scope', '')
+    deposited_package_list = controller.get_ingress_packages_from_user_and_scope(request.user, request_scope)
 
-    paginator = Paginator(user_list, 25)
+    paginator = Paginator(deposited_package_list, 25)
     page_number = request.GET.get('page')
-    user_obj = paginator.get_page(page_number)
+    deposited_package_obj = paginator.get_page(page_number)
 
-    if request.method == 'POST':
-        ev = controller.add_event(request.user, Event.Name.CHANGE_USER_GROUPS)
+    return render(request, 'ingress/package_list.html', context={'deposited_package_obj': deposited_package_obj, 'scope': request_scope})
 
-        for u in user_obj:
-            groups_names = request.POST.getlist('%s|user_groups' % u.username)
-            user_groups = controller.get_groups_from_groups_names(groups_names)
-            controller.update_user_groups(u, user_groups)
 
-        messages.success(request, _("Users' groups were updated"), extra_tags='alert-success')
-        controller.update_event(ev, {'status': Event.Status.COMPLETED})
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+def ingress_articles_files_page(request):
+    article_files_list = dsm_ingress._docs_manager.get_articles_files()
 
-    return render(request, 'core/user_groups_edit.html', context={'user_obj': user_obj, 'available_groups': available_groups})
+    paginator = Paginator(article_files_list, 25)
+    page_number = request.GET.get('page')
+    article_files_obj = paginator.get_page(page_number)
+
+    return render(request, 'ingress/article_files_list.html', context={'article_files_obj': article_files_obj})
+
+
+#################
+# journal views #
+#################
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress'])
+def journal_list_page(request):
+    journal_list = dsm_ingress._journals_manager.get_journals()
+
+    paginator = Paginator(journal_list, 25)
+    page_number = request.GET.get('page')
+    journal_obj = paginator.get_page(page_number)
+
+    return render(request, 'journal/journal_list.html', context={'journal_obj': journal_obj})
+
+
+##################
+# tracking views #
+##################
+@login_required(login_url='login')
+def event_list_page(request):
+    request_scope = request.GET.get('scope', '')
+    event_list = controller.get_events_from_user_and_scope(request.user, request_scope)
+
+    paginator = Paginator(event_list, 25)
+    page_number = request.GET.get('page')
+    event_obj = paginator.get_page(page_number)
+
+    return render(request, 'tracking/event_list.html', context={'event_obj': event_obj, 'scope': request_scope})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration', 'quality_analyst'])
+def task_update_status(request):
+    """Obtém status (STARTING, FAILURY, PROGRESS, SUCCESS ou UNDEFINED) de task executada."""
+    try:
+        task_id = request.GET['task_id']
+        task = AsyncResult(task_id)
+        result = task.result
+        status = task.status
+    except:
+        result = 'UNDEFINED'
+        status = 'UNDEFINED'
+
+    json_data = {
+        'status': status,
+        'state': 'PROGRESS',
+        'data': result,
+    }
+
+    return JsonResponse(json_data)

@@ -19,7 +19,7 @@ function createMessage(msg){
     return divAlert;
 }
 
-function userPackageDownloadToggleSpinner(){
+function ingressPackageDownloadToggleSpinner(){
     var btnSearchPackage = document.getElementById('btnSearchPackage');
     var divSpinner = document.getElementById('searchPackageLoading');
     if (divSpinner.style.display == "none") {
@@ -31,7 +31,7 @@ function userPackageDownloadToggleSpinner(){
     }
 }
 
-function userPackageDownloadCreateTable(data){
+function ingressPackageDownloadCreateTable(data){
     tableBody = document.getElementById('resultSearchPackagesTableBody')
 
     for (k in data['doc_pkg']){

@@ -26,3 +26,7 @@ ingress = [
     path('ingress/articles_files/', views.ingress_articles_files_page, name='ingress_article_files_list'),
 ]
 
+
+journal = [
+    path('journal/list/', views.journal_list_page, name='journal_list'),
+]

@@ -14,7 +14,7 @@ def _get_objects_from_user_and_scope(user, scope, model_class):
         return model_class.objects.filter(user=user)
 
 
-def get_deposited_packages_from_user_and_scope(user, scope):
+def get_ingress_packages_from_user_and_scope(user, scope):
     return _get_objects_from_user_and_scope(user, scope, IngressPackage)
 
 

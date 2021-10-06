@@ -18,14 +18,14 @@ SciELO Publishing Framework - Home
                 <div class="list-group list-group-flush">
                     <a class="list-group-item" href="{% url 'event_list' %}">{% trans 'Events' %}</a>
                     {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_ingress" %}
-                        <a class="list-group-item" href="{% url 'package_list' %}">{% trans "Deposited packages" %}</a>
+                        <a class="list-group-item" href="{% url 'ingress_package_list' %}">{% trans "Deposited packages" %}</a>
                     {% endif %}
                     {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_migration" %}
                     <a class="list-group-item disabled" href="">{% trans "Migrated data" %}</a>
                     {% endif %}
                     <a class="list-group-item" href="{% url 'user_profile' %}">{% trans 'Profile' %}</a>
                     <a class="list-group-item list-group-item-warning" href="{% url 'user_profile_edit' %}">{% trans 'Edit profile' %}</a>
-                    <a class="list-group-item list-group-item-warning" href="{% url 'change_password' %}">{% trans 'Change password' %}</a>
+                    <a class="list-group-item list-group-item-warning" href="{% url 'user_change_password' %}">{% trans 'Change password' %}</a>
                 </div>
             </div>
         </div>
@@ -37,8 +37,8 @@ SciELO Publishing Framework - Home
                     {% trans 'Ingress'  %}
                 </div>
                 <div class="list-group list-group-flush">
-                    <a class="list-group-item" href="{% url 'user_package_download' %}">{% trans 'Search package' %}</a>
-                    <a class="list-group-item" href="{% url 'user_package_upload' %}">{% trans 'Upload package' %}</a>
+                    <a class="list-group-item" href="{% url 'ingress_package_download' %}">{% trans 'Search package' %}</a>
+                    <a class="list-group-item" href="{% url 'ingress_package_upload' %}">{% trans 'Upload package' %}</a>
                 </div>
             </div>
         </div>
@@ -83,8 +83,8 @@ SciELO Publishing Framework - Home
                     {% trans 'Package management' %}
                 </div>
                 <div class="list-group list-group-flush">
-                    <a class="list-group-item" href="{% url 'package_list' %}?scope=all_users">{% trans 'All deposited packages' %}</a>
-                    <a class="list-group-item" href="{% url 'article_files_list' %}">{% trans "Articles' files" %}</a>
+                    <a class="list-group-item" href="{% url 'ingress_package_list' %}?scope=all_users">{% trans 'All deposited packages' %}</a>
+                    <a class="list-group-item" href="{% url 'ingress_article_files_list' %}">{% trans "Articles' files" %}</a>
                 </div>
             </div>
         </div>

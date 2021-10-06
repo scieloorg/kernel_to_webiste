@@ -201,7 +201,7 @@ def logout_user(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def journal_list_page(request):
-    journal_list = controller.get_opac_journals()
+    journal_list = dsm_ingress._journals_manager.get_journals()
 
     paginator = Paginator(journal_list, 25)
     page_number = request.GET.get('page')
@@ -226,7 +226,7 @@ def deposited_package_list_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def article_files_list_page(request):
-    article_files_list = controller.get_articles_files()
+    article_files_list = dsm_ingress._docs_manager.get_articles_files()
 
     paginator = Paginator(article_files_list, 25)
     page_number = request.GET.get('page')

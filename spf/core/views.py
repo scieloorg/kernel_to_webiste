@@ -313,3 +313,42 @@ def ingress_articles_files_page(request):
         controller.update_event(ev, {'status': Event.Status.COMPLETED})
 
     return render(request, 'core/user_groups_edit.html', context={'user_obj': user_obj, 'available_groups': available_groups})
+
+
+##################
+# tracking views #
+##################
+@login_required(login_url='login')
+def event_list_page(request):
+    request_scope = request.GET.get('scope', '')
+    event_list = controller.get_events_from_user_and_scope(request.user, request_scope)
+
+    paginator = Paginator(event_list, 25)
+    page_number = request.GET.get('page')
+    event_obj = paginator.get_page(page_number)
+
+    return render(request, 'tracking/event_list.html', context={'event_obj': event_obj, 'scope': request_scope})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration', 'quality_analyst'])
+def task_update_status(request):
+    """Obtém status (STARTING, FAILURY, PROGRESS, SUCCESS ou UNDEFINED) de task executada."""
+    try:
+        task_id = request.GET['task_id']
+        task = AsyncResult(task_id)
+        result = task.result
+        status = task.status
+    except:
+        result = 'UNDEFINED'
+        status = 'UNDEFINED'
+
+    json_data = {
+        'status': status,
+        'state': 'PROGRESS',
+        'data': result,
+    }
+
+    return JsonResponse(json_data)
+
+

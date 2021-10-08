@@ -132,25 +132,30 @@ docker-compose up
 
 Variable | Example value | Description
 ---------|---------------|------------
-MINIO_HOST | `172.17.0.2:9000` | MinIO host address
-MINIO_ACCESS_KEY | `minioadmin` | MinIO username
-MINIO_SECRET_KEY | `minioadmin` | MinIO password
-MINIO_TIMEOUT | `10000` | MinIO connection timeout
-MINIO_SECURE | `false` | MinIO SSL flag (`true` or `false`)
-MINIO_SCIELO_COLLECTION | `spf_brazil` | MinIO collection name
-MINIO_SPF_DIR | `packages` | MinIO storage main directory
-PID_DATABASE_DSN | `postgresql+psycopg2://postgres:password@172.17.0.4:5432/pidmanager` | PID manager (PostgreSQL) string connection
-DATABASE_CONNECT_URL | `mongodb`://172.17.0.3:27017/opac | OPAC/Kernel database (MongoDB) string connection
-DJANGO_DEBUG | `1` | Django flag to see DEBUG messages)
-DJANGO_SECRET_KEY | `my_django_secret_key` |
-DJANGO_ALLOWED_HOSTS | `localhost;127.0.0.1;[::1]` |
-POSTGRES_DB | `spf` | SciELO Publishing Framework database name
-POSTGRES_USER | `postgres` | SciELO Publishing Framework database user
-POSTGRES_PASSWORD | `password` | SciELO Publishing Framework database user password
-POSTGRES_HOST | `172.17.0.4` | SciELO Publishing Framework database hostname
-POSTGRES_PORT | `5432` | SciELO Publishing Framework database host port
-DJANGO_MANAGE_MIGRATE | `1` | Django flag to run `managep.py migrate`
-DJANGO_MANAGE_LOAD | `1` | Django flag to run `manage.py loaddata group`
+CELERY_BROKER_URL | `pyamqp://user:pass@host:port` | RabbitMQ address
+DATABASE_CONNECT_URL | `mongodb://user:pass@host:port/opac` | OPAC/Kernel database (MongoDB) string connection
 DJANGO_ADMIN_TRANSLATE | `1` | Django flag to run `django-admin compile_messages`
-CELERY_BROKER_URL | `pyamqp://172.17.0.5:5672` | RabbitMQ address
-CELERY_RESULT_BACKEND | `django-db` | Celery flag to use Django Database for persisting messages
+DJANGO_ALLOWED_HOSTS | `localhost;127.0.0.1;[::1]` |
+DJANGO_COLLECTSTATIC | `1` |Django flag to run `manage.py collecstatic`
+DJANGO_CREATE_SUPERUSER | `1` | Django flag to run `manage.py createsuperuser`
+DJANGO_DEBUG | `1` | Django flag to see DEBUG messages
+DJANGO_MANAGE_LOAD_GROUP | `1` | Django flag to run `manage.py loaddata group`
+DJANGO_MANAGE_LOAD_USER | `1` | Django flag to run `manage.py loaddata user`
+DJANGO_MANAGE_MIGRATE | `1` | Django flag to run `managep.py migrate`
+DJANGO_SECRET_KEY | | Django secret key
+DJANGO_SUPERUSER_EMAIL | | superuser email
+DJANGO_SUPERUSER_PASSWORD | | superuser password
+DJANGO_SUPERUSER_USERNAME | | superuser username
+MINIO_ACCESS_KEY | | MinIO username
+MINIO_HOST | `host:port` | MinIO host address
+MINIO_SCIELO_COLLECTION | | MinIO collection name
+MINIO_SECRET_KEY | | MinIO password
+MINIO_SECURE | | MinIO SSL flag (`true` or `false`)
+MINIO_SPF_DIR | | MinIO storage main directory
+MINIO_TIMEOUT | | MinIO connection timeout
+PID_DATABASE_DSN | `postgresql+psycopg2://postgres:password@host:port/database` | PID manager (PostgreSQL) string connection
+POSTGRES_DB | `database name` | SciELO Publishing Framework database name
+POSTGRES_HOST | `localhost` | SciELO Publishing Framework database hostname
+POSTGRES_PASSWORD | | SciELO Publishing Framework database user password
+POSTGRES_PORT | | SciELO Publishing Framework database host port
+POSTGRES_USER | | SciELO Publishing Framework database user

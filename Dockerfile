@@ -24,6 +24,9 @@ RUN pip install -U pip && \
 RUN chmod +x /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-start-worker.sh
 
+RUN chown -R nobody:nobody /app
+USER nobody
+
 EXPOSE 8000
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

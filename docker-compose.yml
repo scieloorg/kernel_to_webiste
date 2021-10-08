@@ -12,6 +12,7 @@ services:
         build:
             context: .
         container_name: 'spf_worker_1'
+        user: nobody
         command: sh docker-start-worker.sh
         env_file:
             - ./prod.env
@@ -24,9 +25,8 @@ services:
     web:
         build: .
         container_name: 'spf_web_1'
+        user: nobody
         command: python spf/manage.py runserver 0.0.0.0:8000
-        volumes:
-            - ./data:/data
         ports:
             - 8000:8000
         depends_on:

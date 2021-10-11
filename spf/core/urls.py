@@ -1,4 +1,3 @@
-from django.conf.urls import url
 from django.urls import path
 from . import views
 
@@ -26,7 +25,6 @@ ingress = [
     path('ingress/articles_files/', views.ingress_articles_files_page, name='ingress_article_files_list'),
 ]
 
-
 journal = [
     path('journal/list/', views.journal_list_page, name='journal_list'),
 ]
@@ -35,6 +33,5 @@ tracking = [
     path('event/list/', views.event_list_page, name='event_list'),
     path('task/update_status/', views.task_update_status, name='task_update_status'),
 ]
-
 
 urlpatterns = general + user + ingress + journal +  tracking

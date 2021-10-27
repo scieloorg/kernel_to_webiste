@@ -40,9 +40,9 @@ SciELO Publishing Framework - {% trans 'Search package' %}
         <table class="table table-bordered" id="table">
             <thead>
                 <tr>
-                    <th>{% trans 'Package' %}</th>
+                    <th>{% trans 'Version' %}</th>
+                    <th>{% trans 'Package name' %}</th>
                     <th>{% trans 'Creation date' %}</th>
-                    <th>{% trans 'Update date' %}</th>
                 </tr>
                 </thead>
                 <tbody id="resultSearchPackagesTableBody">
@@ -73,7 +73,7 @@ SciELO Publishing Framework - {% trans 'Search package' %}
 
                 $('user-package-download-results').add(divSpinner);
 
-                if (result.data && 'doc_pkg' in result.data) {
+                if (result.data && 'doc_pkgs' in result.data) {
                     clearInterval(intervals[0]);
                     ingressPackageDownloadCreateTable(result.data);
                     ingressPackageDownloadToggleSpinner();

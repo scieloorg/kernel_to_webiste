@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load spf_extras %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Events' %}
+{% endblock %}
+
+{% block content %}
+<h1 class="h4 pt-5">{% trans 'Events' %}</h1>
+
+<div class="row justify-content-center my-3">
+    {% if event_obj %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    {% if user|has_group:"manager" %}
+                        <th scope="col">{% trans 'Username' %}</th>
+                    {% endif %}
+                    <th scope="col">{% trans 'Activity' %}</th>
+                    <th scope="col">{% trans 'Annotation' %}</th>
+                    <th scope="col">{% trans 'Status' %}</th>
+                    <th scope="col">{% trans 'Timestamp' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ev in event_obj %}
+                <tr>
+                    <td>{{ event_obj.start_index|add:forloop.counter0 }}</td>
+                    {% if user|has_group:"manager" %}
+                        <td>{{ ev.user }}</th>
+                    {% endif %}
+                    <td>{{ ev.get_name_display }}</td>
+                    {% if ev.annotation %}
+                        <td>{{ ev.annotation }}</td>
+                    {% else %}
+                        <td></td>
+                    {% endif %}
+                    <td><span class="badge {{ ev.status|to_css_event_status_style }}">{{ ev.get_status_display }}</span></td>
+                    <td>{{ ev.datetime }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+
+{% if event_obj %}
+<nav aria-label="Event navigation">
+    <ul class="pagination justify-content-center">
+        {% if event_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1{% if scope %}&scope={{ scope }}{% endif %}">&laquo; {% trans 'First' %}</a>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link"  href="?page={{ event_obj.previous_page_number }}{% if scope %}&scope={{ scope }}{% endif %}">{% trans 'Previous' %}</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item">
+            <a class="page-link">{% trans 'Page' %} {{ event_obj.number }} {% trans 'of' %} {{ event_obj.paginator.num_pages }}</a>
+        </li>
+
+        {% if event_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ event_obj.next_page_number }}{% if scope %}&scope={{ scope }}{% endif %}">{% trans 'Next' %}</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ event_obj.paginator.num_pages }}{% if scope %}&scope={{ scope }}{% endif %}">{% trans 'Last' %} &raquo;</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

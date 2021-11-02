@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% load static %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Login' %}
+{% endblock %}
+
+{% block content %}
+<div class="text-center my-3">
+    <img src="{% static 'img/logo-scielo.svg' %}" width="100px" height="100px" />
+</div>
+<h1 class="h4 text-center">SciELO Publishing Framework</h1>
+<form class="border my-3 p-3 form-user" method="post" action="">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="id_username" class="form-label">{% trans 'Username' %}</label>
+        <input type="text" name="username" autofocus id="id_username" required class="form-control" placeholder="{% trans 'Enter your username'%}" value={{ username }}>
+    </div>
+    <div class="mb-3">
+        <label for="id_password" class="form-label">{% trans 'Password' %}</label>
+        <input type="password" name="password" id="id_password" required class="form-control" placeholder="{% trans 'Enter your password' %}">
+    </div>
+    <button type="submit" class="btn btn-primary">{% trans 'Login' %}</button>
+</form>
+<div class="d-flex justify-content-center"><p class="text-muted px-1">{% trans "Don't have an account" %}?</p><a class="link-primary" href="{% url 'register' %}"> {% trans 'Sign up' %}</a>.</div>
+{% endblock %}

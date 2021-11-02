@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Upload package' %}
+{% endblock %}
+
+{% block content %}
+<h1 class="h4 pt-5">{% trans 'Upload package' %}</h1>
+
+<div class="row my-3">
+    <div class="col-sm-5 mb-3">
+        <div class="card my-3">
+            <div class="card-body">
+                <form class="bg-white form-user" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="package_file" class="form-label">{% trans 'Upload package' %}</label>
+                        <input class="form-control" type="file" name="package_file" id="package_file" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">{% trans 'Upload' %}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

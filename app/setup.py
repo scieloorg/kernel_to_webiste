@@ -11,6 +11,7 @@ requires = [
     'confusable-homoglyphs',
     'Django',
     'django-celery-results',
+    'gunicorn',
     'pytz',
     'python-dateutil',
     'sqlparse',

@@ -7,9 +7,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
-DEBUG = int(os.environ.get('DJANGO_DEBUG', '0'))
+DEBUG = int(os.environ.get('DJANGO_DEBUG', 0))
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(';')
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -57,9 +57,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ.get('POSTGRES_DB', 'spf'),
-        'USER': os.environ.get('POSTGRES_USER', 'user'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'password'),
-        'HOST': os.environ.get('POSTGRES_HOST', 'scielo-postgres-1'),
+        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'pass'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'db'),
         'PORT': int(os.environ.get('POSTGRES_PORT', '5432')),
     },
 }
@@ -98,7 +98,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -108,9 +108,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
-MEDIA_INGRESS_TEMP = os.path.join(BASE_DIR, 'media', 'ingress', 'temp')
+MEDIA_INGRESS_TEMP = os.path.join(MEDIA_ROOT, 'ingress', 'tmp')
 
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'pyamqp://broker:5672'),
 

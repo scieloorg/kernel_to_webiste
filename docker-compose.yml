@@ -1,44 +1,50 @@
-version: "3.2"
+version: '3.7'
 
 services:
-    broker:
-        image: rabbitmq:3-alpine
-        container_name: 'spf_broker_1'
-        ports:
-            - 5672:5672
-        networks:
-            - net
-    worker:
-        build:
-            context: .
-        container_name: 'spf_worker_1'
-        user: nobody
-        command: sh docker-start-worker.sh
-        env_file:
-            - ./prod.env
-        depends_on:
-            - broker
-        external_links:
-            - scielo-postgres-1
-        networks:
-            - net
     web:
-        build: .
-        container_name: 'spf_web_1'
-        user: nobody
-        command: python spf/manage.py runserver 0.0.0.0:8000
-        ports:
-            - 8000:8000
+        build:
+            context: ./app
+            dockerfile: Dockerfile
+        command: gunicorn spf.wsgi:application --bind 0.0.0.0:8000
+        volumes:
+            - static_volume:/home/app/web/staticfiles
+            - media_volume:/home/app/web/mediafiles
+        expose:
+            - 8000
+        env_file:
+            - ./.env.prod
         depends_on:
             - broker
             - worker
-        env_file:
-            - ./prod.env
         external_links:
-            - scielo-postgres-1
-            - opac_opac_mongo_1
-        networks:
-            - net
-networks:
-    net:
-        driver: bridge
+            - scl_postgres_1
+            - scl_mongo_1
+    worker:
+        build:
+            context: ./app
+            dockerfile: Dockerfile
+        command: celery -A spf worker -l INFO
+        env_file:
+            - ./.env.prod
+        depends_on:
+            - broker
+        external_links:
+            - scl_postgres_1
+    broker:
+        image: rabbitmq:3-alpine
+        ports:
+            - 5672:5672
+    nginx:
+        build:
+            context: ./nginx
+        volumes:
+            - static_volume:/home/app/web/staticfiles
+            - media_volume:/home/app/web/mediafiles
+        ports:
+            - 1337:80
+        depends_on:
+            - web
+
+volumes:
+    static_volume:
+    media_volume:

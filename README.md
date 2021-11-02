@@ -31,14 +31,14 @@ pip install .
 _Set the environment variables_
 
 ```shell
-export $(cat dev.ini | xargs)
+export $(cat .env.dev | xargs)
 ```
 
 _Create a PostgreSQL database named "spf"_
 
 ```shell
 # Through a Docker container with a PostgreSQL database
-docker exec --user postgres -it scielo-postgres-1 psql -c 'create database spf;'
+docker exec --user postgres -it scl_postgres_1 psql -c 'create database spf;'
 
 # Or through psql
 psql --user postgres;
@@ -108,22 +108,29 @@ python ../manage.py compilemessages
 
 ```shell
 # Ensure you are in the project root directory. Executing `ls .` will list the following files/directories:
-dev.env
+app
 docker-compose.yml
-docker-entrypoint.sh
-Dockerfile
 LICENSE
-prod.env
+nginx
 README.md
-requirements.txt
-setup.py
-spf
 
-# Build image
-docker-compose -f docker-compose.yml build
+# Create a .env.prod file (and add to it the necessary environment variables)
+touch .env.prod
 
-# Create and start a container with the image built
-docker-compose up
+# Build image and start the services
+docker-compose -f docker-compose.yml up -d --build
+
+# Migrate data
+docker-compose -f docker-compose.yml exec web python manage.py migrate --noinput
+
+# Collect static files
+docker-compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
+
+# Load default groups
+docker-compose -f docker-compose.yml exec web python manage.py loaddata group
+
+# Load example users
+docker-compose -f docker-compose.yml exec web python manage.py loaddata user
 
 # Make sure PostgreSQL and MongoDB databases are in the same network as the spf application
 ```

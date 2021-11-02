@@ -9,17 +9,20 @@ Be sure that you have the necessary operational system dependencies:
 
 ```shell
 gettext
-python 3.9
+python 3
 ```
 
 _Create a virtual environment and install the application dependencies_
 
 ```shell
 # Create a virtual environment
-virtualenv -p python3.9 .venv
+virtualenv -p python3 .venv
 
 # Access the virtual environment
 source .venv/bin/activate
+
+# Access the folder app
+cd app
 
 # Install dependencies
 pip install -r requirements.txt
@@ -31,6 +34,10 @@ pip install .
 _Set the environment variables_
 
 ```shell
+# Create a dotenv file (and add to it the necessary environment variables - see List of environmental variables)
+touch .env.dev
+
+# Export its contents to the system enviroment
 export $(cat .env.dev | xargs)
 ```
 
@@ -55,27 +62,27 @@ _Prepare and run the application_
 
 ```shell
 # Make migrations related to the database
-python spf/manage.py makemigrations
+python manage.py makemigrations
 
 # Migrate database (this operation will create all the necessary tables)
-python spf/manage.py migrate
+python manage.py migrate
 
 # Create the superuser (take note of the credentials)
-python spf/manage.py createsuperuser
+python manage.py createsuperuser
 ```
 
 _Add default groups to the application database_
 
 ```shell
 # Add default groups to the application database
-python spf/manage.py loaddata group
+python manage.py loaddata group
 ```
 
 _Add example users to the application database (only in development environments)_
 
 ```shell
 # Add example users to the application database
-python spf/manage.py loaddata user
+python manage.py loaddata user
 ```
 
 _Run the application_
@@ -85,7 +92,7 @@ _Run the application_
 celery -A spf worker -l INFO
 
 # Start the application
-python spf/manage.py runserver
+python manage.py runserver
 ```
 
 _How to translate the interface content to other languages_
@@ -114,7 +121,7 @@ LICENSE
 nginx
 README.md
 
-# Create a .env.prod file (and add to it the necessary environment variables)
+# Create a dotenv file (and add to it the necessary environment variables - see List of environmental variables)
 touch .env.prod
 
 # Build image and start the services
@@ -141,18 +148,9 @@ Variable | Example value | Description
 ---------|---------------|------------
 CELERY_BROKER_URL | `pyamqp://user:pass@host:port` | RabbitMQ address
 DATABASE_CONNECT_URL | `mongodb://user:pass@host:port/opac` | OPAC/Kernel database (MongoDB) string connection
-DJANGO_ADMIN_TRANSLATE | `1` | Django flag to run `django-admin compile_messages`
 DJANGO_ALLOWED_HOSTS | `localhost;127.0.0.1;[::1]` |
-DJANGO_COLLECTSTATIC | `1` |Django flag to run `manage.py collecstatic`
-DJANGO_CREATE_SUPERUSER | `1` | Django flag to run `manage.py createsuperuser`
 DJANGO_DEBUG | `1` | Django flag to see DEBUG messages
-DJANGO_MANAGE_LOAD_GROUP | `1` | Django flag to run `manage.py loaddata group`
-DJANGO_MANAGE_LOAD_USER | `1` | Django flag to run `manage.py loaddata user`
-DJANGO_MANAGE_MIGRATE | `1` | Django flag to run `managep.py migrate`
 DJANGO_SECRET_KEY | | Django secret key
-DJANGO_SUPERUSER_EMAIL | | superuser email
-DJANGO_SUPERUSER_PASSWORD | | superuser password
-DJANGO_SUPERUSER_USERNAME | | superuser username
 MINIO_ACCESS_KEY | | MinIO username
 MINIO_HOST | `host:port` | MinIO host address
 MINIO_SCIELO_COLLECTION | | MinIO collection name

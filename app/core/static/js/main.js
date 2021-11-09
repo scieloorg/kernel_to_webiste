@@ -1,6 +1,6 @@
-function createMessage(msg){
+function createMessage(msg, alert_class){
     divAlert = document.createElement('div');
-    divAlert.classList.add('alert', 'alert-danger', 'alert-dismissible', 'fade', 'show', 'is-no-rounded', 'm-0', 'p-2');
+    divAlert.classList.add('alert', alert_class, 'alert-dismissible', 'fade', 'show', 'is-no-rounded', 'm-0', 'p-2');
     divAlert.setAttribute('role', 'alert');
 
     divContainer = document.createElement('div');
@@ -34,23 +34,26 @@ function ingressPackageDownloadToggleSpinner(){
 function ingressPackageDownloadCreateTable(data){
     tableBody = document.getElementById('resultSearchPackagesTableBody')
 
+    counter = 1
     for (k in data['doc_pkgs']){
         els = data['doc_pkgs'][k];
         row = tableBody.insertRow(-1);
 
-        aResult = document.createElement('a')
-        aResult.text = els['name'];
-        aResult.href = els['uri'];
-        aResult.classList.add('link');
-
         tdUri = row.insertCell(-1);
-        tdUri.appendChild(aResult);
+        tdUri.innerHTML = counter;
 
-        tdCreated = row.insertCell(-1);
-        tdCreated.innerHTML = els['created'];
+        aPkgName = document.createElement('a')
+        aPkgName.text = els['name'];
+        aPkgName.href = els['uri'];
+        aPkgName.classList.add('link');
 
-        tdUpdated = row.insertCell(-1);
-        tdUpdated.innerHTML = els['updated'];
+        tdPkgName = row.insertCell(-1);
+        tdPkgName.appendChild(aPkgName);
+
+        tdCreated = row.insertCell(-1)
+        tdCreated.innerHTML = new Date(els['created']);
+
+        counter += 1;
     }
 
     if (data['doc_pkgs'].length > 0) {
@@ -58,7 +61,7 @@ function ingressPackageDownloadCreateTable(data){
     } else {
         var divBaseMessages = document.getElementById('baseMessages');
         for (k in data['errors']){
-            element_message = createMessage(data['errors'][k]);
+            element_message = createMessage(data['errors'][k], 'alert-danger');
             divBaseMessages.append(element_message);
         }
     }

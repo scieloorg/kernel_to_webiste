@@ -60,13 +60,13 @@ SciELO Publishing Framework - {% trans 'Search package' %}
 
     function checkTaskStatus() {
         if (!requested){
+            showLoader(loader, button);
+
             $.ajax({
                 url: '/task/update_status/?task_id={{ task_id }}',
                 type: 'GET',
                 success: function(result) {
                     // mostra loader e desativa botão pesquisar
-                    showLoader(loader, button);
-
                     if (result.data && 'doc_pkgs' in result.data) {
                         // adiciona conteúdo à tabela
                         ingressPackageDownloadCreateTable(result.data);

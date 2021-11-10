@@ -16,7 +16,8 @@ RUN apk update \
     musl-dev \
     libxml2-dev \
     libxslt-dev \
-    libffi-dev
+    libffi-dev \
+    gettext
 
 RUN pip install --upgrade pip
 

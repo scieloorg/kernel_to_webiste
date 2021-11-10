@@ -22,11 +22,11 @@ SciELO Publishing Framework - {% trans 'Search package' %}
                         <label for="pid" class="form-label">{% trans 'Document identifier' %}</label>
                         <input required type="text" name="pid" autofocus id="pid" class="form-control" placeholder="{% trans 'Enter a document identifier' %}" value="{{ pid }}">
                     </div>
-                    <button id="btnSearchPackage" type="submit" class="btn btn-primary">{% trans 'Search' %}</button>
+                    <button id="buttonSearch" type="submit" class="btn btn-primary">{% trans 'Search' %}</button>
                 </form>
             </div>
         </div>
-        <div id='searchPackageLoading' style="display: none;" role="status">
+        <div id='divLoader' style="display: none;" role="status">
             <div class="spinner-border text-primary">
                 <span class="sr-only">{% trans 'Loading' %}...</span>
             </div>

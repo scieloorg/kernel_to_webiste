@@ -101,11 +101,13 @@ __How to translate the interface content to other languages__
 # Access the core project directory
 cd core
 
-# Create the strings translated to Portuguese
+# Create the strings to be translated to Portuguese
 python ../manage.py make_messages_no_fuzzy -l pt
 
-# Create the strings translated to Spanish
+# Create the strings to be translated to Spanish
 python ../manage.py make_messages_no_fuzzy -l es
+
+# Translate the strings
 
 # Compile the translated strings
 python ../manage.py compilemessages
@@ -153,7 +155,7 @@ docker-compose -f docker-compose.yml exec web python manage.py migrate --noinput
 python manage.py migrate
 ```
 
-__Collect static files__
+__Collect staticfiles__
 
 ```shell
 # Under host shell, run
@@ -161,6 +163,15 @@ docker-compose -f docker-compose.yml exec web python manage.py collectstatic --n
 
 # Under docker shell, run
 python manage.py collectstatic
+```
+
+__Generate translations__
+```bash
+# Under host shell, run
+python ../manage.py compilemessages
+
+# Under docker shell, run
+docker-compose -f docker-compose.yml exec web python manage.py compilemessages group
 ```
 
 __Load default groups__

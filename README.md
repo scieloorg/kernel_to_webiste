@@ -1,18 +1,18 @@
 # SciELO Publishing Framework
 
+## Development
 
-## Installation under a Python virtual environment
+### Installation under a Python virtual environment
 
-_System dependencies_
-
-Be sure that you have the necessary operational system dependencies:
+__System dependencies__
 
 ```shell
+# Be sure that you have the necessary operational system dependencies
 gettext
-python 3
+python3
 ```
 
-_Create a virtual environment and install the application dependencies_
+__Create a virtual environment and install the application dependencies__
 
 ```shell
 # Create a virtual environment
@@ -31,17 +31,17 @@ pip install -r requirements.txt
 pip install .
 ```
 
-_Set the environment variables_
+__Set the environment variables__
 
 ```shell
-# Create a dotenv file (and add to it the necessary environment variables - see List of environmental variables)
+# Create a dotenv file (and add to it the necessary environment variables - see List of environment variables)
 touch .env.dev
 
 # Export its contents to the system enviroment
 export $(cat .env.dev | xargs)
 ```
 
-_Create a PostgreSQL database named "spf"_
+__Create a PostgreSQL database named "spf"__
 
 ```shell
 # Through a Docker container with a PostgreSQL database
@@ -52,13 +52,13 @@ psql --user postgres;
 create database spf;
 ```
 
-_Run the Message Broker RabbitMQ_
+__Run the Message Broker RabbitMQ__
 ```shell
 # See https://www.rabbitmq.com/download.html to obtain more information
 docker run -d -p 5672:5672 rabbitmq
 ```
 
-_Prepare and run the application_
+__Prepare and run the application__
 
 ```shell
 # Make migrations related to the database
@@ -71,21 +71,21 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-_Add default groups to the application database_
+__Add default groups to the application database__
 
 ```shell
 # Add default groups to the application database
 python manage.py loaddata group
 ```
 
-_Add example users to the application database (only in development environments)_
+__Add example users to the application database (only in development environments)__
 
 ```shell
 # Add example users to the application database
 python manage.py loaddata user
 ```
 
-_Run the application_
+__Run the application__
 
 ```shell
 # Start Celery
@@ -95,7 +95,7 @@ celery -A spf worker -l INFO
 python manage.py runserver
 ```
 
-_How to translate the interface content to other languages_
+__How to translate the interface content to other languages__
 
 ```shell
 # Access the core project directory
@@ -111,56 +111,100 @@ python ../manage.py make_messages_no_fuzzy -l es
 python ../manage.py compilemessages
 ```
 
-## Installation under Docker
+
+---
+
+## Production
+
+### Installation under Docker
 
 ```shell
-# Ensure you are in the project root directory. Executing `ls .` will list the following files/directories:
+# Be sure you are in the project root directory. Executing `ls .` will list the following files/directories
 app
 docker-compose.yml
 LICENSE
 nginx
 README.md
-
-# Create a dotenv file (and add to it the necessary environment variables - see List of environmental variables)
-touch .env.prod
-
-# Build image and start the services
-docker-compose -f docker-compose.yml up -d --build
-
-# Migrate data
-docker-compose -f docker-compose.yml exec web python manage.py migrate --noinput
-
-# Collect static files
-docker-compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
-
-# Load default groups
-docker-compose -f docker-compose.yml exec web python manage.py loaddata group
-
-# Load example users
-docker-compose -f docker-compose.yml exec web python manage.py loaddata user
-
-# Make sure PostgreSQL and MongoDB databases are in the same network as the spf application
 ```
 
-## List of environmental variables
+__Start a nginx container and copy nginx.conf to /etc/nginx/conf.d__
 
-Variable | Example value | Description
----------|---------------|------------
-CELERY_BROKER_URL | `pyamqp://user:pass@host:port` | RabbitMQ address
-DATABASE_CONNECT_URL | `mongodb://user:pass@host:port/opac` | OPAC/Kernel database (MongoDB) string connection
-DJANGO_ALLOWED_HOSTS | `localhost;127.0.0.1;[::1]` |
-DJANGO_DEBUG | `1` | Django flag to see DEBUG messages
-DJANGO_SECRET_KEY | | Django secret key
-MINIO_ACCESS_KEY | | MinIO username
-MINIO_HOST | `host:port` | MinIO host address
-MINIO_SCIELO_COLLECTION | | MinIO collection name
-MINIO_SECRET_KEY | | MinIO password
-MINIO_SECURE | | MinIO SSL flag (`true` or `false`)
-MINIO_SPF_DIR | | MinIO storage main directory
-MINIO_TIMEOUT | | MinIO connection timeout
-PID_DATABASE_DSN | `postgresql+psycopg2://postgres:password@host:port/database` | PID manager (PostgreSQL) string connection
-POSTGRES_DB | `database name` | SciELO Publishing Framework database name
-POSTGRES_HOST | `localhost` | SciELO Publishing Framework database hostname
-POSTGRES_PASSWORD | | SciELO Publishing Framework database user password
-POSTGRES_PORT | | SciELO Publishing Framework database host port
-POSTGRES_USER | | SciELO Publishing Framework database user
+__Start a postgres container and keep note of user credentials__
+
+__Create a dotenv file (and add to it the necessary environment variables - see List of environment variables)__
+
+```shell
+touch .env.prod
+```
+
+__Build image and start the services__
+
+```shell
+docker-compose -f docker-compose.yml up -d --build
+```
+
+__Migrate data__
+
+```shell
+# Under host shell, run
+docker-compose -f docker-compose.yml exec web python manage.py migrate --noinput
+
+# Under docker shell, run
+python manage.py migrate
+```
+
+__Collect static files__
+
+```shell
+# Under host shell, run
+docker-compose -f docker-compose.yml exec web python manage.py collectstatic --no-input --clear
+
+# Under docker shell, run
+python manage.py collectstatic
+```
+
+__Load default groups__
+
+```shell
+# Under host shell, run
+docker-compose -f docker-compose.yml exec web python manage.py loaddata group
+
+# Under docker shell, run
+python manage.py loaddata group
+```
+
+__Load example users (recommended only for development environment)__
+
+```shell
+# Under host shell, run
+docker-compose -f docker-compose.yml exec web python manage.py loaddata user
+
+# Under docker shell, run
+python manage.py loaddata user
+```
+
+__Make sure PostgreSQL and MongoDB databases are in the same network as the spf application__
+
+
+---
+
+## List of environment variables
+
+- CELERY_BROKER_URL: RabbitMQ address (`pyamqp://user:pass@host:port`)
+- DATABASE_CONNECT_URL: OPAC/Kernel database (MongoDB) string connection (`mongodb://user:pass@host:port/opac`)
+- DJANGO_ALLOWED_HOSTS: `localhost;127.0.0.1;[::1]`
+- DJANGO_DEBUG: Django flag to see DEBUG messages (`1`)
+- DJANGO_SECRET_KEY: Django secret key
+- MINIO_ACCESS_KEY: MinIO username
+- MINIO_HOST: MinIO host address (`host:port`)
+- MINIO_SCIELO_COLLECTION: MinIO collection name
+- MINIO_SECRET_KEY: MinIO password
+- MINIO_SECURE: MinIO SSL flag (`true` or `false`)
+- MINIO_SPF_DIR: MinIO storage main directory
+- MINIO_TIMEOUT: MinIO connection timeout
+- PID_DATABASE_DSN: PID manager (PostgreSQL) string connection (`postgresql+psycopg2://postgres:password@host:port/database`)
+- POSTGRES_DB: SciELO Publishing Framework database name
+- POSTGRES_HOST: SciELO Publishing Framework database hostname
+- POSTGRES_PASSWORD: SciELO Publishing Framework database user password
+- POSTGRES_PORT: SciELO Publishing Framework database host port
+- POSTGRES_USER: SciELO Publishing Framework database user

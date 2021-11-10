@@ -19,18 +19,6 @@ function createMessage(msg, alert_class){
     return divAlert;
 }
 
-function ingressPackageDownloadToggleSpinner(){
-    var btnSearchPackage = document.getElementById('btnSearchPackage');
-    var divSpinner = document.getElementById('searchPackageLoading');
-    if (divSpinner.style.display == "none") {
-        divSpinner.style.display = 'block';
-        btnSearchPackage.setAttribute('disabled', 'disabled');
-    } else {
-        divSpinner.style.display = 'none';
-        btnSearchPackage.removeAttribute('disabled');
-    }
-}
-
 function ingressPackageDownloadCreateTable(data){
     tableBody = document.getElementById('resultSearchPackagesTableBody')
 
@@ -65,4 +53,14 @@ function ingressPackageDownloadCreateTable(data){
             divBaseMessages.append(element_message);
         }
     }
+}
+
+function showLoader(loader, button){
+    loader.style.display = 'block';
+    button.setAttribute('disabled', 'disabled');
+}
+
+function hideLoader(loader, button){
+    loader.style.display = 'none';
+    button.removeAttribute('disabled');
 }

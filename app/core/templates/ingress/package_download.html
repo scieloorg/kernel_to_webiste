@@ -22,11 +22,11 @@ SciELO Publishing Framework - {% trans 'Search package' %}
                         <label for="pid" class="form-label">{% trans 'Document identifier' %}</label>
                         <input required type="text" name="pid" autofocus id="pid" class="form-control" placeholder="{% trans 'Enter a document identifier' %}" value="{{ pid }}">
                     </div>
-                    <button id="btnSearchPackage" type="submit" class="btn btn-primary">{% trans 'Search' %}</button>
+                    <button id="buttonSearch" type="submit" class="btn btn-primary">{% trans 'Search' %}</button>
                 </form>
             </div>
         </div>
-        <div id='searchPackageLoading' style="display: none;" role="status">
+        <div id='divLoader' style="display: none;" role="status">
             <div class="spinner-border text-primary">
                 <span class="sr-only">{% trans 'Loading' %}...</span>
             </div>
@@ -52,39 +52,42 @@ SciELO Publishing Framework - {% trans 'Search package' %}
 
 </div>
 <script type="text/javascript">
-    var xhr;
     var checkStatus = '{{ check_status }}';
-    var intervals = {}
+    var loader = document.getElementById('divLoader');
+    var button = document.getElementById('buttonSearch');
+    var requested = false;
+    var timer;
 
-    function update(){
-        xhr = $.ajax({
-            url: '/task/update_status/?task_id={{ task_id }}',
-            type: 'GET',
-            success: function(result) {
-                divSpinner = document.createElement('div');
-                divSpinner.classList.add('spinner-border');
-                divSpinner.setAttribute('role', 'status');
+    function checkTaskStatus() {
+        if (!requested){
+            $.ajax({
+                url: '/task/update_status/?task_id={{ task_id }}',
+                type: 'GET',
+                success: function(result) {
+                    // mostra loader e desativa botão pesquisar
+                    showLoader(loader, button);
 
-                spanLoading = document.createElement('span');
-                spanLoading.classList.add('sr-only');
-                spanLoading.text = "{% trans 'Loading' %}...";
+                    if (result.data && 'doc_pkgs' in result.data) {
+                        // adiciona conteúdo à tabela
+                        ingressPackageDownloadCreateTable(result.data);
 
-                divSpinner.appendChild(spanLoading);
+                        // impede que requisições continuem sendo realizadas
+                        requested = true;
+                        window.clearTimeout(timer);
 
-                $('user-package-download-results').add(divSpinner);
-
-                if (result.data && 'doc_pkgs' in result.data) {
-                    clearInterval(intervals[0]);
-                    ingressPackageDownloadCreateTable(result.data);
-                    ingressPackageDownloadToggleSpinner();
+                        // remove loader e reativa botão pesquisar
+                        hideLoader(loader, button);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
-    if (checkStatus) {
-        intervals[0] = setInterval(update, 200);
-        ingressPackageDownloadToggleSpinner();
+    if(checkStatus){
+        checkTaskStatus();
+        var timer = setInterval(function(){
+            checkTaskStatus();
+        }, 2000);
     }
 </script>
 {% endblock %}

@@ -193,7 +193,7 @@ msgstr "Edite assets y renditions del artículo"
 
 #: templates/index.html:56
 msgid "Edit article metadata"
-msgstr "Edite metadata del artículo"
+msgstr "Edite metadatos del artículo"
 
 #: templates/index.html:57
 msgid "Find problems"
@@ -556,26 +556,3 @@ msgstr "Se agregó el paquete (%(name)s, %(id)s)"
 #: views.py:239
 msgid " does not have a valid format. Please provide a zip file."
 msgstr " no tiene un formato válido. Por favor, proporcione un archivo zip."
-
-#~ msgid "Reset password"
-#~ msgstr "Restablecer la contraseña"
-
-#~ msgid "Send e-mail"
-#~ msgstr "Enviar correo electrónico"
-
-#, fuzzy
-#~| msgid "Packages"
-#~ msgid "Package address"
-#~ msgstr "Direción del paquete"
-
-#~ msgid "No packages were found for document %s"
-#~ msgstr "No se encontraron paquetes para el documento %s"
-
-#~ msgid "Activities"
-#~ msgstr "Actividades"
-
-#~ msgid "All activities"
-#~ msgstr "Todas las actividades"
-
-#~ msgid "The two password fields didn’t match."
-#~ msgstr "Los dos campos de contraseña no coincidían."

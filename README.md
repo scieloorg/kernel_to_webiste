@@ -171,7 +171,7 @@ __Generate translations__
 python ../manage.py compilemessages
 
 # Under docker shell, run
-docker-compose -f docker-compose.yml exec web python manage.py compilemessages group
+docker-compose -f docker-compose.yml exec web python manage.py compilemessages
 ```
 
 __Load default groups__

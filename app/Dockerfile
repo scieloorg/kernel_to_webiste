@@ -17,7 +17,7 @@ RUN apk update \
     libxml2-dev \
     libxslt-dev \
     libffi-dev \
-    gettext
+    gettext-dev
 
 RUN pip install --upgrade pip
 
@@ -42,6 +42,8 @@ RUN mkdir ${APP_HOME}/mediafiles
 WORKDIR ${APP_HOME}
 
 COPY . ${APP_HOME}
+
+RUN django-admin compilemessages
 
 RUN chown -R app:app ${APP_HOME}
 

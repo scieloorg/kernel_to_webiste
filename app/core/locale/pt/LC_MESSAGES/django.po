@@ -189,11 +189,11 @@ msgstr "Agendar artigo para publicação"
 
 #: templates/index.html:55
 msgid "Edit article assets and renditions"
-msgstr "Edite assets y renditions"
+msgstr "Edite assets e renditions"
 
 #: templates/index.html:56
 msgid "Edit article metadata"
-msgstr "Edite metadata del artículo"
+msgstr "Edite metadados do artigo"
 
 #: templates/index.html:57
 msgid "Find problems"
@@ -557,24 +557,3 @@ msgstr "Pacote (%(name)s, %(id)s) foi adicionado"
 msgid " does not have a valid format. Please provide a zip file."
 msgstr ""
 " não possui um formato válido. Por favor, forneça um arquivo em formato zip."
-
-msgid "Reset password"
-#~ msgstr "Redefinir senha"
-
-#~ msgid "Send e-mail"
-#~ msgstr "Enviar e-mail"
-
-#~ msgid "Package address"
-#~ msgstr "Endereço do pacote"
-
-#~ msgid "No packages were found for document %s"
-#~ msgstr "Não foram encontrados pacotes para o documento %s"
-
-#~ msgid "Activities"
-#~ msgstr "Atividades"
-
-#~ msgid "All activities"
-#~ msgstr "Todas as atividades"
-
-#~ msgid "The two password fields didn’t match."
-#~ msgstr "As duas senhas são diferentes."

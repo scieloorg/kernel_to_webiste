@@ -1,0 +1,559 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-11-10 19:43+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: decorators.py:26 decorators.py:30
+msgid "You do not have permission to access the requested page "
+msgstr "Você não possui permissão para acessar a página requisitada "
+
+#: forms.py:14 forms.py:38 templates/user/login.html:19
+#: templates/user/register.html:19
+msgid "Enter your username"
+msgstr "Digite seu nome de usuário"
+
+#: forms.py:18 forms.py:43 templates/user/profile_edit.html:22
+#: templates/user/register.html:23
+msgid "Enter your e-mail"
+msgstr "Digite seu e-mail"
+
+#: forms.py:22 forms.py:47 templates/user/profile_edit.html:26
+#: templates/user/register.html:27
+msgid "Enter your first name"
+msgstr "Digite seu nome"
+
+#: forms.py:26 forms.py:51 templates/user/profile_edit.html:30
+#: templates/user/register.html:31
+msgid "Enter your last name"
+msgstr "Digite seu sobrenome"
+
+#: models.py:16
+msgid "Received"
+msgstr "Recebido"
+
+#: models.py:17
+msgid "Queued for validation"
+msgstr "Agendado para validação"
+
+#: models.py:18
+msgid "Validating"
+msgstr "Validando"
+
+#: models.py:19
+msgid "Validation failure"
+msgstr "Validação falhou"
+
+#: models.py:20
+msgid "Validated"
+msgstr "Validado"
+
+#: models.py:34
+msgid "Initiated"
+msgstr "Iniciado"
+
+#: models.py:35
+msgid "Completed"
+msgstr "Completado"
+
+#: models.py:36
+msgid "Failed"
+msgstr "Falhou"
+
+#: models.py:39
+msgid "Retrieve package"
+msgstr "Procurar pacote"
+
+#: models.py:40 templates/index.html:41 templates/ingress/package_upload.html:5
+#: templates/ingress/package_upload.html:9
+#: templates/ingress/package_upload.html:18
+msgid "Upload package"
+msgstr "Enviar pacote"
+
+#: models.py:41
+msgid "Start validation"
+msgstr "Iniciar validação"
+
+#: models.py:42
+msgid "Finalize validation"
+msgstr "Finalizar validação"
+
+#: models.py:43
+msgid "Change user groups"
+msgstr "Alterar grupos de usuários"
+
+#: templates/base.html:28 templates/journal/journal_list.html:5
+#: templates/journal/journal_list.html:9
+msgid "Journals"
+msgstr "Periódicos"
+
+#: templates/base.html:31
+msgid "Documents"
+msgstr "Documentos"
+
+#: templates/base.html:43 templates/index.html:19
+#: templates/tracking/event_list.html:6 templates/tracking/event_list.html:10
+msgid "Events"
+msgstr "Ações"
+
+#: templates/base.html:44 templates/index.html:26 templates/user/profile.html:6
+#: templates/user/profile.html:10
+msgid "Profile"
+msgstr "Perfil"
+
+#: templates/base.html:45 templates/index.html:27
+#: templates/user/profile_edit.html:7 templates/user/profile_edit.html:11
+msgid "Edit profile"
+msgstr "Editar perfil"
+
+#: templates/base.html:46 templates/index.html:28
+#: templates/user/change_password.html:7 templates/user/change_password.html:12
+#: templates/user/change_password.html:27
+msgid "Change password"
+msgstr "Alterar senha"
+
+#: templates/base.html:48
+msgid "Logout"
+msgstr "Sair"
+
+#: templates/base.html:53 templates/user/login.html:7
+#: templates/user/login.html:25 templates/user/register.html:44
+msgid "Login"
+msgstr "Entrar"
+
+#: templates/base.html:56 templates/user/login.html:27
+#: templates/user/register.html:7
+msgid "Sign up"
+msgstr "Registrar-se"
+
+#: templates/faq.html:5 templates/faq.html:10
+msgid "Frequently asked questions"
+msgstr "Perguntas frequentes"
+
+#: templates/index.html:10
+msgid "Home"
+msgstr "Início"
+
+#: templates/index.html:16
+msgid "My space"
+msgstr "Meu espaço"
+
+#: templates/index.html:21 templates/ingress/package_list.html:6
+#: templates/ingress/package_list.html:10
+msgid "Deposited packages"
+msgstr "Pacotes depositados"
+
+#: templates/index.html:24
+msgid "Migrated data"
+msgstr "Dados migrados"
+
+#: templates/index.html:37
+msgid "Ingress"
+msgstr "Ingresso"
+
+#: templates/index.html:40 templates/ingress/package_download.html:6
+#: templates/ingress/package_download.html:10
+#: templates/ingress/package_download.html:16
+msgid "Search package"
+msgstr "Procurar pacote"
+
+#: templates/index.html:49
+msgid "Document management"
+msgstr "Gerenciamento de documentos"
+
+#: templates/index.html:52
+msgid "Add article to issue"
+msgstr "Adicionar artigo a fascículo"
+
+#: templates/index.html:53
+msgid "Include errata into article"
+msgstr "Incluir Errata em artigo"
+
+#: templates/index.html:54
+msgid "Schedule article for publication"
+msgstr "Agendar artigo para publicação"
+
+#: templates/index.html:55
+msgid "Edit article assets and renditions"
+msgstr "Edite assets e renditions"
+
+#: templates/index.html:56
+msgid "Edit article metadata"
+msgstr "Edite metadados do artigo"
+
+#: templates/index.html:57
+msgid "Find problems"
+msgstr "Procurar problemas"
+
+#: templates/index.html:68
+msgid "Migration"
+msgstr "Migração"
+
+#: templates/index.html:71
+msgid "Migrate title"
+msgstr "Migrar periódico"
+
+#: templates/index.html:72
+msgid "Migrate fascicle"
+msgstr "Migrar fascículo"
+
+#: templates/index.html:73
+msgid "Migrate document"
+msgstr "Migrar artigo"
+
+#: templates/index.html:83
+msgid "Package management"
+msgstr "Gerenciamento de pacotes"
+
+#: templates/index.html:86
+msgid "All deposited packages"
+msgstr "Todo os pacotes depositados"
+
+#: templates/index.html:87 templates/ingress/article_files_list.html:5
+#: templates/ingress/article_files_list.html:9
+msgid "Articles' files"
+msgstr "Arquivos de artigos"
+
+#: templates/index.html:95
+msgid "User management"
+msgstr "Gerenciamento de usuário"
+
+#: templates/index.html:98
+msgid "All events"
+msgstr "Todas as ações"
+
+#: templates/index.html:99 templates/user/add.html:7 templates/user/add.html:46
+#: templates/user/register.html:41
+msgid "Add user"
+msgstr "Adicionar usuário"
+
+#: templates/index.html:100 templates/user/groups_edit.html:6
+#: templates/user/groups_edit.html:10
+msgid "User groups"
+msgstr "Grupos de usuário"
+
+#: templates/ingress/article_files_list.html:18
+msgid "Identifier"
+msgstr "Identificador de documento"
+
+#: templates/ingress/article_files_list.html:19
+#: templates/ingress/package_download.html:45
+msgid "Creation date"
+msgstr "Data de criação"
+
+#: templates/ingress/article_files_list.html:20
+msgid "Update date"
+msgstr "Data de atualização"
+
+#: templates/ingress/article_files_list.html:21
+#: templates/ingress/package_download.html:44
+#: templates/ingress/package_list.html:20
+msgid "Package name"
+msgstr "Nome do pacote"
+
+#: templates/ingress/article_files_list.html:22
+msgid "XML"
+msgstr ""
+
+#: templates/ingress/article_files_list.html:23
+msgid "Assets"
+msgstr ""
+
+#: templates/ingress/article_files_list.html:24
+msgid "Renditions"
+msgstr ""
+
+#: templates/ingress/article_files_list.html:55
+#: templates/ingress/package_list.html:46
+#: templates/journal/journal_list.html:49 templates/tracking/event_list.html:56
+#: templates/user/groups_edit.html:64
+msgid "First"
+msgstr "Primeiro"
+
+#: templates/ingress/article_files_list.html:59
+#: templates/ingress/package_list.html:50
+#: templates/journal/journal_list.html:53 templates/tracking/event_list.html:60
+#: templates/user/groups_edit.html:68
+msgid "Previous"
+msgstr "Anterior"
+
+#: templates/ingress/article_files_list.html:64
+#: templates/ingress/package_list.html:55
+#: templates/journal/journal_list.html:58 templates/tracking/event_list.html:65
+#: templates/user/groups_edit.html:73
+msgid "Page"
+msgstr "Página"
+
+#: templates/ingress/article_files_list.html:64
+#: templates/ingress/package_list.html:55
+#: templates/journal/journal_list.html:58 templates/tracking/event_list.html:65
+#: templates/user/groups_edit.html:73
+msgid "of"
+msgstr "de"
+
+#: templates/ingress/article_files_list.html:69
+#: templates/ingress/package_list.html:60
+#: templates/journal/journal_list.html:63 templates/tracking/event_list.html:70
+#: templates/user/groups_edit.html:78
+msgid "Next"
+msgstr "Próximo"
+
+#: templates/ingress/article_files_list.html:72
+#: templates/ingress/package_list.html:63
+#: templates/journal/journal_list.html:66 templates/tracking/event_list.html:73
+#: templates/user/groups_edit.html:81
+msgid "Last"
+msgstr "Último"
+
+#: templates/ingress/package_download.html:22
+msgid "Document identifier"
+msgstr "Identificador de documento"
+
+#: templates/ingress/package_download.html:23
+msgid "Enter a document identifier"
+msgstr "Digite um identificador de documento"
+
+#: templates/ingress/package_download.html:25
+msgid "Search"
+msgstr "Procurar"
+
+#: templates/ingress/package_download.html:31
+msgid "Loading"
+msgstr "Carregando"
+
+#: templates/ingress/package_download.html:33
+msgid "Collecting resources"
+msgstr "Coletando recursos"
+
+#: templates/ingress/package_download.html:39
+msgid "Results for document"
+msgstr "Resultados para o documento"
+
+#: templates/ingress/package_download.html:43
+msgid "Version"
+msgstr "Versão"
+
+#: templates/ingress/package_list.html:19 templates/tracking/event_list.html:20
+#: templates/user/add.html:18 templates/user/groups_edit.html:21
+#: templates/user/login.html:18 templates/user/profile.html:18
+#: templates/user/profile_edit.html:17 templates/user/register.html:18
+msgid "Username"
+msgstr "Usuário"
+
+#: templates/ingress/package_list.html:21
+msgid "Datetime"
+msgstr "Data e hora"
+
+#: templates/ingress/package_list.html:22 templates/tracking/event_list.html:24
+msgid "Status"
+msgstr "Estado"
+
+#: templates/ingress/package_upload.html:21
+msgid "Upload"
+msgstr "Enviar"
+
+#: templates/journal/journal_list.html:18
+msgid "Title"
+msgstr "Título"
+
+#: templates/journal/journal_list.html:19
+msgid "Short title"
+msgstr "Título abreviado"
+
+#: templates/journal/journal_list.html:20
+msgid "Acronym"
+msgstr "Acrônimo"
+
+#: templates/journal/journal_list.html:21
+msgid "Print ISSN"
+msgstr "Print ISSN"
+
+#: templates/journal/journal_list.html:22
+msgid "Online ISSN"
+msgstr "Online ISSN"
+
+#: templates/journal/journal_list.html:23
+msgid "SciELO ISSN"
+msgstr "SciELO ISSN"
+
+#: templates/tracking/event_list.html:22
+msgid "Activity"
+msgstr "Atividade"
+
+#: templates/tracking/event_list.html:23
+msgid "Annotation"
+msgstr "Anotação"
+
+#: templates/tracking/event_list.html:25
+msgid "Timestamp"
+msgstr "Data e hora"
+
+#: templates/user/add.html:19
+msgid "Enter the username"
+msgstr "Digite o nome de usuário"
+
+#: templates/user/add.html:23
+msgid "Enter the user e-mail"
+msgstr "Digite o e-mail"
+
+#: templates/user/add.html:26 templates/user/login.html:22
+#: templates/user/register.html:34
+msgid "Password"
+msgstr "Senha"
+
+#: templates/user/add.html:27
+msgid "Enter the user password"
+msgstr "Digite a senha"
+
+#: templates/user/add.html:30
+msgid "Confirm the password"
+msgstr "Confirme a senha"
+
+#: templates/user/add.html:31
+msgid "Re-enter the user password"
+msgstr "Digita a senha novamente"
+
+#: templates/user/add.html:34 templates/user/profile.html:23
+msgid "Groups"
+msgstr "Grupos"
+
+#: templates/user/change_password.html:16
+msgid "Old password"
+msgstr "Senha antiga"
+
+#: templates/user/change_password.html:17
+msgid "Enter your old password"
+msgstr "Digite sua senha antiga"
+
+#: templates/user/change_password.html:20
+msgid "New password"
+msgstr "Senha nova"
+
+#: templates/user/change_password.html:21
+msgid "Enter your new password"
+msgstr "Digita sua senha nova"
+
+#: templates/user/change_password.html:24
+msgid "Confirm new password"
+msgstr "Confirme sua senha nova"
+
+#: templates/user/change_password.html:25
+msgid "Re-enter your new password"
+msgstr "Digite sua senha nova novamente"
+
+#: templates/user/groups_edit.html:22 templates/user/profile.html:19
+#: templates/user/profile_edit.html:25 templates/user/register.html:26
+msgid "First name"
+msgstr "Nome"
+
+#: templates/user/groups_edit.html:23 templates/user/profile.html:20
+#: templates/user/profile_edit.html:29 templates/user/register.html:30
+msgid "Last name"
+msgstr "Sobrenome"
+
+#: templates/user/groups_edit.html:24 templates/user/profile.html:21
+msgid "E-mail"
+msgstr "E-mail"
+
+#: templates/user/groups_edit.html:54
+msgid "Update users' groups"
+msgstr "Atualizar grupos de usuários"
+
+#: templates/user/login.html:23 templates/user/register.html:35
+msgid "Enter your password"
+msgstr "Digite sua senha"
+
+#: templates/user/login.html:27
+msgid "Don't have an account"
+msgstr "Não possui uma conta"
+
+#: templates/user/profile.html:15
+msgid "User profile"
+msgstr "Editar perfil"
+
+#: templates/user/profile.html:22
+msgid "Last login date"
+msgstr "Data do último acesso"
+
+#: templates/user/profile_edit.html:32
+msgid "Update user"
+msgstr "Atualizar usuário"
+
+#: templates/user/register.html:38
+msgid "Confirm your password"
+msgstr "Confirme sua senha"
+
+#: templates/user/register.html:39
+msgid "Re-enter your password"
+msgstr "Digite sua senha novamente"
+
+#: templates/user/register.html:44
+msgid "Already have an account"
+msgstr "Já possui uma conta"
+
+#: templatetags/spf_extras.py:29
+msgid "Q. Analyst"
+msgstr "An. de Qualidade"
+
+#: templatetags/spf_extras.py:31
+msgid "Op. Ingress"
+msgstr "Op. de Ingresso"
+
+#: templatetags/spf_extras.py:33
+msgid "Op. Migration"
+msgstr "Op. de Migração"
+
+#: templatetags/spf_extras.py:35
+msgid "Manager"
+msgstr "Gerente"
+
+#: views.py:45 views.py:107
+#, python-format
+msgid "User %s was created"
+msgstr "Usuário %s foi criado"
+
+#: views.py:75
+msgid "Incorrect username or password"
+msgstr "Nome de usuário ou senha incorreto"
+
+#: views.py:136
+msgid "Your password was updated"
+msgstr "Sua senha foi atualizada"
+
+#: views.py:172
+msgid "Users' groups were updated"
+msgstr "Grupos de usuários foram atualizados"
+
+#: views.py:192
+#, python-format
+msgid "User %s was updated"
+msgstr "Usuário %s foi atualizado"
+
+#: views.py:222
+#, python-format
+msgid "Errors ocurred: %s"
+msgstr "Ocorreram erros: %s"
+
+#: views.py:229
+#, python-format
+msgid "Package (%(name)s, %(id)s) was added"
+msgstr "Pacote (%(name)s, %(id)s) foi adicionado"
+
+#: views.py:239
+msgid " does not have a valid format. Please provide a zip file."
+msgstr ""
+" não possui um formato válido. Por favor, forneça um arquivo em formato zip."

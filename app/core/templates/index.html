@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load spf_extras %}
+
+{% block title %}
+SciELO Publishing Framework - Home
+{% endblock %}
+
+{% block content %}
+    <h1 class="h4 pt-5">{% trans 'Home' %}</h1>
+    {% if user.is_authenticated %}
+    <div class="row row-cols-2 row-cols-md-3 my-3">
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'My space' %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item" href="{% url 'event_list' %}">{% trans 'Events' %}</a>
+                    {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_ingress" %}
+                        <a class="list-group-item" href="{% url 'ingress_package_list' %}">{% trans "Deposited packages" %}</a>
+                    {% endif %}
+                    {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_migration" %}
+                    <a class="list-group-item disabled" href="">{% trans "Migrated data" %}</a>
+                    {% endif %}
+                    <a class="list-group-item" href="{% url 'user_profile' %}">{% trans 'Profile' %}</a>
+                    <a class="list-group-item list-group-item-warning" href="{% url 'user_profile_edit' %}">{% trans 'Edit profile' %}</a>
+                    <a class="list-group-item list-group-item-warning" href="{% url 'user_change_password' %}">{% trans 'Change password' %}</a>
+                </div>
+            </div>
+        </div>
+
+        {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_ingress" %}
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'Ingress'  %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item" href="{% url 'ingress_package_download' %}">{% trans 'Search package' %}</a>
+                    <a class="list-group-item" href="{% url 'ingress_package_upload' %}">{% trans 'Upload package' %}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'Document management' %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item disabled" href="">{% trans 'Add article to issue' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Include errata into article' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Schedule article for publication' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Edit article assets and renditions' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Edit article metadata' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Find problems' %}</a>
+                </div>
+            </div>
+        </div>
+
+        {% endif %}
+
+        {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_migration" %}
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'Migration' %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item disabled" href="">{% trans 'Migrate title' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Migrate fascicle' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans 'Migrate document' %}</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if user.is_superuser or user|has_group:"manager" %}
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'Package management' %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item" href="{% url 'ingress_package_list' %}?scope=all_users">{% trans 'All deposited packages' %}</a>
+                    <a class="list-group-item disabled" href="">{% trans "Articles' files" %}</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col mb-4">
+            <div class="card">
+                <div class="card-header">
+                    {% trans 'User management' %}
+                </div>
+                <div class="list-group list-group-flush">
+                    <a class="list-group-item" href="{% url 'event_list' %}?scope=all_users">{% trans 'All events' %}</a>
+                    <a class="list-group-item" href="{% url 'user_add' %}">{% trans 'Add user' %}</a>
+                    <a class="list-group-item list-group-item-warning" href="{% url 'user_groups_edit' %}">{% trans 'User groups' %}</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+    {% endif %}
+
+{% endblock %}

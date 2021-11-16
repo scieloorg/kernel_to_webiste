@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+    web:
+        build:
+            context: ./app
+            dockerfile: Dockerfile
+        command: gunicorn spf.wsgi:application --bind 0.0.0.0:8000
+        volumes:
+            - static_volume:/home/app/web/staticfiles
+            - media_volume:/home/app/web/mediafiles
+        expose:
+            - 8000
+        env_file:
+            - ./.env.prod
+        depends_on:
+            - broker
+            - worker
+        external_links:
+            - scl_postgres_1
+            - scl_mongo_1
+    worker:
+        build:
+            context: ./app
+            dockerfile: Dockerfile
+        command: celery -A spf worker -l INFO
+        env_file:
+            - ./.env.prod
+        depends_on:
+            - broker
+        external_links:
+            - scl_postgres_1
+    broker:
+        image: rabbitmq:3-alpine
+        ports:
+            - 5672:5672
+    nginx:
+        build:
+            context: ./nginx
+        volumes:
+            - static_volume:/home/app/web/staticfiles
+            - media_volume:/home/app/web/mediafiles
+        ports:
+            - 1337:80
+        depends_on:
+            - web
+
+volumes:
+    static_volume:
+    media_volume:

@@ -33,4 +33,11 @@ tracking = [
     path('task/update_status/', views.task_update_status, name='task_update_status'),
 ]
 
-urlpatterns = general + user + ingress + journal +  tracking
+migrate = [
+    path('migration/journals/list', views.migrate_pending_documents_by_journal, name='pending_documents_by_journal'),
+    path('migration/documents/list', views.migrate_search_pending_documents, name='search_pending_documents'),
+    path('migration/issue/list', views.migrate_issue_list_page, name='issue_list'),
+    path('migration/title', views.migrate_title_page, name='migrate_title'),
+]
+
+urlpatterns = general + user + ingress + journal +  tracking + migrate

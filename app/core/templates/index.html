@@ -68,9 +68,11 @@ SciELO Publishing Framework - Home
                     {% trans 'Migration' %}
                 </div>
                 <div class="list-group list-group-flush">
-                    <a class="list-group-item disabled" href="">{% trans 'Migrate title' %}</a>
+                    <a class="list-group-item" href="{% url 'migrate_title' %}">{% trans 'Migrate database' %}</a>
                     <a class="list-group-item disabled" href="">{% trans 'Migrate fascicle' %}</a>
                     <a class="list-group-item disabled" href="">{% trans 'Migrate document' %}</a>
+                    <a class="list-group-item" href="{% url 'search_pending_documents' %}">{% trans 'Search pending documents' %}</a>
+                    <a class="list-group-item" href="{% url 'pending_documents_by_journal' %}">{% trans 'Pending documents by journal' %}</a>
                 </div>
             </div>
         </div>

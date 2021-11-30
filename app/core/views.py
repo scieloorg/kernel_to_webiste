@@ -18,6 +18,17 @@ from os import path
 
 import core.controller as controller
 import dsm.ingress as dsm_ingress
+import dsm.migration as dsm_migration
+
+from opac_schema.v1.models import Journal as OPACJournal
+from opac_schema.v1.models import Issue as OPACIssue
+from opac_schema.v2.models import ArticleFiles
+from dsm.extdeps.isis_migration.migration_models import ISISDocument
+from dsm.extdeps.isis_migration.isis_cmds import get_document_isis_db
+
+from core.models import MigrationPackage
+from datetime import datetime
+import os, math
 
 
 ###################
@@ -338,3 +349,216 @@ def task_update_status(request):
     }
 
     return JsonResponse(json_data)
+
+
+##################
+# migrate views #
+##################
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_migration'])
+def migrate_title_page(request):
+    if request.method == 'POST':
+        file_input = request.FILES.get('title_file')
+        isis_path = request.POST.get('isis_path')
+        data_type = request.POST.get('data_type')
+        
+        if file_input:
+            print(settings.MEDIA_INGRESS_TEMP)
+            fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
+
+            # envia arquivo para diretório temporário
+            file_id = fs.save(file_input.name, file_input)
+
+            ip = MigrationPackage()
+            ip.user = request.user
+            ip.datetime = datetime.utcnow()
+            ip.path = file_id
+            ip.save()
+
+            task_migrate_isis_db.delay(data_type, os.path.join(fs.base_location, file_id),file_id)
+        
+        elif isis_path:
+            ip = MigrationPackage()
+            ip.user = request.user
+            ip.datetime = datetime.utcnow()
+            ip.path = isis_path
+            ip.save()
+ 
+            task_migrate_isis_db.delay(data_type, isis_path+'/'+data_type+'/'+data_type)
+        
+        messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
+        return redirect('index')
+
+    return render(request, 'migration/user_migrate_title.html', context={'isis_path' : os.environ['BASES_PATH']})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_migration'])
+def migrate_search_pending_documents(request):
+    page_number = int(request.GET.get('page', 1))
+    pub_year = request.GET.get('pub_year', None)
+    acron = request.GET.get('acron', None)
+    volume = request.GET.get('volume', None)
+
+    year = request.GET.get('year', None)
+    issn = request.GET.get('issn', None)
+    pid = request.GET.get('pid', None)
+
+    pending_documents = []
+    paginator = None
+    class Object(object):
+            pass
+    search = Object()
+    setattr(search, 'exists', True)
+    url = '?'
+
+    if issn or year or pid:
+        filter = ''
+        if pid:
+            filter = pid
+        else:
+            if issn:
+                filter = issn
+                url += 'issn='+issn+'&'
+            if year:
+                filter += year
+                url += 'year='+year+'&'
+        filter_documents = ISISDocument.objects.filter(_id__contains = filter) 
+        paginator = Paginator(filter_documents, 25)
+        pending_documents = paginator.get_page(page_number)
+        setattr(paginator, 'exists', False)
+        setattr(search, 'url', url)
+
+    elif acron or volume or pub_year:
+        pending_documents = dsm_migration.list_documents_to_migrate(acron, volume, pub_year, "", "", items_per_page=25, page_number=page_number, status="")
+        total_documents = dsm_migration.list_documents_to_migrate(acron, volume, pub_year, "", "", items_per_page=1000, page_number=int(1), status="")
+        
+        paginator = Object()
+        has_next = False
+        has_previous = False
+        next_page_number = ''
+        previous_page_number = ''
+        num_pages = math.ceil(len(total_documents)/25)
+        if num_pages > page_number:
+            next_page_number = page_number + 1
+            has_next = True
+        if page_number > 1:
+            previous_page_number = page_number - 1
+            has_previous = True
+
+        setattr(paginator, 'exists', True)
+        setattr(paginator, 'page_number', page_number)
+        setattr(paginator, 'num_pages', num_pages)
+        setattr(paginator, 'has_next', has_next)
+        setattr(paginator, 'has_previous', has_previous)
+        setattr(paginator, 'next_page_number', next_page_number)
+        setattr(paginator, 'previous_page_number', previous_page_number)
+        if pub_year:
+            setattr(paginator, 'pub_year', pub_year)
+            url += 'pub_year='+pub_year+'&'
+        if acron:
+            setattr(paginator, 'acron', acron)
+            url += 'acron='+acron+'&'
+        if volume:
+            setattr(paginator, 'volume', volume)
+            url += 'volume='+volume+'&'
+        if url != '?':
+            setattr(search, 'exists', False)
+        setattr(paginator, 'url', url)
+
+    if request.method == 'POST':
+        #Obtiene documentos seleccionadas
+        print(request.POST.get('migrate'))
+        migrate = []
+        if request.POST.get('migrate') == "select":
+            migrate = request.POST.getlist('document')
+        if request.POST.get('migrate') == "this":
+            for p in pending_documents:
+                migrate.append(p.id)
+        if request.POST.get('migrate') == "all":
+            for f in filter_documents:
+                migrate.append(f.id)
+        task_migrate_documents.delay(pid=",".join(migrate))
+
+        messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
+        return redirect('index')
+    
+    
+    return render(request, 'migration/search_pending_documents.html', context={'documents_obj': pending_documents, 'paginator': paginator, 'search': search})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_migration'])
+def migrate_pending_documents_by_journal(request):
+    journals = OPACJournal.objects
+
+    paginator = Paginator(journals, 25)
+    page_number = request.GET.get('page')
+    journals_obj = paginator.get_page(page_number)
+
+    if request.method == 'POST':
+        acronym = request.POST.getlist('acronym')
+        task_migrate_acron.delay(",".join(acronym))
+
+        messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
+        return redirect('index')    
+
+    return render(request, 'migration/pending_documents_by_journal.html', context={'journals_obj': journals_obj})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_migration'])
+def migrate_issue_list_page(request):
+    if request.method == 'POST':
+        #Obtiene años o carpetas seleccionadas
+        years=None
+        volumes=None
+        selected = request.POST.getlist(request.POST.get('migrate'))
+        if request.POST.get('migrate') == "years":
+            years = ",".join(selected)
+        if request.POST.get('migrate') == "volumes":
+            volumes = ",".join(selected)
+        acron = request.GET.get('acron')
+        task_migrate_documents.delay(acronym=acron, volume=volumes, pub_year=years)
+
+        messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
+        return redirect('index')
+
+    issue = request.GET.get('issue')
+    acron = request.GET.get('acron')
+    issues = OPACIssue.objects.filter(journal=issue)
+    i_prev = ''
+    issue_obj = None
+    issues_obj = []
+    class Issue:
+        def __init__(self, volumes = None, year = None):
+            if volumes:
+                self.volumes = volumes
+            else:
+                self.volumes = []
+            self.year = year
+
+    for num, i in enumerate(issues):
+        if i.year != i_prev:
+            if issue_obj:
+                if issue_obj.year:
+                    issues_obj.append(issue_obj)
+            issue_obj = Issue()
+            i_prev = i.year
+            issue_obj.year = i.year
+        volume = ''
+        if i.volume:
+            volume = 'v' + str(i.volume)
+        if i.number:
+            volume += 'n' + str(i.number)
+        issue_obj.volumes.append(volume)
+        if num == len(issues)-1:
+            issues_obj.append(issue_obj)
+        
+    paginator = Paginator(issues_obj, 25)
+    page_number = request.GET.get('page')
+    issues_obj = paginator.get_page(page_number)
+
+    return render(request, 'migration/issue_list.html', context={'issues_obj': issues_obj, 'issue': issue, 'acron': acron})
+

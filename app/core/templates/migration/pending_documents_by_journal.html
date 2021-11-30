@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Journals' %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-5">
+    <h1 class="h4">{% trans 'Journals' %}</h1>
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="m-3">
+        {% if journals_obj %}
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">{% trans 'ISSN' %}</th>
+                    <th scope="col">{% trans 'Acronym' %}</th>
+                    <th scope="col">{% trans 'Title' %}</th>
+                    <th scope="col">{% trans 'View documents' %}</th>
+                    <th scope="col">{% trans 'Migrate' %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                
+                {% for j in journals_obj %}
+                <tr>
+                    <td>{{ journals_obj.start_index|add:forloop.counter0 }}</td>
+                    <td><a href="{% url 'issue_list' %}?issue={{ j.jid }}&acron={{ j.acronym }}">{{ j.jid }}</a></td>
+                    <td>{{ j.acronym }}</td>
+                    <td>{{ j.title }}</td>
+                    <td>
+                        <a href="{% url 'search_pending_documents' %}?acron={{ j.acronym }}"><i class="fas fa-eye"></i></a>
+                    </td>
+                    <td><input type="checkbox" name="acronym" value={{ j.acronym }}></td>
+                </tr>
+                {% endfor %}
+                
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">{% trans 'Migrate Acronym' %}</button>
+    </form>
+</div>
+
+<nav aria-label="Journal navigation">
+    <ul class="pagination justify-content-center">
+        {% if journals_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page=1">&laquo; {% trans 'First' %}</a>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link"  href="?page={{ journals_obj.previous_page_number }}">{% trans 'Previous' %}</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item">
+            <a class="page-link">Page {{ journals_obj.number }} of {{ journals_obj.paginator.num_pages }}</a>
+        </li>
+
+        {% if journals_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ journals_obj.next_page_number }}">{% trans 'Next' %}</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?page={{ journals_obj.paginator.num_pages }}">{% trans 'Last' %} &raquo;</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}

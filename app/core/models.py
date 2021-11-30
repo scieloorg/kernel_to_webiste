@@ -25,8 +25,10 @@ class IngressPackage(models.Model):
     status = models.CharField(max_length=1, choices=Status.choices, blank=False, null=False)
 
 
-class MigratePackage(models.Model):
-    ...
+class MigrationPackage(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    path = models.CharField(max_length=200)
+    datetime = models.DateTimeField(null=True)
 
 
 class Event(models.Model):

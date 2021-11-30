@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Issues' %}
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center pt-5">
+    <h1 class="h4">{% trans 'Issues of' %} {{ issue }}</h1>
+    <div class="m-3">
+        {% if issues_obj %}
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th width="200px" scope="col">
+                        {% trans 'Year' %}                        
+                    </th>
+                    <th width="200px" scope="col">
+                        {% trans 'View documents' %}                        
+                    </th>
+                    <th width="200px" scope="col">
+                        {% trans 'Volumes' %}
+                    </th>
+                    <th width="200px" scope="col">
+                        {% trans 'View documents' %}                        
+                    </th>
+                </tr>
+                </thead>
+                <form method="POST">
+                {% csrf_token %}
+                <tbody>
+                {% for i in issues_obj %}
+                <tr>
+                    <td>
+                        {{ i.year }}&nbsp;&nbsp;&nbsp;<input type="checkbox" name="years" value={{ i.year }}>
+                    </td>
+                    <td>
+                        <a href="{% url 'search_pending_documents' %}?acron={{ acron }}&pub_year={{ i.year }}"><i class="fas fa-eye"></i></a>
+                    </td>
+                    <td>
+                        {% for v in i.volumes %}
+                            {{ v }}&nbsp;&nbsp;&nbsp;<input type="checkbox" name="volumes" value={{ v }}><br>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% for v in i.volumes %}
+                        <a href="{% url 'search_pending_documents' %}?acron={{ acron }}&volume={{ v }}"><i class="fas fa-eye"></i></a><br>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td align="center">
+                        <button type="submit" name="migrate" value="years" class="btn btn-primary">{% trans 'Migrate selected years' %}</button>
+                    </td>
+                    <td></td>
+                    <td align="center">
+                        <button type="submit" name="migrate" value="volumes" class="btn btn-primary">{% trans 'Migrate selected volumes' %}</button>
+                    </td>
+                    <td></td>
+                </tr>
+                </tbody>
+                </form>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<nav aria-label="Journal navigation">
+    <ul class="pagination justify-content-center">
+        {% if issues_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?issue={{ issue }}&page=1">&laquo; {% trans 'First' %}</a>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link"  href="?issue={{ issue }}&page={{ issues_obj.previous_page_number }}">{% trans 'Previous' %}</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item">
+            <a class="page-link">Page {{ issues_obj.number }} of {{ issues_obj.paginator.num_pages }}</a>
+        </li>
+
+        {% if issues_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?issue={{ issue }}&page={{ issues_obj.next_page_number }}">{% trans 'Next' %}</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="?issue={{ issue }}&page={{ issues_obj.paginator.num_pages }}">{% trans 'Last' %} &raquo;</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}

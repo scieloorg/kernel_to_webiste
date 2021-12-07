@@ -20,6 +20,16 @@ def task_get_package_uri_by_pid(pid):
 
 
 @shared_task
+def task_migrate_identify_documents():
+    current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...'})
+
+    results = []
+    for i in dsm_migration.identify_documents_to_migrate():
+        results.append(i)
+
+    return results
+
+
 @shared_task
 def task_migrate_isis_db(data_type, file_path, file_id=None):
    results = []

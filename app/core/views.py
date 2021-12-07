@@ -248,7 +248,7 @@ def ingress_package_upload_page(request):
 
             # envia arquivo ao MinIO
             try:
-                file_path = path.join(fs.base_location, pkg_name)
+                file_path = os.path.join(fs.base_location, pkg_name)
                 ingress_results = dsm_ingress.upload_package(file_path)
 
                 if len(ingress_results['errors']) > 0:
@@ -452,7 +452,7 @@ def migrate_isis_db_page(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_migration'])
-def migrate_search_pending_documents(request):
+def migrate_search_pending_documents_page(request):
     page_number = int(request.GET.get('page', 1))
     pub_year = request.GET.get('pub_year', None)
     acron = request.GET.get('acron', None)
@@ -464,14 +464,17 @@ def migrate_search_pending_documents(request):
 
     pending_documents = []
     paginator = None
-    class Object(object):
-            pass
+
+    class Object():
+        pass
+
     search = Object()
     setattr(search, 'exists', True)
     url = '?'
 
     if issn or year or pid:
         filter = ''
+
         if pid:
             filter = pid
         else:
@@ -481,25 +484,29 @@ def migrate_search_pending_documents(request):
             if year:
                 filter += year
                 url += 'year='+year+'&'
-        filter_documents = ISISDocument.objects.filter(_id__contains = filter) 
+
+        filter_documents = ISISDocument.objects.filter(_id__contains = filter)
         paginator = Paginator(filter_documents, 25)
         pending_documents = paginator.get_page(page_number)
+
         setattr(paginator, 'exists', False)
         setattr(search, 'url', url)
 
     elif acron or volume or pub_year:
         pending_documents = dsm_migration.list_documents_to_migrate(acron, volume, pub_year, "", "", items_per_page=25, page_number=page_number, status="")
         total_documents = dsm_migration.list_documents_to_migrate(acron, volume, pub_year, "", "", items_per_page=1000, page_number=int(1), status="")
-        
+
         paginator = Object()
         has_next = False
         has_previous = False
         next_page_number = ''
         previous_page_number = ''
         num_pages = math.ceil(len(total_documents)/25)
+
         if num_pages > page_number:
             next_page_number = page_number + 1
             has_next = True
+
         if page_number > 1:
             previous_page_number = page_number - 1
             has_previous = True
@@ -543,19 +550,24 @@ def migrate_search_pending_documents(request):
         if request.POST.get('migrate') == "all":
             for f in filter_documents:
                 migrate.append(f.id)
+
         task_migrate_documents.delay(pid=",".join(migrate))
 
+        ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_AVY)
+
         messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
-        return redirect('index')
-    
-    
+
+        controller.update_event(ev, {'status': Event.Status.COMPLETED})
+
+        return redirect('event_list')
+
     return render(request, 'migration/search_pending_documents.html', context={'documents_obj': pending_documents, 'paginator': paginator, 'search': search})
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_migration'])
-def migrate_pending_documents_by_journal(request):
-    journals = OPACJournal.objects
+def migrate_pending_documents_by_journal_list_page(request):
+    journals = dsm_ingress._journals_manager.get_journals()
 
     paginator = Paginator(journals, 25)
     page_number = request.GET.get('page')
@@ -565,29 +577,44 @@ def migrate_pending_documents_by_journal(request):
         acronym = request.POST.getlist('acronym')
         task_migrate_acron.delay(",".join(acronym))
 
-        messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
-        return redirect('index')    
+        # registra evento de migração por acrônimo
+        ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_ACRONYM)
 
-    return render(request, 'migration/pending_documents_by_journal.html', context={'journals_obj': journals_obj})
+        messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
+
+        controller.update_event(ev, {'status': Event.Status.COMPLETED})
+
+        return redirect('event_list')
+
+    return render(request, 'migration/pending_documents_by_journal_list.html', context={'journals_obj': journals_obj})
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_migration'])
-def migrate_issue_list_page(request):
+def migrate_pending_documents_by_issue_list_page(request):
     if request.method == 'POST':
-        #Obtiene años o carpetas seleccionadas
+        # obtiene años o carpetas seleccionadas
         years=None
         volumes=None
         selected = request.POST.getlist(request.POST.get('migrate'))
+
         if request.POST.get('migrate') == "years":
             years = ",".join(selected)
+
         if request.POST.get('migrate') == "volumes":
             volumes = ",".join(selected)
+
         acron = request.GET.get('acron')
         task_migrate_documents.delay(acronym=acron, volume=volumes, pub_year=years)
 
+        # registra evento de migração por acrônimo, volume e ano
+        ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_AVY)
+
         messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
-        return redirect('index')
+
+        controller.update_event(ev, {'status': Event.Status.COMPLETED})
+
+        return redirect('event_list')
 
     issue = request.GET.get('issue')
     acron = request.GET.get('acron')
@@ -595,6 +622,7 @@ def migrate_issue_list_page(request):
     i_prev = ''
     issue_obj = None
     issues_obj = []
+
     class Issue:
         def __init__(self, volumes = None, year = None):
             if volumes:
@@ -611,18 +639,21 @@ def migrate_issue_list_page(request):
             issue_obj = Issue()
             i_prev = i.year
             issue_obj.year = i.year
+
         volume = ''
+
         if i.volume:
             volume = 'v' + str(i.volume)
+
         if i.number:
             volume += 'n' + str(i.number)
+
         issue_obj.volumes.append(volume)
         if num == len(issues)-1:
             issues_obj.append(issue_obj)
-        
+
     paginator = Paginator(issues_obj, 25)
     page_number = request.GET.get('page')
     issues_obj = paginator.get_page(page_number)
 
-    return render(request, 'migration/issue_list.html', context={'issues_obj': issues_obj, 'issue': issue, 'acron': acron})
-
+    return render(request, 'migration/pending_documents_by_issue_list.html', context={'issues_obj': issues_obj, 'issue': issue, 'acron': acron})

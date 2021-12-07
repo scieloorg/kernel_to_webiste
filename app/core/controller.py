@@ -94,3 +94,14 @@ def add_ingress_package(user, event_datetime, package_name):
     ip.save()
 
     return ip
+
+
+def add_migration_package(user, event_datetime, path):
+    mp = MigrationPackage()
+    mp.user = user
+    mp.datetime = event_datetime
+    mp.path = path
+    mp.status = MigrationPackage.Status.RECEIVED
+    mp.save()
+
+    return mp

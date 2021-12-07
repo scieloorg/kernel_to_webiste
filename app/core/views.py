@@ -404,40 +404,58 @@ def migrate_identify_documents(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_migration'])
-def migrate_title_page(request):
+def migrate_isis_db_page(request):
     if request.method == 'POST':
-        file_input = request.FILES.get('title_file')
+        id_file = request.FILES.get('id_file')
         isis_path = request.POST.get('isis_path')
         data_type = request.POST.get('data_type')
-        
-        if file_input:
-            print(settings.MEDIA_INGRESS_TEMP)
-            fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
 
+        input_path = ''
+
+        fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
+
+        # migração por arquivo id
+        if id_file:
             # envia arquivo para diretório temporário
-            file_id = fs.save(file_input.name, file_input)
+            fs_file_name = fs.save(id_file.name, id_file)
 
-            ip = MigrationPackage()
-            ip.user = request.user
-            ip.datetime = datetime.utcnow()
-            ip.path = file_id
-            ip.save()
+            # caminho completo do arquivo
+            fs_full_path_id_file = os.path.join(fs.base_location, fs_file_name)
 
-            task_migrate_isis_db.delay(data_type, os.path.join(fs.base_location, file_id),file_id)
-        
+            # registra evento de migração
+            ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_ID_FILE, {'path': fs_full_path_id_file})
+
+            # inica task para efetuar migração
+            task_migrate_isis_db.delay(data_type, fs_full_path_id_file)
+
+            input_path = fs_full_path_id_file
+
+        # migração por base isis
         elif isis_path:
-            ip = MigrationPackage()
-            ip.user = request.user
-            ip.datetime = datetime.utcnow()
-            ip.path = isis_path
-            ip.save()
- 
-            task_migrate_isis_db.delay(data_type, isis_path+'/'+data_type+'/'+data_type)
-        
-        messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
-        return redirect('index')
+            # gera caminho canônico da base ISIS
+            full_isis_path = os.path.join(isis_path, data_type, data_type)
 
-    return render(request, 'migration/user_migrate_title.html', context={'isis_path' : os.environ['BASES_PATH']})
+            # registra evento de migração
+            ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_ISIS_DB, {'path': full_isis_path})
+
+            # inica task para efetuar migração
+            task_migrate_isis_db.delay(data_type, full_isis_path)
+
+            input_path = full_isis_path
+
+        if input_path:
+            # cria registro de pacote migrado
+            controller.add_migration_package(request.user, datetime.utcnow(), input_path)
+
+            # informa mensagem de sucesso
+            messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
+
+            # atualiza estado do evento de migração
+            controller.update_event(ev, {'status': Event.Status.COMPLETED})
+
+        return redirect('event_list')
+
+    return render(request, 'migration/isis_db.html', context={'isis_path': dsm_migration.configuration.BASES_PATH})
 
 
 @login_required(login_url='login')

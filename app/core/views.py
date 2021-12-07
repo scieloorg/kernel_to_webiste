@@ -52,14 +52,6 @@ import dsm.ingress as dsm_ingress
 import dsm.migration as dsm_migration
 import math
 import os
-from opac_schema.v1.models import Issue as OPACIssue
-from opac_schema.v2.models import ArticleFiles
-from dsm.extdeps.isis_migration.migration_models import ISISDocument
-from dsm.extdeps.isis_migration.isis_cmds import get_document_isis_db
-
-from core.models import MigrationPackage
-from datetime import datetime
-import os, math
 
 
 ###################
@@ -519,28 +511,35 @@ def migrate_search_pending_documents(request):
         setattr(paginator, 'has_previous', has_previous)
         setattr(paginator, 'next_page_number', next_page_number)
         setattr(paginator, 'previous_page_number', previous_page_number)
+
         if pub_year:
             setattr(paginator, 'pub_year', pub_year)
             url += 'pub_year='+pub_year+'&'
+
         if acron:
             setattr(paginator, 'acron', acron)
             url += 'acron='+acron+'&'
+
         if volume:
             setattr(paginator, 'volume', volume)
             url += 'volume='+volume+'&'
+
         if url != '?':
             setattr(search, 'exists', False)
+
         setattr(paginator, 'url', url)
 
     if request.method == 'POST':
-        #Obtiene documentos seleccionadas
-        print(request.POST.get('migrate'))
+        # obtiene documentos seleccionadas
         migrate = []
+
         if request.POST.get('migrate') == "select":
             migrate = request.POST.getlist('document')
+
         if request.POST.get('migrate') == "this":
             for p in pending_documents:
                 migrate.append(p.id)
+
         if request.POST.get('migrate') == "all":
             for f in filter_documents:
                 migrate.append(f.id)

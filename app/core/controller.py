@@ -1,6 +1,15 @@
 from datetime import datetime
-from django.contrib.auth.models import Group, User
-from core.models import GROUP_MANAGER, SCOPE_ALL_USERS, IngressPackage, Event
+from django.contrib.auth.models import (
+    Group,
+    User,
+)
+from core.models import (
+    GROUP_MANAGER,
+    SCOPE_ALL_USERS,
+    IngressPackage,
+    MigrationPackage,
+    Event,
+)
 
 
 def _is_privileged_user(user):

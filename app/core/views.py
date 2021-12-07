@@ -382,9 +382,25 @@ def task_update_status(request):
     return JsonResponse(json_data)
 
 
-##################
-# migrate views #
-##################
+###################
+# migration views #
+###################
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_migration'])
+def migrate_identify_documents(request):
+    # registra evento de identificação
+    ev = controller.add_event(request.user, Event.Name.IDENTIFY_DOCUMENTS_TO_MIGRATE)
+
+    # identifica documentos para migrar
+    task_migrate_identify_documents.delay()
+
+    controller.update_event(ev, {'status': Event.Status.COMPLETED})
+
+    # informa mensagem de sucesso
+    messages.success(request, _('Task submitted successfully'), extra_tags='alert alert-success')
+
+    return redirect('event_list')
+
 
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_migration'])

@@ -33,11 +33,12 @@ tracking = [
     path('task/update_status/', views.task_update_status, name='task_update_status'),
 ]
 
-migrate = [
-    path('migration/journals/list', views.migrate_pending_documents_by_journal, name='pending_documents_by_journal'),
-    path('migration/documents/list', views.migrate_search_pending_documents, name='search_pending_documents'),
-    path('migration/issue/list', views.migrate_issue_list_page, name='issue_list'),
-    path('migration/title', views.migrate_title_page, name='migrate_title'),
+migration = [
+    path('migration/documents/identify', views.migrate_identify_documents, name='migrate_identify_documents_list'),
+    path('migration/documents/list', views.migrate_search_pending_documents_page, name='migrate_search_pending_documents'),
+    path('migration/journals/list', views.migrate_pending_documents_by_journal_list_page, name='migrate_pending_documents_by_journal_list'),
+    path('migration/issue/list', views.migrate_pending_documents_by_issue_list_page, name='migrate_pending_documents_by_issue_list'),
+    path('migration/isis_db', views.migrate_isis_db_page, name='migrate_isis_db'),
 ]
 
-urlpatterns = general + user + ingress + journal +  tracking + migrate
+urlpatterns = general + user + ingress + journal +  tracking + migration

@@ -37,62 +37,49 @@ def task_migrate_isis_db(data_type, file_path, file_id=None):
            results.append(r)
 
    return results
+
+
+@shared_task
 def task_migrate_acron(acronym):
-    result = []
+    results = []
+
     if acronym:
         acron = acronym.split(",")
         for a in acron:
             for r in dsm_migration.migrate_acron(a):
-                current_task.update_state(
-                    state='PROGRESS',
-                    meta={
-                        'status': 'LOADING...',
-                    })
-                result.append('Finish ' + a)
+                current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+                results.append('Finish ' + a)
 
-    return result
+    return results
 
 
 @shared_task
 def task_migrate_documents(acronym=None, volume=None, pub_year=None, pid=None):
-    result = None
+    results = None
 
     if pid:
-        result = []
+        results = []
         for p in pid.split(","):
             for r in dsm_migration.migrate_document(p):
-                current_task.update_state(
-                    state='PROGRESS',
-                    meta={
-                        'status': 'LOADING...',
-                    })
-                result.append('Finish ' + str(p))
+                current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+                results.append('Finish ' + str(p))
 
     if volume:
-        result = []
+        results = []
         for v in volume.split(","):
             total_documents = dsm_migration.list_documents_to_migrate(acronym, v, "", "", "", items_per_page=1000000, page_number=1, status="")
             for d in total_documents:
                 for r in dsm_migration.migrate_document(d):
-                    current_task.update_state(
-                        state='PROGRESS',
-                        meta={
-                            'status': 'LOADING...',
-                        })
-                    result.append('Finish ' + str(d))
+                    current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+                    results.append('Finish ' + str(d))
 
     if pub_year:
-        result = []
+        results = []
         for y in pub_year.split(","):
             total_documents = dsm_migration.list_documents_to_migrate(acronym, "", y, "", "", items_per_page=1000000, page_number=1, status="")
             for d in total_documents:
                 for r in dsm_migration.migrate_document(d):
-                    current_task.update_state(
-                        state='PROGRESS',
-                        meta={
-                            'status': 'LOADING...',
-                        })
-                    result.append('Finish ' + str(d))
+                    current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+                    results.append('Finish ' + str(d))
 
-    return result
-
+    return results

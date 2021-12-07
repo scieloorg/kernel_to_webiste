@@ -20,6 +20,23 @@ def task_get_package_uri_by_pid(pid):
 
 
 @shared_task
+@shared_task
+def task_migrate_isis_db(data_type, file_path, file_id=None):
+   results = []
+
+   fs = FileSystemStorage(settings.MEDIA_INGRESS_TEMP)
+
+   if file_id:
+       for r in dsm_migration.migrate_isis_db(data_type, file_path):
+           current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...', })
+           results.append(r)
+       fs.delete(file_id)
+   else:
+       for r in dsm_migration.migrate_isis_db(data_type, file_path):
+           current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+           results.append(r)
+
+   return results
 def task_migrate_acron(acronym):
     result = []
     if acronym:

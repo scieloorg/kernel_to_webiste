@@ -200,7 +200,13 @@ __Make sure PostgreSQL and MongoDB databases are in the same network as the spf 
 ---
 
 ## List of environment variables
-
+- BASES_PATH: Isis Bases root directory
+- BASES_PDF_PATH: Isis Base "PDF"
+- BASES_TRANSLATION_PATH: Isis Base "Translation"
+- BASES_WORK_PATH: Isis Base "Work"
+- BASES_XML_PATH: Isis Base "XML"
+- CISIS_PATH: CISIS root directory
+- HTDOCS_IMG_REVISTAS_PATH: HTDOCS Image directory
 - CELERY_BROKER_URL: RabbitMQ address (`pyamqp://user:pass@host:port`)
 - DATABASE_CONNECT_URL: OPAC/Kernel database (MongoDB) string connection (`mongodb://user:pass@host:port/opac`)
 - DJANGO_ALLOWED_HOSTS: `localhost;127.0.0.1;[::1]`

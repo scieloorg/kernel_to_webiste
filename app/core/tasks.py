@@ -1,6 +1,9 @@
 from celery import shared_task, current_task
+from django.core.files.storage import FileSystemStorage
+from spf import settings
 
 import dsm.ingress as dsm_ingress
+import dsm.migration as dsm_migration
 
 
 @shared_task

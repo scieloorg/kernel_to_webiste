@@ -73,11 +73,12 @@ def get_event_from_id(event_id):
     return Event.objects.get(id=event_id)
 
 
+def add_event(user, event_name, annotation=None, status=None):
     event = Event()
     event.user = user
     event.name = event_name
     event.annotation = annotation
-    event.status = Event.Status.INITIATED
+    event.status = status or Event.Status.INITIATED
     event.save()
 
     return event
@@ -92,12 +93,12 @@ def update_event(event, args):
     return event
 
 
-def add_ingress_package(user, event_datetime, package_name):
+def add_ingress_package(user, event_datetime, package_name, status):
     ip = IngressPackage()
     ip.user = user
     ip.datetime = event_datetime
     ip.package_name = package_name
-    ip.status = IngressPackage.Status.RECEIVED
+    ip.status = status or IngressPackage.Status.RECEIVED
     ip.save()
 
     return ip

@@ -35,6 +35,10 @@ def get_user_from_username(username):
     return User.objects.get(username=username)
 
 
+def get_user_from_id(user_id):
+    return User.objects.get(id=user_id)
+
+
 def get_users(include_superuser=False):
     return User.objects.filter(is_superuser=include_superuser)
 
@@ -65,7 +69,10 @@ def get_groups():
     return Group.objects.all()
 
 
-def add_event(user, event_name, annotation=None):
+def get_event_from_id(event_id):
+    return Event.objects.get(id=event_id)
+
+
     event = Event()
     event.user = user
     event.name = event_name

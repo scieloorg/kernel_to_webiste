@@ -15,7 +15,9 @@ from core.tasks import (
     task_migrate_documents,
     task_migrate_identify_documents,
     task_migrate_isis_db,
+    task_ingress_package,
 )
+from core.utils import package_name_is_valid
 
 from datetime import datetime
 
@@ -43,7 +45,6 @@ from django.utils.translation import gettext as _
 from dsm.extdeps.isis_migration.migration_models import ISISDocument
 
 from opac_schema.v1.models import Issue as OPACIssue
-from opac_schema.v1.models import Journal as OPACJournal
 
 from spf import settings
 

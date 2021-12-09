@@ -294,7 +294,7 @@ def ingress_package_download_page(request):
 
     # Inicializa task para o PID informado e redireciona para a própria página aguardando resultado
     elif pid:
-        job = task_get_package_uri_by_pid.delay(pid)
+        job = task_get_package_uri_by_pid.delay(pid, request.user.id)
         return HttpResponseRedirect(reverse('ingress_package_download') + '?job=' + job.id + '&pid=' + pid)
 
     # Abre template pela primeira vez para digitar PID
@@ -335,7 +335,7 @@ def journal_list_page(request):
 @login_required(login_url='login')
 def event_list_page(request):
     request_scope = request.GET.get('scope', '')
-    event_list = controller.get_events_from_user_and_scope(request.user, request_scope)
+    event_list = controller.get_events_from_user_and_scope(request.user, request_scope).order_by('-datetime')
 
     paginator = Paginator(event_list, 25)
     page_number = request.GET.get('page')

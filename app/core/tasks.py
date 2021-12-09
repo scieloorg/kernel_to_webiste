@@ -1,6 +1,8 @@
 from celery import shared_task, current_task
 from django.core.files.storage import FileSystemStorage
 from spf import settings
+from core import controller
+from core.models import Event, IngressPackage
 
 import dsm.ingress as dsm_ingress
 import dsm.migration as dsm_migration

@@ -9,7 +9,20 @@ import dsm.migration as dsm_migration
 
 
 @shared_task
-def task_get_package_uri_by_pid(pid):
+def task_get_package_uri_by_pid(pid, user_id):
+    # obtém objeto User
+    user = controller.get_user_from_id(user_id)
+
+    # cria evento de pesquisa por pacote
+    ev = controller.add_event(
+        user,
+        Event.Name.RETRIEVE_PACKAGE,
+        annotation={
+            'pid': pid,
+        }
+    )
+
+    # obtém o {uri, name} de todos os pacotes existentes para o PID informado
     result = dsm_ingress.get_package_uri_by_pid(pid)
 
     current_task.update_state(
@@ -17,6 +30,20 @@ def task_get_package_uri_by_pid(pid):
         meta={
             'status': 'LOADING...',
         })
+
+    if result['errors']:
+        # houve alguma falha. atualiza status com valor FAILED e conteúdo da falha ocorrida
+        controller.update_event(
+            ev,
+            {
+                'status': Event.Status.FAILED,
+                'annotation': result,
+            }
+        )
+    else:
+
+        # evento ocorreu com sucesso. atualiza status com valor COMPLETED
+        controller.update_event(ev, {'status': Event.Status.COMPLETED})
 
     return result
 

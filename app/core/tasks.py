@@ -81,6 +81,10 @@ def task_ingress_package(file_path, pkg_name, user_id):
             }
         )
 
+    # remove da pasta temporária o arquivo enviado
+    fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
+    fs.delete(file_path)
+
     # devolve caminho
     return file_path
 

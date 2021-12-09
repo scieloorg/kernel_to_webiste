@@ -238,46 +238,37 @@ def user_profile_edit_page(request):
 def ingress_package_upload_page(request):
     if request.method == 'POST':
         file_input = request.FILES.get('package_file')
-        # registra evento de envio de pacote novo
-        ev = controller.add_event(request.user, Event.Name.UPLOAD_PACKAGE, {'file_name': file_input.name})
 
         if file_input:
             fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
 
-            # envia arquivo para diretório temporário
-            pkg_name = fs.save(file_input.name, file_input)
+            if package_name_is_valid(file_input.name):
+                # envia arquivo para diretório temporário
+                pkg_name = fs.save(file_input.name, file_input)
 
-            # envia arquivo ao MinIO
-            try:
                 file_path = os.path.join(fs.base_location, pkg_name)
-                ingress_results = dsm_ingress.upload_package(file_path)
 
-                if len(ingress_results['errors']) > 0:
-                    messages.error(request,
-                                   _('Errors ocurred: %s') % ingress_results['errors'],
-                                   extra_tags='alert-danger')
-                    # registra o evento como completado com falha
-                    ev = controller.update_event(ev, {'status': Event.Status.FAILED})
-                else:
-                    for d in ingress_results['docs']:
-                        messages.success(request,
-                                         _('Package (%(name)s, %(id)s) was added')
-                                         % {'name': d['name'], 'id': d['id']},
-                                         extra_tags='alert-success')
-                    # registra o evento como completado com sucesso
-                    ev = controller.update_event(ev, {'status': Event.Status.COMPLETED})
+                # envia arquivo ao MinIO
+                task_ingress_package.delay(file_path, pkg_name, request.user.id)
 
-                    # registra o pacote enviado
-                    controller.add_ingress_package(request.user, ev.datetime, pkg_name)
-            except ValueError:
-                messages.error(request,
-                               pkg_name + _(' does not have a valid format. Please provide a zip file.'),
-                               extra_tags='alert-danger')
-                # registra o evento como completado com falha
-                ev = controller.update_event(ev, {'status': Event.Status.FAILED})
+                emphasis = True
+            else:
+                emsg = file_input.name + _(' does not have a valid format. Please provide a zip file.')
+                messages.error(request, emsg, extra_tags='alert-danger')
 
-            # remove arquivo de diretório temporário
-            fs.delete(pkg_name)
+                # registra evento de arquivo inválido
+                ev = controller.add_event(
+                    user=request.user,
+                    event_name=Event.Name.UPLOAD_PACKAGE,
+                    annotation={
+                        'error': emsg,
+                    },
+                    status=Event.Status.FAILED,
+                )
+
+                emphasis = False
+
+            return render(request, 'tracking/event_list.html', context={'emphasis': emphasis})
 
     return render(request, 'ingress/package_upload.html')
 

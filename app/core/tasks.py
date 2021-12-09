@@ -49,6 +49,43 @@ def task_get_package_uri_by_pid(pid, user_id):
 
 
 @shared_task
+def task_ingress_package(file_path, pkg_name, user_id):
+    # obtém objeto User
+    user = controller.get_user_from_id(user_id)
+
+    try:
+        # registra evento iniciado
+        ev = controller.add_event(user, Event.Name.UPLOAD_PACKAGE, {'file_name': file_path})
+
+        # envia pacote ao MinIO e guarda saída em results
+        results = dsm_ingress.upload_package(file_path)
+
+        # evento ocorreu com sucesso. atualiza status com valor COMPLETED
+        controller.update_event(ev, {'status': Event.Status.COMPLETED})
+
+        # registra o pacote enviado
+        controller.add_ingress_package(
+            user=user,
+            event_datetime=ev.datetime,
+            package_name=pkg_name,
+            status=IngressPackage.Status.RECEIVED
+        )
+
+    except ValueError as e:
+        # evento falhou. atualiza status com valor FAILED
+        controller.update_event(
+            ev,
+            {
+                'status': Event.Status.FAILED,
+                'annotation': e.message,
+            }
+        )
+
+    # devolve caminho
+    return file_path
+
+
+@shared_task
 def task_migrate_identify_documents():
     current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...'})
 

@@ -251,7 +251,6 @@ def ingress_package_upload_page(request):
                 # envia arquivo ao MinIO
                 task_ingress_package.delay(file_path, pkg_name, request.user.id)
 
-                emphasis = True
             else:
                 emsg = file_input.name + _(' does not have a valid format. Please provide a zip file.')
                 messages.error(request, emsg, extra_tags='alert-danger')
@@ -266,9 +265,7 @@ def ingress_package_upload_page(request):
                     status=Event.Status.FAILED,
                 )
 
-                emphasis = False
-
-            return render(request, 'tracking/event_list.html', context={'emphasis': emphasis})
+            return redirect('event_list')
 
     return render(request, 'ingress/package_upload.html')
 

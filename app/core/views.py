@@ -240,6 +240,9 @@ def ingress_package_upload_page(request):
         file_input = request.FILES.get('package_file')
 
         if file_input:
+            # registra evento iniciado
+            ev = controller.add_event(request.user, Event.Name.UPLOAD_PACKAGE, {'file_name': file_input.name})
+
             fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
 
             if package_name_is_valid(file_input.name):
@@ -249,20 +252,19 @@ def ingress_package_upload_page(request):
                 file_path = os.path.join(fs.base_location, pkg_name)
 
                 # envia arquivo ao MinIO
-                task_ingress_package.delay(file_path, pkg_name, request.user.id)
+                task_ingress_package.delay(file_path, pkg_name, request.user.id, ev.id)
 
             else:
                 emsg = file_input.name + _(' does not have a valid format. Please provide a zip file.')
                 messages.error(request, emsg, extra_tags='alert-danger')
 
                 # registra evento de arquivo inválido
-                ev = controller.add_event(
-                    user=request.user,
-                    event_name=Event.Name.UPLOAD_PACKAGE,
-                    annotation={
-                        'error': emsg,
-                    },
-                    status=Event.Status.FAILED,
+                controller.update_event(
+                    ev,
+                    {
+                        'status': Event.Status.FAILED,
+                        'annotation': {'error': emsg},
+                    }
                 )
 
             return redirect('event_list')

@@ -49,14 +49,14 @@ def task_get_package_uri_by_pid(pid, user_id):
 
 
 @shared_task
-def task_ingress_package(file_path, pkg_name, user_id):
+def task_ingress_package(file_path, pkg_name, user_id, event_id):
     # obtém objeto User
     user = controller.get_user_from_id(user_id)
 
-    try:
-        # registra evento iniciado
-        ev = controller.add_event(user, Event.Name.UPLOAD_PACKAGE, {'file_name': file_path})
+    # obtém objeto Event
+    ev = controller.get_event_from_id(event_id)
 
+    try:
         # envia pacote ao MinIO e guarda saída em results
         results = dsm_ingress.upload_package(file_path)
 

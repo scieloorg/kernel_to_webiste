@@ -1,6 +1,8 @@
 from django.conf.urls import url
+from django.views.i18n import JavaScriptCatalog
 from django.urls import path
 from . import views
+
 
 
 general = [
@@ -43,4 +45,6 @@ migration = [
     path('migration/isis_db', views.migrate_isis_db_page, name='migrate_isis_db'),
 ]
 
-urlpatterns = general + user + ingress + journal +  tracking + migration
+javascript_catalog = [path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog')]
+
+urlpatterns = general + user + ingress + journal +  tracking + migration + javascript_catalog

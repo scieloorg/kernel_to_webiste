@@ -66,7 +66,7 @@ function hideLoader(loader, button){
 }
 
 function setEventStatusCompleted(object){
-    object.innerHTML = 'Completed';
+    object.innerHTML = gettext('Completed');
     object.classList.remove('bg-warning');
     object.classList.add('bg-success');
 }

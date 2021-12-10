@@ -1,3 +1,4 @@
+from django.conf.urls import url
 from django.urls import path
 from . import views
 
@@ -29,6 +30,7 @@ journal = [
 ]
 
 tracking = [
+    url(r'^event/(?P<eid>[\d-]+)/$', views.event_status, name='event'),
     path('event/list/', views.event_list_page, name='event_list'),
     path('task/update_status/', views.task_update_status, name='task_update_status'),
 ]

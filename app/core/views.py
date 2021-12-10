@@ -340,7 +340,33 @@ def event_list_page(request):
     page_number = request.GET.get('page')
     event_obj = paginator.get_page(page_number)
 
-    return render(request, 'tracking/event_list.html', context={'event_obj': event_obj, 'scope': request_scope})
+    return render(request, 'tracking/event_list.html', context={'event_obj': event_obj, 'scope': request_scope, 'autocheck_status_update': 1})
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_groups=['manager', 'operator_ingress', 'operator_migration', 'quality_analyst'])
+def event_status(request, eid):
+    try:
+        event_id = int(eid)
+        event = controller.get_event_from_id(event_id)
+
+        user_groups_names = controller.get_groups_names_from_user(request.user)
+
+        if request.user.id == event.user_id or 'manager' in user_groups_names:
+            json_data = {
+                "id": event.id,
+                "status": event.status,
+            }
+
+            return JsonResponse(json_data)
+
+        else:
+            return JsonResponse({
+                'error': _('User %s are not allowed to see the status of the event %s' % (request.user.username, event_id))
+            })
+
+    except:
+        return JsonResponse({'error': _('No results were found')})
 
 
 @login_required(login_url='login')

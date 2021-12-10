@@ -64,3 +64,9 @@ function hideLoader(loader, button){
     loader.style.display = 'none';
     button.removeAttribute('disabled');
 }
+
+function setEventStatusCompleted(object){
+    object.innerHTML = 'Completed';
+    object.classList.remove('bg-warning');
+    object.classList.add('bg-success');
+}

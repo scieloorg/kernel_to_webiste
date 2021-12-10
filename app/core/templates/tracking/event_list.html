@@ -38,7 +38,7 @@ SciELO Publishing Framework - {% trans 'Events' %}
                     {% else %}
                         <td></td>
                     {% endif %}
-                    <td><span class="badge {{ ev.status|to_css_event_status_style }}">{{ ev.get_status_display }}</span></td>
+                    <td><span id="event_{{ ev.id }}_{{ ev.status }}" class="badge {{ ev.status|to_css_event_status_style }}">{{ ev.get_status_display }}</span></td>
                     <td>{{ ev.datetime }}</td>
                 </tr>
             {% endfor %}

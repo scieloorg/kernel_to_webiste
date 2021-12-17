@@ -8,8 +8,8 @@ import dsm.ingress as dsm_ingress
 import dsm.migration as dsm_migration
 
 
-@shared_task
-def task_get_package_uri_by_pid(pid, user_id):
+@app.task(bind=True,  max_retries=3)
+def task_get_package_uri_by_pid(self, pid, user_id):
     # obtém objeto User
     user = controller.get_user_from_id(user_id)
 
@@ -25,7 +25,7 @@ def task_get_package_uri_by_pid(pid, user_id):
     # obtém o {uri, name} de todos os pacotes existentes para o PID informado
     result = dsm_ingress.get_package_uri_by_pid(pid)
 
-    current_task.update_state(
+    app.current_task.update_state(
         state='PROGRESS',
         meta={
             'status': 'LOADING...',
@@ -91,7 +91,7 @@ def task_ingress_package(self, file_path, pkg_name, user_id, event_id):
 
 @app.task(bind=True,  max_retries=3)
 def task_migrate_identify_documents(self):
-    current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...'})
+    app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...'})
 
     results = []
     for i in dsm_migration.identify_documents_to_migrate():
@@ -108,12 +108,12 @@ def task_migrate_isis_db(self, data_type, file_path, file_id=None):
 
    if file_id:
        for r in dsm_migration.migrate_isis_db(data_type, file_path):
-           current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...', })
+           app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...', })
            results.append(r)
        fs.delete(file_id)
    else:
        for r in dsm_migration.migrate_isis_db(data_type, file_path):
-           current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+           app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
            results.append(r)
 
    return results
@@ -127,7 +127,7 @@ def task_migrate_acron(self, acronym):
         acron = acronym.split(",")
         for a in acron:
             for r in dsm_migration.migrate_acron(a):
-                current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+                app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
                 results.append('Finish ' + a)
 
     return results
@@ -141,7 +141,7 @@ def task_migrate_documents(self, acronym=None, volume=None, pub_year=None, pid=N
         results = []
         for p in pid.split(","):
             for r in dsm_migration.migrate_document(p):
-                current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+                app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
                 results.append('Finish ' + str(p))
 
     if volume:
@@ -150,7 +150,7 @@ def task_migrate_documents(self, acronym=None, volume=None, pub_year=None, pid=N
             total_documents = dsm_migration.list_documents_to_migrate(acronym, v, "", "", "", items_per_page=1000000, page_number=1, status="")
             for d in total_documents:
                 for r in dsm_migration.migrate_document(d):
-                    current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+                    app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
                     results.append('Finish ' + str(d))
 
     if pub_year:
@@ -159,7 +159,7 @@ def task_migrate_documents(self, acronym=None, volume=None, pub_year=None, pid=N
             total_documents = dsm_migration.list_documents_to_migrate(acronym, "", y, "", "", items_per_page=1000000, page_number=1, status="")
             for d in total_documents:
                 for r in dsm_migration.migrate_document(d):
-                    current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+                    app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
                     results.append('Finish ' + str(d))
 
     return results

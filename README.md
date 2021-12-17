@@ -66,9 +66,6 @@ python manage.py makemigrations
 
 # Migrate database (this operation will create all the necessary tables)
 python manage.py migrate
-
-# Create the superuser (take note of the credentials)
-python manage.py createsuperuser
 ```
 
 __Add default groups to the application database__
@@ -84,6 +81,9 @@ __Add example users to the application database (only in development environment
 # Add example users to the application database
 python manage.py loaddata user
 ```
+
+__Override superuser credentials__
+python manage.py createsuperuser
 
 __Run the application__
 

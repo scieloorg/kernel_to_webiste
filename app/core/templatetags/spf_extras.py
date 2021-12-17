@@ -60,3 +60,9 @@ def to_css_ingress_package_status_style(ingress_package_status):
         return 'bg-success'
     elif ingress_package_status == 'F':
         return 'bg-danger'
+
+@register.filter(name='to_css_migration_status_style')
+def to_css_migration_status_style(migration_status):
+    if migration_status == 'pending_migration':
+        return 'bg-secondary'
+    return 'bg-danger'

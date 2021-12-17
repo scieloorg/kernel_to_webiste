@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load spf_extras %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Search pending documents' %}
+{% endblock %}
+
+{% block content %}
+{% if search.exists %}
+    <h1 class="h4 pt-5">{% trans 'Search pending documents' %}</h1>
+    <div class="row my-3">
+        <div class="col-sm-5 mb-3">
+            <div class="card my-3">
+                <div class="card-header">
+                    {% trans 'Search' %}
+                </div>
+                <div class="card-body">
+                    <form class="bg-white form-user">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="issn" class="form-label">{% trans 'ISSN' %}</label>
+                            <div class="input-group mb-3">
+                                <input type="text" name="issn" id="issn" class="form-control" placeholder="{% trans 'Enter an ISSN' %}" value="{{ issn }}">
+                                <span class="input-group-text">AND</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="year" class="form-label">{% trans 'Year' %}</label>
+                            <div class="input-group mb-3">
+                                <input type="text" name="year" id="year" class="form-control" placeholder="Enter a year">
+                                <span class="input-group-text">OR</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="pid" class="form-label">{% trans 'Document identifier' %}</label>
+                            <div class="input-group mb-3">
+                                <input type="text" name="pid" id="pid" class="form-control" placeholder="{% trans 'Enter a document identifier' %}" value="{{ pid }}">
+                                <span class="input-group-text"">OR</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">{% trans 'Search' %}</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <h2 class="h4 pt-5">{% trans 'Pending documents' %}</h1>
+{% endif %}
+
+{% if documents_obj %}
+    {% if search.exists %}
+        <h2 class="h4">{% trans 'Results' %}</h1>
+    {% endif %}
+    <div class="row justify-content-center my-3">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">{% trans 'PID' %}</th>
+                        <th scope="col">{% trans 'Created' %}</th>
+                        <th scope="col" class="text-center">{% trans 'Isis updated date' %}</th>
+                        <th scope="col" class="text-center">{% trans 'Status' %}</th>
+                        <th scope="col">{% trans 'Updated' %}</th>
+                        <th scope="col" class="text-center">{% trans 'Migrate?' %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for doc in documents_obj %}
+                    <tr>
+                        <td>{{ documents_obj.start_index|add:forloop.counter0 }}</td>
+                        <td>{{ doc.id }}</td>
+                        <td>{{ doc.created }}</td>
+                        <td class="text-center" >{{ doc.isis_updated_date }}</td>
+                        <td class="text-center">
+                            <span class="badge {{ doc.status|to_css_migration_status_style }}">{{ doc.status }}</span>
+                        </td>
+                        <td>{{ doc.updated }}</td>
+                        <td class="text-center" ><input type="checkbox" name="document" value="{{ doc.id }}"></td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <button type="submit" name="migrate" value="select" class="btn btn-primary">{% trans 'Migrate selected documents' %}</button>
+            <button type="submit" name="migrate" value="this" class="btn btn-primary mx-2">{% trans 'Migrate documents (this page)' %}</button>
+            <button type="submit" name="migrate" value="all" class="btn btn-primary">{% trans 'Migrate all documents (all pages)' %}</button>
+        </form>
+        </div>
+    </div>
+{% endif %}
+
+{% if documents_obj %}
+<nav aria-label="Journal navigation">
+    <ul class="pagination justify-content-center">
+        {% if paginator.exists %}
+
+            {% if paginator.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="{{ paginator.url }}page=1">&laquo; {% trans 'First' %}</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link"  href="{{ paginator.url }}page={{ paginator.previous_page_number }}">{% trans 'Previous' %}</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item">
+                <a class="page-link">Page {{ paginator.page_number }} of {{ paginator.num_pages }}</a>
+            </li>
+
+            {% if paginator.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ paginator.url }}page={{ paginator.next_page_number }}">{% trans 'Next' %}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ paginator.url }}page={{ paginator.num_pages }}">{% trans 'Last' %} &raquo;</a>
+            </li>
+            {% endif %}
+
+        {% else %}
+
+            {% if documents_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="{{ search.url }}page=1">&laquo; {% trans 'First' %}</a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link"  href="{{ search.url }}page={{ documents_obj.previous_page_number }}">{% trans 'Previous' %}</a>
+            </li>
+            {% endif %}
+
+            {% if documents_obj %}
+            <li class="page-item">
+                <a class="page-link">Page {{ documents_obj.number }} of {{ documents_obj.paginator.num_pages }}</a>
+            </li>
+            {% endif %}
+
+            {% if documents_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{{ search.url }}page={{ documents_obj.next_page_number }}">{% trans 'Next' %}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ search.url }}page={{ documents_obj.paginator.num_pages }}">{% trans 'Last' %} &raquo;</a>
+            </li>
+            {% endif %}
+
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}

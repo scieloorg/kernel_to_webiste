@@ -25,8 +25,14 @@ class IngressPackage(models.Model):
     status = models.CharField(max_length=1, choices=Status.choices, blank=False, null=False)
 
 
-class MigratePackage(models.Model):
-    ...
+class MigrationPackage(models.Model):
+    class Status(models.TextChoices):
+        RECEIVED = 'R', _('Received')
+
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    path = models.CharField(max_length=200)
+    datetime = models.DateTimeField(null=True)
+    status = models.CharField(max_length=1, choices=Status.choices, blank=False, null=False)
 
 
 class Event(models.Model):
@@ -41,6 +47,11 @@ class Event(models.Model):
         START_VALIDATION = 'SV', _('Start validation')
         FINALIZE_VALIDATION = 'FV', _('Finalize validation')
         CHANGE_USER_GROUPS = 'CUG', _('Change user groups')
+        IDENTIFY_DOCUMENTS_TO_MIGRATE =  'MID', _('Identify documents to migrate')
+        START_MIGRATION_BY_ID_FILE = 'MSF', _('Start migration by id file')
+        START_MIGRATION_BY_ISIS_DB = 'MSD', _('Start migration by ISIS database')
+        START_MIGRATION_BY_ACRONYM = 'MAC', _('Start migration by acronym')
+        START_MIGRATION_BY_AVY = 'MVY', _('Start migration by volume or year')
 
     # quem realiza o evento
     user = models.ForeignKey(User, on_delete=models.PROTECT)

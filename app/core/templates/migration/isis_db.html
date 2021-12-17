@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Migrate database' %}
+{% endblock %}
+
+{% block content %}
+<h1 class="h4 pt-5">{% trans 'Migrate database' %}</h1>
+
+<div class="row my-3">
+    <div class="col-sm-5 mb-3">
+        <div class="card my-3">
+            <div class="card-header">
+                {% trans 'Migrate database by ID file or ISIS database' %}
+            </div>
+            <div class="card-body">
+                <form class="bg-white form-user" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_file" class="form-label">{% trans 'Choose ID file' %}</label>
+                        <input class="form-control" type="file" name="id_file" id="id_file">
+                    </div>
+                    <div class="strike my-4">
+                        <span>{% trans 'OR' %}</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="isis_path" class="form-label">{% trans 'Use the default ISIS database path' %}</label>
+                        <input class="form-control" type="text" value="{{ isis_path }}" name="isis_path" id="isis_path" readonly="readonly">
+                    </div>
+                    <div class="mb-3">
+                        <label for="data_type" class="form-label">{% trans 'Choose data type' %}</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="data_type" value="title" id="radioTitle" checked>
+                            <label class="form-check-label" for="radioTitle">
+                                {% trans 'Title data' %}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="data_type" value="issue" id="radioIssue">
+                            <label class="form-check-label" for="radioIssue">
+                              {% trans 'Issue data' %}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="data_type" value="artigo" id="radioArticle" disabled>
+                            <label class="form-check-label" for="radioArticle">
+                                {% trans 'Article data (it can be very time consuming)' %}
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">{% trans 'Migrate' %}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for message in messages %}
+    <div class="d-flex justify-content-center">
+        <div class="{{ message.tags }}" role="alert">
+            {{ message }}
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}
+</div>

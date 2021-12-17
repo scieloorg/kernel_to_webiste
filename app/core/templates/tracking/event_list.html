@@ -38,7 +38,7 @@ SciELO Publishing Framework - {% trans 'Events' %}
                     {% else %}
                         <td></td>
                     {% endif %}
-                    <td><span class="badge {{ ev.status|to_css_event_status_style }}">{{ ev.get_status_display }}</span></td>
+                    <td><span id="event_{{ ev.id }}_{{ ev.status }}" class="badge {{ ev.status|to_css_event_status_style }}">{{ ev.get_status_display }}</span></td>
                     <td>{{ ev.datetime }}</td>
                 </tr>
             {% endfor %}
@@ -77,4 +77,51 @@ SciELO Publishing Framework - {% trans 'Events' %}
 </nav>
 {% endif %}
 
+<script type="text/javascript">
+    var autocheck = '{{ autocheck_status_update }}' == 1;
+
+    let requests = {};
+    let timers = {};
+    var events = [];
+
+    $("span[id^='event_']").each(function(){
+        els = this.id.split('_')
+        if (els[2] == 'I'){
+            events.push(this.id);
+            requests[els[1]] = false;
+        }
+    });
+
+
+    function checkEventStatus(event){
+        if(!requests[event]){
+            let event_db_id = event.split("_")[1];
+            let event_tag_id = "#" + event;
+
+            $.ajax({
+                url: '/event/' + event_db_id,
+                type: 'GET',
+                success: function(result) {
+                    if (result['status'] == 'C'){
+                        obj = $(event_tag_id)[0];
+                        setEventStatusCompleted(obj);
+
+                        requests[event] = true;
+                        window.clearTimeout(timers[event]);
+                    }
+                }
+            });
+        }
+    }
+
+    if(autocheck){
+        for (let i = 0; i < events.length; ++i){
+            let ev = events[i];
+
+            i_interval = setInterval(function(){checkEventStatus(ev)}, 2000);
+            requests[ev] = false;
+            timers[ev] = i_interval;
+        }
+    }
+</script>
 {% endblock %}

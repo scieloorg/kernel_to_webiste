@@ -66,9 +66,6 @@ python manage.py makemigrations
 
 # Migrate database (this operation will create all the necessary tables)
 python manage.py migrate
-
-# Create the superuser (take note of the credentials)
-python manage.py createsuperuser
 ```
 
 __Add default groups to the application database__
@@ -84,6 +81,9 @@ __Add example users to the application database (only in development environment
 # Add example users to the application database
 python manage.py loaddata user
 ```
+
+__Override superuser credentials__
+python manage.py createsuperuser
 
 __Run the application__
 
@@ -200,7 +200,13 @@ __Make sure PostgreSQL and MongoDB databases are in the same network as the spf 
 ---
 
 ## List of environment variables
-
+- BASES_PATH: Isis Bases root directory
+- BASES_PDF_PATH: Isis Base "PDF"
+- BASES_TRANSLATION_PATH: Isis Base "Translation"
+- BASES_WORK_PATH: Isis Base "Work"
+- BASES_XML_PATH: Isis Base "XML"
+- CISIS_PATH: CISIS root directory
+- HTDOCS_IMG_REVISTAS_PATH: HTDOCS Image directory
 - CELERY_BROKER_URL: RabbitMQ address (`pyamqp://user:pass@host:port`)
 - DATABASE_CONNECT_URL: OPAC/Kernel database (MongoDB) string connection (`mongodb://user:pass@host:port/opac`)
 - DJANGO_ALLOWED_HOSTS: `localhost;127.0.0.1;[::1]`

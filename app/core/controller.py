@@ -1,6 +1,15 @@
 from datetime import datetime
-from django.contrib.auth.models import Group, User
-from core.models import GROUP_MANAGER, SCOPE_ALL_USERS, IngressPackage, Event
+from django.contrib.auth.models import (
+    Group,
+    User,
+)
+from core.models import (
+    GROUP_MANAGER,
+    SCOPE_ALL_USERS,
+    IngressPackage,
+    MigrationPackage,
+    Event,
+)
 
 
 def _is_privileged_user(user):
@@ -24,6 +33,10 @@ def get_events_from_user_and_scope(user, scope):
 
 def get_user_from_username(username):
     return User.objects.get(username=username)
+
+
+def get_user_from_id(user_id):
+    return User.objects.get(id=user_id)
 
 
 def get_users(include_superuser=False):
@@ -56,12 +69,16 @@ def get_groups():
     return Group.objects.all()
 
 
-def add_event(user, event_name, annotation=None):
+def get_event_from_id(event_id):
+    return Event.objects.get(id=event_id)
+
+
+def add_event(user, event_name, annotation=None, status=None):
     event = Event()
     event.user = user
     event.name = event_name
     event.annotation = annotation
-    event.status = Event.Status.INITIATED
+    event.status = status or Event.Status.INITIATED
     event.save()
 
     return event
@@ -76,12 +93,23 @@ def update_event(event, args):
     return event
 
 
-def add_ingress_package(user, event_datetime, package_name):
+def add_ingress_package(user, event_datetime, package_name, status):
     ip = IngressPackage()
     ip.user = user
     ip.datetime = event_datetime
     ip.package_name = package_name
-    ip.status = IngressPackage.Status.RECEIVED
+    ip.status = status or IngressPackage.Status.RECEIVED
     ip.save()
 
     return ip
+
+
+def add_migration_package(user, event_datetime, path):
+    mp = MigrationPackage()
+    mp.user = user
+    mp.datetime = event_datetime
+    mp.path = path
+    mp.status = MigrationPackage.Status.RECEIVED
+    mp.save()
+
+    return mp

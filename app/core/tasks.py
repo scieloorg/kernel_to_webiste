@@ -1,4 +1,4 @@
-from celery import shared_task, current_task
+from spf.celery import app
 from django.core.files.storage import FileSystemStorage
 from spf import settings
 from core import controller
@@ -48,8 +48,8 @@ def task_get_package_uri_by_pid(pid, user_id):
     return result
 
 
-@shared_task
-def task_ingress_package(file_path, pkg_name, user_id, event_id):
+@app.task(bind=True,  max_retries=3)
+def task_ingress_package(self, file_path, pkg_name, user_id, event_id):
     # obtém objeto User
     user = controller.get_user_from_id(user_id)
 
@@ -89,8 +89,8 @@ def task_ingress_package(file_path, pkg_name, user_id, event_id):
     return file_path
 
 
-@shared_task
-def task_migrate_identify_documents():
+@app.task(bind=True,  max_retries=3)
+def task_migrate_identify_documents(self):
     current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...'})
 
     results = []
@@ -100,8 +100,8 @@ def task_migrate_identify_documents():
     return results
 
 
-@shared_task
-def task_migrate_isis_db(data_type, file_path, file_id=None):
+@app.task(bind=True,  max_retries=3)
+def task_migrate_isis_db(self, data_type, file_path, file_id=None):
    results = []
 
    fs = FileSystemStorage(settings.MEDIA_INGRESS_TEMP)
@@ -119,8 +119,8 @@ def task_migrate_isis_db(data_type, file_path, file_id=None):
    return results
 
 
-@shared_task
-def task_migrate_acron(acronym):
+@app.task(bind=True,  max_retries=3)
+def task_migrate_acron(self, acronym):
     results = []
 
     if acronym:
@@ -133,8 +133,8 @@ def task_migrate_acron(acronym):
     return results
 
 
-@shared_task
-def task_migrate_documents(acronym=None, volume=None, pub_year=None, pid=None):
+@app.task(bind=True,  max_retries=3)
+def task_migrate_documents(self, acronym=None, volume=None, pub_year=None, pid=None):
     results = None
 
     if pid:

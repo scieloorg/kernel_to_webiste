@@ -77,7 +77,7 @@ def task_ingress_package(self, file_path, pkg_name, user_id, event_id):
             ev,
             {
                 'status': Event.Status.FAILED,
-                'annotation': e.message,
+                'annotation': str(e),
             }
         )
 

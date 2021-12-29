@@ -1,6 +1,7 @@
-from django.forms import TextInput, EmailInput
+from django.forms import TextInput, EmailInput, Form
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
+from django.forms.fields import FileField
 from django.utils.translation import gettext as _
 
 
@@ -51,3 +52,7 @@ class UpdateUserForm(UserChangeForm):
                 'placeholder': _('Enter your last name')
             }),
         }
+
+
+class UploadPackageFileForm(Form):
+    package_file = FileField()

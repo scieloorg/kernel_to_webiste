@@ -23,7 +23,7 @@ tests_require = [
 
 setuptools.setup(
     name="SciELO Publishing Framework",
-    version="0.1.5.0",
+    version="0.1.6.0",
     author="SciELO",
     author_email="scielo-dev@googlegroups.com",
     description="This is the SciELO Upload Framework",

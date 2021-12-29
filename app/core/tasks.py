@@ -1,7 +1,5 @@
 from spf.celery import app
-from django.core.files.storage import FileSystemStorage
-from spf import settings
-from core import controller
+from core import controller, utils
 from core.models import Event, IngressPackage
 
 import dsm.ingress as dsm_ingress

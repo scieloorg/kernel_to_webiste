@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-10 19:43+0000\n"
+"POT-Creation-Date: 2021-12-29 16:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,27 +22,27 @@ msgstr ""
 msgid "You do not have permission to access the requested page "
 msgstr "No tienes permiso para acceder a la página solicitada "
 
-#: forms.py:14 forms.py:38 templates/user/login.html:19
+#: forms.py:15 forms.py:39 templates/user/login.html:19
 #: templates/user/register.html:19
 msgid "Enter your username"
 msgstr "Ingrese su nombre de usuario"
 
-#: forms.py:18 forms.py:43 templates/user/profile_edit.html:22
+#: forms.py:19 forms.py:44 templates/user/profile_edit.html:22
 #: templates/user/register.html:23
 msgid "Enter your e-mail"
 msgstr "Ingrese su correo electrónico"
 
-#: forms.py:22 forms.py:47 templates/user/profile_edit.html:26
+#: forms.py:23 forms.py:48 templates/user/profile_edit.html:26
 #: templates/user/register.html:27
 msgid "Enter your first name"
 msgstr "Ingrese su nombre"
 
-#: forms.py:26 forms.py:51 templates/user/profile_edit.html:30
+#: forms.py:27 forms.py:52 templates/user/profile_edit.html:30
 #: templates/user/register.html:31
 msgid "Enter your last name"
 msgstr "Ingrese su nombre de familia"
 
-#: models.py:16
+#: models.py:16 models.py:34
 msgid "Received"
 msgstr "Recebió"
 
@@ -62,80 +62,120 @@ msgstr "Validación fallida"
 msgid "Validated"
 msgstr "Validado"
 
-#: models.py:34
+#: models.py:21
+msgid "Queued for uploading"
+msgstr "En cola para cargar"
+
+#: models.py:22
+msgid "Uploading"
+msgstr "Cargando"
+
+#: models.py:23
+msgid "Uploading failure"
+msgstr "Error de carga"
+
+#: models.py:24
+msgid "Uploaded"
+msgstr "Cargado"
+
+#: models.py:44
 msgid "Initiated"
 msgstr "Empezado"
 
-#: models.py:35
+#: models.py:45
 msgid "Completed"
 msgstr "Terminado"
 
-#: models.py:36
+#: models.py:46
 msgid "Failed"
 msgstr "Fallido"
 
-#: models.py:39
+#: models.py:49
 msgid "Retrieve package"
 msgstr "Recibir paquete"
 
-#: models.py:40 templates/index.html:41 templates/ingress/package_upload.html:5
-#: templates/ingress/package_upload.html:9
-#: templates/ingress/package_upload.html:18
-msgid "Upload package"
-msgstr "Enviar paquete"
+#: models.py:50
+msgid "Upload package to disk"
+msgstr "Cargar paquete en disco"
 
-#: models.py:41
+#: models.py:51
+msgid "Upload package to MinIO"
+msgstr "Cargar paquete en MinIO"
+
+#: models.py:52
 msgid "Start validation"
 msgstr "Empezar validación"
 
-#: models.py:42
+#: models.py:53
 msgid "Finalize validation"
 msgstr "Finalizar validación"
 
-#: models.py:43
+#: models.py:54
 msgid "Change user groups"
 msgstr "Cambiar grupos de usuarios"
 
-#: templates/base.html:28 templates/journal/journal_list.html:5
+#: models.py:55
+msgid "Identify documents to migrate"
+msgstr "Identificar documentos para migrar"
+
+#: models.py:56
+msgid "Start migration by id file"
+msgstr "Empezar migración por archivo ID"
+
+#: models.py:57
+msgid "Start migration by ISIS database"
+msgstr "Empezar migración por base de datos ISIS"
+
+#: models.py:58
+msgid "Start migration by acronym"
+msgstr "Empezar migración por acrónimo"
+
+#: models.py:59
+msgid "Start migration by volume or year"
+msgstr "Empezar migración por volumen o año"
+
+#: templates/base.html:29 templates/journal/journal_list.html:5
 #: templates/journal/journal_list.html:9
+#: templates/migration/pending_documents_by_journal_list.html:5
+#: templates/migration/pending_documents_by_journal_list.html:9
 msgid "Journals"
 msgstr "Revistas"
 
-#: templates/base.html:31
+#: templates/base.html:32
 msgid "Documents"
 msgstr "Documentos"
 
-#: templates/base.html:43 templates/index.html:19
+#: templates/base.html:44 templates/index.html:19
 #: templates/tracking/event_list.html:6 templates/tracking/event_list.html:10
 msgid "Events"
 msgstr "Eventos"
 
-#: templates/base.html:44 templates/index.html:26 templates/user/profile.html:6
+#: templates/base.html:45 templates/index.html:26 templates/user/profile.html:6
 #: templates/user/profile.html:10
 msgid "Profile"
 msgstr "Perfil"
 
-#: templates/base.html:45 templates/index.html:27
+#: templates/base.html:46 templates/index.html:27
 #: templates/user/profile_edit.html:7 templates/user/profile_edit.html:11
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: templates/base.html:46 templates/index.html:28
+#: templates/base.html:47 templates/index.html:28
 #: templates/user/change_password.html:7 templates/user/change_password.html:12
 #: templates/user/change_password.html:27
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
-#: templates/base.html:48
+#: templates/base.html:49
 msgid "Logout"
 msgstr "Salir"
 
-#: templates/base.html:53 templates/user/login.html:7
+#: templates/base.html:54 templates/user/login.html:7
 #: templates/user/login.html:25 templates/user/register.html:44
 msgid "Login"
 msgstr "Iniciar sesión"
 
-#: templates/base.html:56 templates/user/login.html:27
+#: templates/base.html:57 templates/user/login.html:27
 #: templates/user/register.html:7
 msgid "Sign up"
 msgstr "Registrarse"
@@ -171,6 +211,11 @@ msgstr "Entrada"
 msgid "Search package"
 msgstr "Buscar paquete"
 
+#: templates/index.html:41 templates/ingress/package_upload.html:7
+#: templates/ingress/package_upload.html:11
+msgid "Upload package"
+msgstr "Enviar paquete"
+
 #: templates/index.html:49
 msgid "Document management"
 msgstr "Gestión de documentos"
@@ -204,130 +249,66 @@ msgid "Migration"
 msgstr "Migración"
 
 #: templates/index.html:71
-msgid "Migrate title"
-msgstr "Migrar título"
+msgid "Identify documents"
+msgstr "Identificar documentos"
 
-#: templates/index.html:72
-msgid "Migrate fascicle"
-msgstr "Migrar asunto"
+#: templates/index.html:72 templates/migration/isis_db.html:5
+#: templates/migration/isis_db.html:9
+msgid "Migrate database"
+msgstr "Migrar base de datos"
 
-#: templates/index.html:73
-msgid "Migrate document"
-msgstr "Migrar documento"
+#: templates/index.html:73 templates/migration/search_pending_documents.html:6
+#: templates/migration/search_pending_documents.html:11
+msgid "Search pending documents"
+msgstr "Buscar documentos pendentes"
 
-#: templates/index.html:83
+#: templates/index.html:74
+msgid "Pending documents by journal"
+msgstr "Documentos pendentes por revista"
+
+#: templates/index.html:84
 msgid "Package management"
 msgstr "Gestión de paquetes"
 
-#: templates/index.html:86
+#: templates/index.html:87
 msgid "All deposited packages"
 msgstr "Todos los paquetes depositados"
 
-#: templates/index.html:87 templates/ingress/article_files_list.html:5
-#: templates/ingress/article_files_list.html:9
+#: templates/index.html:88
 msgid "Articles' files"
 msgstr "Archivos de artículos"
 
-#: templates/index.html:95
+#: templates/index.html:96
 msgid "User management"
 msgstr "Gestión de usuarios"
 
-#: templates/index.html:98
+#: templates/index.html:99
 msgid "All events"
 msgstr "Todos los eventos"
 
-#: templates/index.html:99 templates/user/add.html:7 templates/user/add.html:46
-#: templates/user/register.html:41
+#: templates/index.html:100 templates/user/add.html:7
+#: templates/user/add.html:46 templates/user/register.html:41
 msgid "Add user"
 msgstr "Agregar usuario"
 
-#: templates/index.html:100 templates/user/groups_edit.html:6
+#: templates/index.html:101 templates/user/groups_edit.html:6
 #: templates/user/groups_edit.html:10
 msgid "User groups"
 msgstr "Grupos de usuarios"
 
-#: templates/ingress/article_files_list.html:18
-msgid "Identifier"
-msgstr "Identificador"
-
-#: templates/ingress/article_files_list.html:19
-#: templates/ingress/package_download.html:45
-msgid "Creation date"
-msgstr "Fecha de criación"
-
-#: templates/ingress/article_files_list.html:20
-msgid "Update date"
-msgstr "Fecha de actualización"
-
-#: templates/ingress/article_files_list.html:21
-#: templates/ingress/package_download.html:44
-#: templates/ingress/package_list.html:20
-msgid "Package name"
-msgstr "Nombre del paquete"
-
-#: templates/ingress/article_files_list.html:22
-msgid "XML"
-msgstr ""
-
-#: templates/ingress/article_files_list.html:23
-msgid "Assets"
-msgstr ""
-
-#: templates/ingress/article_files_list.html:24
-msgid "Renditions"
-msgstr ""
-
-#: templates/ingress/article_files_list.html:55
-#: templates/ingress/package_list.html:46
-#: templates/journal/journal_list.html:49 templates/tracking/event_list.html:56
-#: templates/user/groups_edit.html:64
-msgid "First"
-msgstr "Primero"
-
-#: templates/ingress/article_files_list.html:59
-#: templates/ingress/package_list.html:50
-#: templates/journal/journal_list.html:53 templates/tracking/event_list.html:60
-#: templates/user/groups_edit.html:68
-msgid "Previous"
-msgstr "Anterior"
-
-#: templates/ingress/article_files_list.html:64
-#: templates/ingress/package_list.html:55
-#: templates/journal/journal_list.html:58 templates/tracking/event_list.html:65
-#: templates/user/groups_edit.html:73
-msgid "Page"
-msgstr "Página"
-
-#: templates/ingress/article_files_list.html:64
-#: templates/ingress/package_list.html:55
-#: templates/journal/journal_list.html:58 templates/tracking/event_list.html:65
-#: templates/user/groups_edit.html:73
-msgid "of"
-msgstr "de"
-
-#: templates/ingress/article_files_list.html:69
-#: templates/ingress/package_list.html:60
-#: templates/journal/journal_list.html:63 templates/tracking/event_list.html:70
-#: templates/user/groups_edit.html:78
-msgid "Next"
-msgstr "Seguiente"
-
-#: templates/ingress/article_files_list.html:72
-#: templates/ingress/package_list.html:63
-#: templates/journal/journal_list.html:66 templates/tracking/event_list.html:73
-#: templates/user/groups_edit.html:81
-msgid "Last"
-msgstr "Último"
-
 #: templates/ingress/package_download.html:22
+#: templates/migration/search_pending_documents.html:36
 msgid "Document identifier"
 msgstr "Identificador de documento"
 
 #: templates/ingress/package_download.html:23
+#: templates/migration/search_pending_documents.html:38
 msgid "Enter a document identifier"
 msgstr "Ingrese un identificador de documento "
 
 #: templates/ingress/package_download.html:25
+#: templates/migration/search_pending_documents.html:16
+#: templates/migration/search_pending_documents.html:42
 msgid "Search"
 msgstr "Buscar"
 
@@ -347,6 +328,15 @@ msgstr "Resultados del documento"
 msgid "Version"
 msgstr "Versión"
 
+#: templates/ingress/package_download.html:44
+#: templates/ingress/package_list.html:20
+msgid "Package name"
+msgstr "Nombre del paquete"
+
+#: templates/ingress/package_download.html:45
+msgid "Creation date"
+msgstr "Fecha de criación"
+
 #: templates/ingress/package_list.html:19 templates/tracking/event_list.html:20
 #: templates/user/add.html:18 templates/user/groups_edit.html:21
 #: templates/user/login.html:18 templates/user/profile.html:18
@@ -358,15 +348,75 @@ msgstr "Usuario"
 msgid "Datetime"
 msgstr "Fecha y hora"
 
-#: templates/ingress/package_list.html:22 templates/tracking/event_list.html:24
+#: templates/ingress/package_list.html:22
+#: templates/migration/search_pending_documents.html:67
+#: templates/tracking/event_list.html:24
 msgid "Status"
 msgstr "Estado"
 
-#: templates/ingress/package_upload.html:21
-msgid "Upload"
-msgstr "Cargar"
+#: templates/ingress/package_list.html:46
+#: templates/journal/journal_list.html:49
+#: templates/migration/pending_documents_by_issue_list.html:69
+#: templates/migration/pending_documents_by_journal_list.html:53
+#: templates/migration/search_pending_documents.html:104
+#: templates/migration/search_pending_documents.html:129
+#: templates/tracking/event_list.html:56 templates/user/groups_edit.html:64
+msgid "First"
+msgstr "Primero"
+
+#: templates/ingress/package_list.html:50
+#: templates/journal/journal_list.html:53
+#: templates/migration/pending_documents_by_issue_list.html:73
+#: templates/migration/pending_documents_by_journal_list.html:57
+#: templates/migration/search_pending_documents.html:108
+#: templates/migration/search_pending_documents.html:133
+#: templates/tracking/event_list.html:60 templates/user/groups_edit.html:68
+msgid "Previous"
+msgstr "Anterior"
+
+#: templates/ingress/package_list.html:55
+#: templates/journal/journal_list.html:58 templates/tracking/event_list.html:65
+#: templates/user/groups_edit.html:73
+msgid "Page"
+msgstr "Página"
+
+#: templates/ingress/package_list.html:55
+#: templates/journal/journal_list.html:58 templates/tracking/event_list.html:65
+#: templates/user/groups_edit.html:73
+msgid "of"
+msgstr "de"
+
+#: templates/ingress/package_list.html:60
+#: templates/journal/journal_list.html:63
+#: templates/migration/pending_documents_by_issue_list.html:83
+#: templates/migration/pending_documents_by_journal_list.html:67
+#: templates/migration/search_pending_documents.html:118
+#: templates/migration/search_pending_documents.html:145
+#: templates/tracking/event_list.html:70 templates/user/groups_edit.html:78
+msgid "Next"
+msgstr "Seguiente"
+
+#: templates/ingress/package_list.html:63
+#: templates/journal/journal_list.html:66
+#: templates/migration/pending_documents_by_issue_list.html:86
+#: templates/migration/pending_documents_by_journal_list.html:70
+#: templates/migration/search_pending_documents.html:121
+#: templates/migration/search_pending_documents.html:148
+#: templates/tracking/event_list.html:73 templates/user/groups_edit.html:81
+msgid "Last"
+msgstr "Último"
+
+#: templates/ingress/package_upload.html:20
+#: templates/ingress/package_upload.html:38
+msgid "Package file"
+msgstr "Paquete"
+
+#: templates/ingress/package_upload.html:39
+msgid "Uploaded datetime"
+msgstr "Fecha y hora de envío"
 
 #: templates/journal/journal_list.html:18
+#: templates/migration/pending_documents_by_journal_list.html:22
 msgid "Title"
 msgstr "Título"
 
@@ -375,6 +425,7 @@ msgid "Short title"
 msgstr "Título corto"
 
 #: templates/journal/journal_list.html:20
+#: templates/migration/pending_documents_by_journal_list.html:21
 msgid "Acronym"
 msgstr "Acrónimo"
 
@@ -389,6 +440,138 @@ msgstr "Online ISSN"
 #: templates/journal/journal_list.html:23
 msgid "SciELO ISSN"
 msgstr "SciELO ISSN"
+
+#: templates/migration/isis_db.html:15
+msgid "Migrate database by ID file or ISIS database"
+msgstr "Migrar base de datos por archivo ID o ISIS"
+
+#: templates/migration/isis_db.html:21
+msgid "Choose ID file"
+msgstr "Elija archivo ID"
+
+#: templates/migration/isis_db.html:25
+msgid "OR"
+msgstr "O"
+
+#: templates/migration/isis_db.html:28
+msgid "Use the default ISIS database path"
+msgstr "Utilice la ruta predeterminada de la base de datos ISIS"
+
+#: templates/migration/isis_db.html:32
+msgid "Choose data type"
+msgstr "Elija el tipo de datos"
+
+#: templates/migration/isis_db.html:36
+msgid "Title data"
+msgstr "Base Title"
+
+#: templates/migration/isis_db.html:42
+msgid "Issue data"
+msgstr "Base Issue"
+
+#: templates/migration/isis_db.html:48
+msgid "Article data (it can be very time consuming)"
+msgstr "Base artículo"
+
+#: templates/migration/isis_db.html:52
+#: templates/migration/pending_documents_by_journal_list.html:24
+msgid "Migrate"
+msgstr "Migrar"
+
+#: templates/migration/pending_documents_by_issue_list.html:5
+msgid "Issues"
+msgstr "Números"
+
+#: templates/migration/pending_documents_by_issue_list.html:9
+msgid "Issues of"
+msgstr "Números de"
+
+#: templates/migration/pending_documents_by_issue_list.html:20
+msgid "Years"
+msgstr "Años"
+
+#: templates/migration/pending_documents_by_issue_list.html:21
+msgid "Migrate year?"
+msgstr "Migrar anõ?"
+
+#: templates/migration/pending_documents_by_issue_list.html:22
+#: templates/migration/pending_documents_by_issue_list.html:25
+#: templates/migration/pending_documents_by_journal_list.html:23
+msgid "View documents"
+msgstr "Ver documentos"
+
+#: templates/migration/pending_documents_by_issue_list.html:23
+msgid "Volume"
+msgstr "Volumen"
+
+#: templates/migration/pending_documents_by_issue_list.html:24
+msgid "Migrate volume?"
+msgstr "Migrar volumen?"
+
+#: templates/migration/pending_documents_by_issue_list.html:55
+msgid "Migrate selected years"
+msgstr "Migrar anõs seleccionados"
+
+#: templates/migration/pending_documents_by_issue_list.html:56
+msgid "Migrate selected volumes"
+msgstr "Migrar volúmenes seleccionados"
+
+#: templates/migration/pending_documents_by_journal_list.html:20
+#: templates/migration/search_pending_documents.html:22
+msgid "ISSN"
+msgstr "ISSN"
+
+#: templates/migration/pending_documents_by_journal_list.html:43
+msgid "Migrate acronym"
+msgstr "Migrar acrónimo"
+
+#: templates/migration/search_pending_documents.html:24
+msgid "Enter an ISSN"
+msgstr "Ingrese uno ISSN"
+
+#: templates/migration/search_pending_documents.html:29
+msgid "Year"
+msgstr "Año"
+
+#: templates/migration/search_pending_documents.html:49
+msgid "Pending documents"
+msgstr "Documentos pendientes"
+
+#: templates/migration/search_pending_documents.html:54
+msgid "Results"
+msgstr "Resultados"
+
+#: templates/migration/search_pending_documents.html:64
+msgid "PID"
+msgstr "PID"
+
+#: templates/migration/search_pending_documents.html:65
+msgid "Created"
+msgstr "Creado"
+
+#: templates/migration/search_pending_documents.html:66
+msgid "Isis updated date"
+msgstr "Fecha de actualización de ISIS"
+
+#: templates/migration/search_pending_documents.html:68
+msgid "Updated"
+msgstr "Actualizado"
+
+#: templates/migration/search_pending_documents.html:69
+msgid "Migrate?"
+msgstr "Migrar?"
+
+#: templates/migration/search_pending_documents.html:89
+msgid "Migrate selected documents"
+msgstr "Migrar documentos seleccionados"
+
+#: templates/migration/search_pending_documents.html:90
+msgid "Migrate documents (this page)"
+msgstr "Migrar documentos (esta página)"
+
+#: templates/migration/search_pending_documents.html:91
+msgid "Migrate all documents (all pages)"
+msgstr "Migrar todos los documentos (todas las páginas)"
 
 #: templates/tracking/event_list.html:22
 msgid "Activity"
@@ -521,38 +704,75 @@ msgstr "Op. de Migración"
 msgid "Manager"
 msgstr "Gerente"
 
-#: views.py:45 views.py:107
+#: utils.py:61
+#, python-format
+msgid "File %s does not exist"
+msgstr "Archivo %s no existe"
+
+#: views.py:73 views.py:135
 #, python-format
 msgid "User %s was created"
 msgstr "Se creó el usuario %s"
 
-#: views.py:75
+#: views.py:103
 msgid "Incorrect username or password"
 msgstr "Nombre de usuario o contraseña incorrecta."
 
-#: views.py:136
+#: views.py:164
 msgid "Your password was updated"
 msgstr "Su contraseña ha sido actualizada"
 
-#: views.py:172
+#: views.py:200
 msgid "Users' groups were updated"
 msgstr "Se actualizaron los grupos de usuarios"
 
-#: views.py:192
+#: views.py:220
 #, python-format
 msgid "User %s was updated"
 msgstr "Se creó el usuario %s"
 
-#: views.py:222
-#, python-format
-msgid "Errors ocurred: %s"
-msgstr "Ocurrieron errores: %s"
+#: views.py:260
+msgid "Invalid form data"
+msgstr "Datos de formulario no válidos"
 
-#: views.py:229
+#: views.py:353
 #, python-format
-msgid "Package (%(name)s, %(id)s) was added"
-msgstr "Se agregó el paquete (%(name)s, %(id)s)"
+msgid "User %s are not allowed to see the status of the event %s"
+msgstr "El usuario %s no puede ver el estado del evento %s"
 
-#: views.py:239
-msgid " does not have a valid format. Please provide a zip file."
-msgstr " no tiene un formato válido. Por favor, proporcione un archivo zip."
+#: views.py:357
+msgid "No results were found"
+msgstr "No se encontraron resultados"
+
+#: views.py:397 views.py:448 views.py:563 views.py:588 views.py:618
+msgid "Task submitted successfully"
+msgstr "Tarea enviada con éxito"
+
+#~ msgid "Migrate title"
+#~ msgstr "Migrar título"
+
+#~ msgid "Migrate fascicle"
+#~ msgstr "Migrar asunto"
+
+#~ msgid "Migrate document"
+#~ msgstr "Migrar documento"
+
+#~ msgid "Identifier"
+#~ msgstr "Identificador"
+
+#~ msgid "Update date"
+#~ msgstr "Fecha de actualización"
+
+#~ msgid "Upload"
+#~ msgstr "Cargar"
+
+#, python-format
+#~ msgid "Errors ocurred: %s"
+#~ msgstr "Ocurrieron errores: %s"
+
+#, python-format
+#~ msgid "Package (%(name)s, %(id)s) was added"
+#~ msgstr "Se agregó el paquete (%(name)s, %(id)s)"
+
+#~ msgid " does not have a valid format. Please provide a zip file."
+#~ msgstr " no tiene un formato válido. Por favor, proporcione un archivo zip."

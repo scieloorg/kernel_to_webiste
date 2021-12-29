@@ -11,28 +11,32 @@ GROUP_QUALITY_ANALYST = 'quality_analyst'
 SCOPE_ALL_USERS = 'all_users'
 
 
-class IngressPackage(models.Model):
+class IngressPackage(models.Model): 
     class Status(models.TextChoices):
-        RECEIVED = 'R', _('Received')
-        QUEUDED_FOR_VALIDATION = 'Q', _('Queued for validation')
-        VALIDATING = 'D', _('Validating')
-        VALIDATION_FAILURE = 'F', _('Validation failure')
-        VALIDATED = 'V', _('Validated')
+        RECEIVED = 'RC', _('Received')
+        QUEUDED_FOR_VALIDATION = 'QV', _('Queued for validation')
+        VALIDATING = 'VI', _('Validating')
+        VALIDATION_FAILURE = 'VF', _('Validation failure')
+        VALIDATED = 'VC', _('Validated')
+        QUEUED_FOR_UPLOADING = 'QU', _('Queued for uploading')
+        UPLOADING = 'UI', _('Uploading')
+        UPLOADING_FAILURE = 'UF', _('Uploading failure')
+        UPLOADED = 'UC', _('Uploaded')
 
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     package_name = models.CharField(max_length=200)
     datetime = models.DateTimeField()
-    status = models.CharField(max_length=1, choices=Status.choices, blank=False, null=False)
+    status = models.CharField(max_length=2, choices=Status.choices, blank=False, null=False)
 
 
 class MigrationPackage(models.Model):
     class Status(models.TextChoices):
-        RECEIVED = 'R', _('Received')
+        RECEIVED = 'RC', _('Received')
 
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     path = models.CharField(max_length=200)
     datetime = models.DateTimeField(null=True)
-    status = models.CharField(max_length=1, choices=Status.choices, blank=False, null=False)
+    status = models.CharField(max_length=2, choices=Status.choices, blank=False, null=False)
 
 
 class Event(models.Model):
@@ -43,7 +47,8 @@ class Event(models.Model):
 
     class Name(models.TextChoices):
         RETRIEVE_PACKAGE = 'RP', _('Retrieve package')
-        UPLOAD_PACKAGE = 'UP', _('Upload package')
+        UPLOAD_PACKAGE_TO_DISK = 'UPD', _('Upload package to disk')
+        UPLOAD_PACKAGE_TO_MINIO = 'UPM', _('Upload package to MinIO')
         START_VALIDATION = 'SV', _('Start validation')
         FINALIZE_VALIDATION = 'FV', _('Finalize validation')
         CHANGE_USER_GROUPS = 'CUG', _('Change user groups')

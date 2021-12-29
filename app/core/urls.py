@@ -1,13 +1,13 @@
 from django.conf.urls import url
 from django.views.i18n import JavaScriptCatalog
 from django.urls import path
+from django.views.generic import TemplateView
 from . import views
 
 
-
 general = [
-    path('', views.index_page, name='index'),
-    path('faq/', views.faq_page, name='faq'),
+    path('', TemplateView.as_view(template_name='index.html'), name='index'),
+    path('faq/', TemplateView.as_view(template_name='faq.html'), name='faq'),
 ]
 
 user = [
@@ -22,7 +22,7 @@ user = [
 ]
 
 ingress = [
-    path('ingress/package_upload/', views.ingress_package_upload_page, name='ingress_package_upload'),
+    path('ingress/package_upload/', views.UploadView.as_view(), name='ingress_package_upload'),
     path('ingress/package_download/', views.ingress_package_download_page, name='ingress_package_download'),
     path('ingress/package_list/', views.ingress_package_list_page, name='ingress_package_list'),
 ]

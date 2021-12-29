@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load spf_extras %}
 
 {% block title %}
 SciELO Publishing Framework - {% trans 'Upload package' %}
@@ -12,17 +13,92 @@ SciELO Publishing Framework - {% trans 'Upload package' %}
     <div class="col-sm-5 mb-3">
         <div class="card my-3">
             <div class="card-body">
-                <form class="bg-white form-user" method="POST" enctype="multipart/form-data">
+                <form class="bg-white form-user" action="" method="post" id="upload_form">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="package_file" class="form-label">{% trans 'Upload package' %}</label>
-                        <input class="form-control" type="file" name="package_file" id="package_file" required>
+                    <div class="form-group mb-3">
+                        <label class="control-label" for="id_package_file">{% trans 'Package file' %}</label>
+                        <input type="file" name="package_file" class="form-control" required id="id_package_file">
                     </div>
-                    <button type="submit" class="btn btn-primary">{% trans 'Upload' %}</button>
+                    <div class="mb-3">
+                        <input id='btn_upload_file' type="submit" value="Upload" class="btn btn-primary">
+                    </div>
                 </form>
+                <div class="container bg-white progress" id="progress">
+                </div>
             </div>
+        </div>
+    </div>
+
+    <div id="div_uploaded_packages" style="display: none;">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Package file' %}</th>
+                        <th>{% trans 'Uploaded datetime' %}</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody_uploaded_packages"></tbody>
+            </table>
         </div>
     </div>
 </div>
 
+<script>
+const form_upload = document.getElementById('upload_form');
+const input_file = document.getElementById('id_package_file');
+const progress_bar = document.getElementById('progress');
+const btn_upload_file = document.getElementById('btn_upload_file');
+
+$("#upload_form").submit(function(e){
+    e.preventDefault();
+    $form = $(this)
+    var form_data = new FormData(this);
+    const media_data = input_file.files[0];
+
+    btn_upload_file.disabled = true;
+
+    $.ajax({
+        type: 'POST',
+        url:'/ingress/package_upload/',
+        data: form_data,
+        dataType: 'json',
+        beforeSend: function(){},
+        xhr:function(){
+            const xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener('progress', e=>{
+                if(e.lengthComputable){
+                    const percentProgress = (e.loaded/e.total)*100;
+                    progress_bar.innerHTML = `<div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: ${percentProgress}%" aria-valuenow="${percentProgress}" aria-valuemin="0" aria-valuemax="100"></div>`
+                }
+            });
+            return xhr
+        },
+        success: function(response){
+            form_upload.reset();
+            progress_bar.innerHTML = '';
+
+            div_uploaded_packages = document.getElementById('div_uploaded_packages');
+            div_uploaded_packages.style.display = "initial";
+
+            tbody_uploaded_packages = document.getElementById('tbody_uploaded_packages');
+            row = tbody_uploaded_packages.insertRow(-1);
+
+            cell_package_file = row.insertCell(-1);
+            cell_package_file.innerHTML = response['package_file'];
+
+            cell_datetime = row.insertCell(-1)
+            cell_datetime.innerHTML = new Date(response['datetime']);
+            
+            btn_upload_file.disabled = false;
+        },
+        error: function(err){
+            console.log(err);
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+    });
+});
+</script>
 {% endblock %}

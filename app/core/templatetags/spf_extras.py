@@ -50,15 +50,13 @@ def to_css_event_status_style(event_status):
 
 @register.filter(name='to_css_ingress_package_status_style')
 def to_css_ingress_package_status_style(ingress_package_status):
-    if ingress_package_status == 'R':
-        return 'bg-primary'
-    elif ingress_package_status == 'Q':
-        return 'bg-secondary'
-    elif ingress_package_status == 'D':
-        return 'bg-warning'
-    elif ingress_package_status == 'V':
+    if 'C' in ingress_package_status:
         return 'bg-success'
-    elif ingress_package_status == 'F':
+    elif 'Q' in ingress_package_status:
+        return 'bg-secondary'
+    elif 'I' in ingress_package_status:
+        return 'bg-warning'
+    elif 'F' in ingress_package_status:
         return 'bg-danger'
 
 @register.filter(name='to_css_migration_status_style')

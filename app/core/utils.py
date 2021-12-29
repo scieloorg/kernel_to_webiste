@@ -51,3 +51,11 @@ def handle_upload_file(file):
         'error': result.get('errro'),
         'success': result.get('success'),
         }
+
+
+def fs_delete_file(path):
+    try:
+        fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
+        fs.delete(path)
+    except FileNotFoundError:
+        raise PathDoesNotExistError(_('File %s does not exist' % path))

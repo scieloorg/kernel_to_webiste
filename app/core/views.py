@@ -226,43 +226,38 @@ def user_profile_edit_page(request):
 #################
 # ingress views #
 #################
-@login_required(login_url='login')
-@allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def ingress_package_upload_page(request):
-    if request.method == 'POST':
-        file_input = request.FILES.get('package_file')
+class UploadView(GroupRequiredMixin, generic.View):
+    group_required = [u'manager', u'operator_ingress']
+    redirect_unauthenticated_users = True
+    login_url = '/login/'
 
-        if file_input:
-            # registra evento iniciado
-            ev = controller.add_event(request.user, Event.Name.UPLOAD_PACKAGE, {'file_name': file_input.name})
+    def get(self, request):
+        form = UploadPackageFileForm()
+        return render(request, 'ingress/package_upload.html', context={'form': form})
 
-            fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
+    def post(self, request):
+        form = UploadPackageFileForm(request.POST, request.FILES)
 
-            if package_name_is_valid(file_input.name):
-                # envia arquivo para diretório temporário
-                pkg_name = fs.save(file_input.name, file_input)
+        if form.is_valid():
+            ev = controller.add_event(request.user, Event.Name.UPLOAD_PACKAGE_TO_DISK, {'file_name': request.FILES['package_file'].name})
+            result = handle_upload_file(request.FILES['package_file'])
 
-                file_path = os.path.join(fs.base_location, pkg_name)
-
-                # envia arquivo ao MinIO
-                task_ingress_package.delay(file_path, pkg_name, request.user.id, ev.id)
-
+            json_data = {
+                'package_path': result.get('package_path'),
+                'package_file': result.get('package_file'),
+                'error': result.get('error'),
+            }
+            
+            if result.get('success'):
+                controller.update_event(ev, {'status': Event.Status.COMPLETED})
+                task_ingress_package(json_data.get('package_path'), json_data.get('package_file'), request.user.id)
+                json_data.update({'datetime': result.get('datetime'),})
+                return JsonResponse(json_data)
             else:
-                emsg = file_input.name + _(' does not have a valid format. Please provide a zip file.')
-                messages.error(request, emsg, extra_tags='alert-danger')
-
-                # registra evento de arquivo inválido
-                controller.update_event(
-                    ev,
-                    {
-                        'status': Event.Status.FAILED,
-                        'annotation': {'error': emsg},
-                    }
-                )
-
-            return redirect('event_list')
-
-    return render(request, 'ingress/package_upload.html')
+                json_data.update({'error': result.get('error'),})
+                return JsonResponse(json_data)  
+        else:
+            return JsonResponse({'error': _('Invalid form data')})
 
 
 @login_required(login_url='login')

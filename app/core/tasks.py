@@ -64,13 +64,11 @@ def task_migrate_identify_documents(self):
 def task_migrate_isis_db(self, data_type, file_path, file_id=None):
    results = []
 
-   fs = FileSystemStorage(settings.MEDIA_INGRESS_TEMP)
-
    if file_id:
        for r in dsm_migration.migrate_isis_db(data_type, file_path):
-           app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...', })
-           results.append(r)
-       fs.delete(file_id)
+            app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...', })
+            results.append(r)
+       utils.fs_delete_file(file_id)
    else:
        for r in dsm_migration.migrate_isis_db(data_type, file_path):
            app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})

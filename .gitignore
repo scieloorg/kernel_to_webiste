@@ -1,5 +1,8 @@
 # Others
 data/
+staticfiles/
+mediafiles/
+Pipfile
 env.dev
 env.prod
 *.vscode

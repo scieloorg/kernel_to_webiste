@@ -7,17 +7,18 @@ from core.decorators import (
 from core.forms import (
     CreateUserForm,
     UpdateUserForm,
+    UploadPackageFileForm,
 )
 from core.models import Event
 from core.tasks import (
     task_get_package_uri_by_pid,
+    task_ingress_package,
     task_migrate_acron,
     task_migrate_documents,
     task_migrate_identify_documents,
     task_migrate_isis_db,
-    task_ingress_package,
 )
-from core.utils import package_name_is_valid
+from core.utils import handle_upload_file
 
 from datetime import datetime
 
@@ -54,16 +55,8 @@ import dsm.migration as dsm_migration
 import math
 import os
 
-
-###################
-### general views #
-###################
-def index_page(request):
-    return render(request, 'index.html')
-
-
-def faq_page(request):
-    return render(request, 'faq.html')
+from django.views import generic
+from braces.views import GroupRequiredMixin
 
 
 ################

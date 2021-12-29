@@ -31,12 +31,12 @@ class IngressPackage(models.Model):
 
 class MigrationPackage(models.Model):
     class Status(models.TextChoices):
-        RECEIVED = 'R', _('Received')
+        RECEIVED = 'RC', _('Received')
 
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     path = models.CharField(max_length=200)
     datetime = models.DateTimeField(null=True)
-    status = models.CharField(max_length=1, choices=Status.choices, blank=False, null=False)
+    status = models.CharField(max_length=2, choices=Status.choices, blank=False, null=False)
 
 
 class Event(models.Model):

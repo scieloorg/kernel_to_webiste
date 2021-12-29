@@ -30,44 +30,23 @@ def task_get_package_uri_by_pid(self, pid, user_id):
 
 
 @app.task(bind=True,  max_retries=3)
-def task_ingress_package(self, file_path, pkg_name, user_id, event_id):
-    # obtém objeto User
+def task_ingress_package(self, package_path, package_file, user_id):
     user = controller.get_user_from_id(user_id)
+    ev = controller.add_event(user, Event.Name.UPLOAD_PACKAGE_TO_MINIO, {'package_file': package_file}, Event.Status.INITIATED)
 
-    # obtém objeto Event
-    ev = controller.get_event_from_id(event_id)
+    results = {}
 
     try:
-        # envia pacote ao MinIO e guarda saída em results
-        results = dsm_ingress.upload_package(file_path)
-
-        # evento ocorreu com sucesso. atualiza status com valor COMPLETED
+        results.update(dsm_ingress.upload_package(package_path))
         controller.update_event(ev, {'status': Event.Status.COMPLETED})
-
-        # registra o pacote enviado
-        controller.add_ingress_package(
-            user=user,
-            event_datetime=ev.datetime,
-            package_name=pkg_name,
-            status=IngressPackage.Status.RECEIVED
-        )
-
+        controller.add_ingress_package(user, ev.datetime, package_file, IngressPackage.Status.RECEIVED)
     except ValueError as e:
-        # evento falhou. atualiza status com valor FAILED
-        controller.update_event(
-            ev,
-            {
-                'status': Event.Status.FAILED,
-                'annotation': str(e),
-            }
-        )
+        controller.update_event(ev, {'status': Event.Status.FAILED, 'annotation': {'error': str(e)},})
+        results.update({'error': str(e)})
 
-    # remove da pasta temporária o arquivo enviado
-    fs = FileSystemStorage(location=settings.MEDIA_INGRESS_TEMP)
-    fs.delete(file_path)
-
-    # devolve caminho
-    return file_path
+    utils.fs_delete_file(package_path)
+    
+    return results
 
 
 @app.task(bind=True,  max_retries=3)

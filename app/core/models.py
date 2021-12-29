@@ -47,7 +47,8 @@ class Event(models.Model):
 
     class Name(models.TextChoices):
         RETRIEVE_PACKAGE = 'RP', _('Retrieve package')
-        UPLOAD_PACKAGE = 'UP', _('Upload package')
+        UPLOAD_PACKAGE_TO_DISK = 'UPD', _('Upload package to disk')
+        UPLOAD_PACKAGE_TO_MINIO = 'UPM', _('Upload package to MinIO')
         START_VALIDATION = 'SV', _('Start validation')
         FINALIZE_VALIDATION = 'FV', _('Finalize validation')
         CHANGE_USER_GROUPS = 'CUG', _('Change user groups')

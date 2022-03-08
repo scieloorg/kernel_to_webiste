@@ -9,8 +9,8 @@ SciELO Publishing Framework - {% trans 'Search package' %}
 {% block content %}
 <h1 class="h4 pt-5">{% trans 'Search package' %}</h1>
 
-<div class="row my-3"">
-    <div class="col-auto mb-3"">
+<div class="row my-3">
+    <div class="col-auto mb-3">
         <div class="card my-3">
             <div class="card-header">
                 {% trans 'Search for document identifer and find ZIP packages' %}
@@ -21,7 +21,7 @@ SciELO Publishing Framework - {% trans 'Search package' %}
                     <div class="mb-3">
                         <label for="pid" class="form-label">{% trans 'Document Identifier' %}</label>
                         <input maxlength="30" required type="text" name="pid" autofocus id="pid" class="form-control" placeholder="{% trans 'Enter a Document identifier (PIDv3)' %}" value="{{ pid }}">
-                        <div class="form-text">{% trans 'Hint: YDm3hSwJ3xQQjqwvVKMX9Qc' %}</div>
+                        <div class="form-text">{% trans 'Hint: '%} YDm3hSwJ3xQQjqwvVKMX9Qc</div>
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <button id="buttonReset" type="reset" class="btn btn-outline-danger">{% trans 'Reset' %}</button>
@@ -98,7 +98,8 @@ SciELO Publishing Framework - {% trans 'Search package' %}
                             // apresenta erro ao usuário
                             errorExceptionMessage = result.data['error'];
                             baseMessages = document.getElementById('baseMessages');
-                            baseMessages.appendChild(createMessage(errorExceptionMessage + '. ' + gettext('It was not possible to generate package. Please, contact the platform adminstratiors.'), 'alert-danger'))
+                            cleanMessages(baseMessages);
+                            baseMessages.appendChild(createMessage(errorExceptionMessage + '. ' + gettext('It was not possible to generate package. Please, contact the platform developers.'), 'alert-danger'))
                         }
                     }
                 }

@@ -16,7 +16,7 @@ SciELO Publishing Framework - {% trans 'Events' %}
             <thead>
                 <tr>
                     <th scope="col">#</th>
-                    {% if user|has_group:"manager" %}
+                    {% if user.is_superuser or user|has_group:"manager" %}
                         <th scope="col">{% trans 'Username' %}</th>
                     {% endif %}
                     <th scope="col">{% trans 'Activity' %}</th>
@@ -29,7 +29,7 @@ SciELO Publishing Framework - {% trans 'Events' %}
                 {% for ev in event_obj %}
                 <tr>
                     <td>{{ event_obj.start_index|add:forloop.counter0 }}</td>
-                    {% if user|has_group:"manager" %}
+                    {% if user.is_superuser or user|has_group:"manager" %}
                         <td>{{ ev.user }}</th>
                     {% endif %}
                     <td>{{ ev.get_name_display }}</td>
@@ -39,7 +39,7 @@ SciELO Publishing Framework - {% trans 'Events' %}
                         <td></td>
                     {% endif %}
                     <td><span id="event_{{ ev.id }}_{{ ev.status }}" class="badge {{ ev.status|to_css_event_status_style }}">{{ ev.get_status_display }}</span></td>
-                    <td>{{ ev.datetime }}</td>
+                    <td>{{ ev.datetime|format_date }}</td>
                 </tr>
             {% endfor %}
             </tbody>

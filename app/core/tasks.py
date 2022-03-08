@@ -60,23 +60,81 @@ def task_make_package(self, user_id, pid, xml_uri, renditions_uris_and_names):
 
 
 @app.task(bind=True,  max_retries=3)
-def task_ingress_package(self, package_path, package_file, user_id):
+def task_upload_package(self, package_path, package_file, user_id):
+    """
+    Envia um pacote para o sistema, atualiza banco de dados e file storage.
+
+    Parameters
+    ----------
+    package_path: str
+    package_file: str
+    user_id: int
+
+    Returns
+    -------
+    package: dict
+    """
     user = controller.get_user_from_id(user_id)
-    ev = controller.add_event(user, Event.Name.UPLOAD_PACKAGE_TO_MINIO, {'package_file': package_file}, Event.Status.INITIATED)
 
-    results = {}
-
+    # obtém os arquivos de cada documento
     try:
-        results.update(dsm_ingress.upload_package(package_path))
-        controller.update_event(ev, {'status': Event.Status.COMPLETED})
-        controller.add_ingress_package(user, ev.datetime, package_file, IngressPackage.Status.RECEIVED)
-    except ValueError as e:
-        controller.update_event(ev, {'status': Event.Status.FAILED, 'annotation': {'error': str(e)},})
-        results.update({'error': str(e)})
+        names_and_packages = sps_maker.get_names_and_packages(package_path)
+    except ValueError:
+        return ['error']
+
+    packages_metadata = []
+
+    # processa cada documento contido no pacote
+    for pkg_name, pkg_data in names_and_packages.items():
+        ev = controller.add_event(user, models.Event.Name.UPLOAD_PACKAGE, {'package_file': package_file}, models.Event.Status.INITIATED)
+
+        xml_sps = sps_maker.sps_package.SPS_Package(pkg_data.xml_content)
+        xml_sps.remote_to_local(xml_sps.package_name)
+
+        assets_uris_and_names = storage_adapter.register_assets(pkg_data, xml_sps)
+        renditions_uris_and_names = storage_adapter.register_renditions(pkg_data, xml_sps)
+        xml_uri_and_name = storage_adapter.register_xml(xml_sps)
+
+        article_package_uris_and_names = sps_maker.make_package_from_uris(xml_uri_and_name['uri'], renditions_uris_and_names)
+        article_package_uris_and_names['file'] = storage_adapter.register_article_files(
+            xml_sps.issn,
+            xml_sps.scielo_pid_v3,
+            article_package_uris_and_names['zip']
+        )
+
+        controller.add_ingress_package(user, article_package_uris_and_names['file']['name'], models.IngressPackage.Status.RECEIVED)
+
+        opac_adapter.update_article(
+            pid=xml_sps.scielo_pid_v3,
+            xml_sps=xml_sps,
+            xml_uri=xml_uri_and_name['uri'],
+            renditions_uris_and_names=renditions_uris_and_names,
+        )
+
+        package_uris_and_names = {
+            'file': article_package_uris_and_names['file'],
+            'xml': xml_uri_and_name,
+            'renditions': renditions_uris_and_names,
+            'assets': assets_uris_and_names,
+        }
+
+        article_files = opac_adapter.add_article_files(
+            xml_sps.scielo_pid_v3,
+            package_uris_and_names,
+        )
+
+        package_uris_and_names['pid'] = article_files.aid
+        package_uris_and_names['issn'] = xml_sps.issn
+        package_uris_and_names['acron'] = xml_sps.acron
+        package_uris_and_names['version'] = article_files.version
+
+        packages_metadata.append(package_uris_and_names)
+
+        controller.update_event(ev, {'status': models.Event.Status.COMPLETED})
 
     utils.fs_delete_file(package_path)
-    
-    return results
+
+    return packages_metadata
 
 
 @app.task(bind=True,  max_retries=3)

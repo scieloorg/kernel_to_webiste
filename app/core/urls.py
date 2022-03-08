@@ -23,7 +23,7 @@ user = [
 
 ingress = [
     path('ingress/package_upload/', views.UploadView.as_view(), name='ingress_package_upload'),
-    path('ingress/package_download/', views.ingress_package_download_page, name='ingress_package_download'),
+    path('ingress/package_search/', views.ingress_search_package_page, name='ingress_package_search'),
     path('ingress/package_list/', views.ingress_package_list_page, name='ingress_package_list'),
 ]
 

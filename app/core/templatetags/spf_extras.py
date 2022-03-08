@@ -1,7 +1,7 @@
 from django import template
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext as _
-from dateutil import parser
+from datetime import datetime
 
 
 register = template.Library()

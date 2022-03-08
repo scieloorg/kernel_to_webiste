@@ -119,6 +119,19 @@ function addLinkCellToRow(row, text, href){
     cell = row.insertCell(-1);
     cell.appendChild(link);
 }
+
+function formatDate(date){
+    /*
+    Formata data.
+
+    Parameters
+    ----------
+    date: `Datetime`
+    */
+    var datestring = date.getFullYear() + '/' + (date.getMonth()+1) + "/" + date.getDate()  + " " + date.getHours() + ":" + date.getMinutes();
+    return datestring;
+}
+
 function showLoader(loader, button){
     /*
     Exibe um gif do tipo loading para indicar que dados estão sendo obtidos.

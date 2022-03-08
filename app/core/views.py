@@ -237,32 +237,71 @@ class UploadView(GroupRequiredMixin, generic.View):
             return JsonResponse({'error': _('Invalid form data')})
 
 
-@login_required(login_url='login')
+@login_required
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def ingress_package_download_page(request):
-    pid = request.GET.get('pid', '')
+def ingress_search_package_page(request):
+    pid = request.GET.get('pid', '').strip()
     job_id = request.GET.get('job', '')
+    packages = []
+    context = {}
 
-    # Há task sendo executada: renderiza template para mostrar resultados (ou aguardar por eles)
-    if job_id:
-        job = AsyncResult(job_id)
+    if pid:
+        for p in opac_adapter.get_article_files_by_pid(pid):
+            packages.append(p)
 
-        context = {
-            'pid': pid,
-            'check_status': 1,
-            'data': '',
-            'state': 'STARTING',
-            'task_id': job_id
-        }
-        return render(request, 'ingress/package_download.html', context)
+        if len(packages) == 0:
+            if job_id:
+                job = AsyncResult(job_id)
 
-    # Inicializa task para o PID informado e redireciona para a própria página aguardando resultado
-    elif pid:
-        job = task_get_package_uri_by_pid.delay(pid, request.user.id)
-        return HttpResponseRedirect(reverse('ingress_package_download') + '?job=' + job.id + '&pid=' + pid)
+                context.update({
+                    'pid': pid,
+                    'check_status': 1,
+                    'data': '',
+                    'state': 'STARTING',
+                    'task_id': job_id
+                })
 
-    # Abre template pela primeira vez para digitar PID
-    return render(request, 'ingress/package_download.html')
+                return render(request, 'ingress/package_search.html', context)
+            else:
+                try:
+                    # obtém dados da base opac.article
+                    xml_uri_and_name, renditions_uris_and_names = opac_adapter.get_article_uris_and_names(pid)
+
+                    if len(xml_uri_and_name) > 0:
+                        messages.info(request, _(f'No packages available for document {pid}. Generating package. Please, wait.'), extra_tags='alert alert-warning')
+
+                    # gera pacote para xml_uri_and_name e renditions_uris_and_names
+                    job = tasks.task_make_package.delay(
+                        request.user.id,
+                        pid,
+                        xml_uri_and_name['uri'].replace('https://kernel.scielo.br', 'http://192.168.0.33:6543'),
+                        renditions_uris_and_names,
+                    )
+
+                    return HttpResponseRedirect(reverse('ingress_package_search') + '?job=' + job.id + '&pid=' + pid)
+
+                except opac_adapter.DocumentDoesNotExistError:
+                    controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid, 'error': _('Document not found')}, Event.Status.FAILED)
+                    messages.error(request, _(f'Article not found for identifier {pid}. Please, enter a valid PID V3.'), extra_tags='alert alert-danger')
+
+                except packtools_exceptions.SPSLoadToXMLError:
+                    controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid, 'error': {_('It was not possible to generate package')}}, Event.Status.FAILED)
+                    messages.error(request, _(f'It was not possible to generate package for identifier {pid}. Please, contact the platform developers.'), extra_tags='alert alert-danger')
+
+                except KeyError:
+                    controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid, 'error': {_('The article record is inconsistent')}}, Event.Status.FAILED)
+                    messages.error(request, _(f'The article record {pid} is inconsistent. Please, contact the platform developers.'), extra_tags='alert alert-danger')
+
+                except Exception as e:
+                    messages.error(request, _(f'{e.__class__.__name__}. Please, contact the platform developers.'), extra_tags='alert alert-danger')
+
+                return render(request, 'ingress/package_search.html', context=context)
+
+        controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid}, Event.Status.COMPLETED)
+
+    context.update({'pid': pid, 'packages': packages, 'show_packages_table': len(packages) > 0})
+
+    return render(request, 'ingress/package_search.html', context=context)
 
 
 @login_required(login_url='login')

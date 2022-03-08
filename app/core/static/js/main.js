@@ -101,6 +101,24 @@ function ingressPackageUploadPopulateTable(data, journal_uri){
     }
 }
 
+function addLinkCellToRow(row, text, href){
+    /*
+    Adiciona célula do tipo link a um objeto `<tr>`.
+
+    Parameters
+    ----------
+    row: `<tr>`
+    text: string
+    href: string
+    */
+    link = document.createElement('a')
+    link.text = text;
+    link.href = href;
+    link.classList.add('link');
+    link.setAttribute('target', '_blank');
+    cell = row.insertCell(-1);
+    cell.appendChild(link);
+}
 function showLoader(loader, button){
     /*
     Exibe um gif do tipo loading para indicar que dados estão sendo obtidos.

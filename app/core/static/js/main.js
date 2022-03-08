@@ -27,39 +27,37 @@ function createMessage(msg, alert_class){
     return divAlert;
 }
 
-function ingressPackageDownloadCreateTable(data){
-    tableBody = document.getElementById('resultSearchPackagesTableBody')
+function ingressPackageSearchPopulateTable(data){
+    /*
+    Preenche tabela resultante de busca por pacote.
 
-    counter = 1
-    for (k in data['doc_pkgs']){
-        els = data['doc_pkgs'][k];
-        row = tableBody.insertRow(-1);
+    Parameters
+    ----------
+    data: array
+    */
+    packagesTable = document.getElementById('packagesTable');
+    tableBody = document.getElementById('packagesTableBody');
+    packagesTable.style.display = 'block';
 
-        tdUri = row.insertCell(-1);
-        tdUri.innerHTML = counter;
+    row = tableBody.insertRow(-1);
 
-        aPkgName = document.createElement('a')
-        aPkgName.text = els['name'];
-        aPkgName.href = els['uri'];
-        aPkgName.classList.add('link');
+    pkg_version = row.insertCell(-1);
+    pkg_version.innerHTML = data['name'];
 
-        tdPkgName = row.insertCell(-1);
-        tdPkgName.appendChild(aPkgName);
+    pkg_version = row.insertCell(-1);
+    pkg_version.innerHTML = data['version'];
 
-        tdCreated = row.insertCell(-1)
-        tdCreated.innerHTML = new Date(els['created']);
+    pkg_created = row.insertCell(-1)
+    pkg_created.innerHTML = formatDate(new Date(data['created']));
 
-        counter += 1;
-    }
+    addLinkCellToRow(row, 'ZIP', data['uri'])
 
-    if (data['doc_pkgs'].length > 0) {
-        document.getElementById('resultSearchPackages').style.display = 'block';
-    } else {
-        var divBaseMessages = document.getElementById('baseMessages');
-        for (k in data['errors']){
-            element_message = createMessage(data['errors'][k], 'alert-danger');
-            divBaseMessages.append(element_message);
-        }
+    var divBaseMessages = document.getElementById('baseMessages');
+    cleanMessages(divBaseMessages);
+    element_message = createMessage(gettext('Package was generated with success.'), 'alert-success');
+    divBaseMessages.append(element_message);
+}
+
     }
 }
 

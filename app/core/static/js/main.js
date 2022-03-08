@@ -170,3 +170,14 @@ function setEventStatusCompleted(object){
     object.classList.remove('bg-warning');
     object.classList.add('bg-success');
 }
+
+function cleanMessages(object){
+    /*
+    Limpa lista de mensagens
+
+    Parameters
+    ----------
+    object: Elemento `<div>`
+    */
+    object.innerHTML = '';
+}

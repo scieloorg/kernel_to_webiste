@@ -323,7 +323,7 @@ def ingress_package_list_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def journal_list_page(request):
-    journal_list = dsm_ingress._journals_manager.get_journals()
+    journal_list = opac_adapter.get_journals()
 
     paginator = Paginator(journal_list, 25)
     page_number = request.GET.get('page')
@@ -405,7 +405,7 @@ def migrate_identify_documents(request):
     ev = controller.add_event(request.user, Event.Name.IDENTIFY_DOCUMENTS_TO_MIGRATE)
 
     # identifica documentos para migrar
-    task_migrate_identify_documents.delay()
+    tasks.task_migrate_identify_documents.delay()
 
     controller.update_event(ev, {'status': Event.Status.COMPLETED})
 
@@ -439,7 +439,7 @@ def migrate_isis_db_page(request):
             ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_ID_FILE, {'path': fs_full_path_id_file})
 
             # inica task para efetuar migração
-            task_migrate_isis_db.delay(data_type, fs_full_path_id_file)
+            tasks.task_migrate_isis_db.delay(data_type, fs_full_path_id_file)
 
             input_path = fs_full_path_id_file
 
@@ -452,7 +452,7 @@ def migrate_isis_db_page(request):
             ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_ISIS_DB, {'path': full_isis_path})
 
             # inica task para efetuar migração
-            task_migrate_isis_db.delay(data_type, full_isis_path)
+            tasks.task_migrate_isis_db.delay(data_type, full_isis_path)
 
             input_path = full_isis_path
 
@@ -572,7 +572,7 @@ def migrate_search_pending_documents_page(request):
             for f in filter_documents:
                 migrate.append(f.id)
 
-        task_migrate_documents.delay(pid=",".join(migrate))
+        tasks.task_migrate_documents.delay(pid=",".join(migrate))
 
         ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_AVY)
 
@@ -588,7 +588,7 @@ def migrate_search_pending_documents_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_migration'])
 def migrate_pending_documents_by_journal_list_page(request):
-    journals = dsm_ingress._journals_manager.get_journals()
+    journals = opac_adapter.get_journals()
 
     paginator = Paginator(journals, 25)
     page_number = request.GET.get('page')
@@ -596,7 +596,7 @@ def migrate_pending_documents_by_journal_list_page(request):
 
     if request.method == 'POST':
         acronym = request.POST.getlist('acronym')
-        task_migrate_acron.delay(",".join(acronym))
+        tasks.task_migrate_acron.delay(",".join(acronym))
 
         # registra evento de migração por acrônimo
         ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_ACRONYM)
@@ -626,7 +626,7 @@ def migrate_pending_documents_by_issue_list_page(request):
             volumes = ",".join(selected)
 
         acron = request.GET.get('acron')
-        task_migrate_documents.delay(acronym=acron, volume=volumes, pub_year=years)
+        tasks.task_migrate_documents.delay(acronym=acron, volume=volumes, pub_year=years)
 
         # registra evento de migração por acrônimo, volume e ano
         ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_AVY)

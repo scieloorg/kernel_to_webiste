@@ -274,7 +274,7 @@ def ingress_search_package_page(request):
                     job = tasks.task_make_package.delay(
                         request.user.id,
                         pid,
-                        xml_uri_and_name['uri'].replace('https://kernel.scielo.br', 'http://192.168.0.110:6543'),
+                        xml_uri_and_name['uri'],
                         renditions_uris_and_names,
                     )
 

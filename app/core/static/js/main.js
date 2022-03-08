@@ -58,6 +58,46 @@ function ingressPackageSearchPopulateTable(data){
     divBaseMessages.append(element_message);
 }
 
+function ingressPackageUploadPopulateTable(data, journal_uri){
+    /*
+    Preenche tabela resultante de envio de pacote.
+
+    Parameters
+    ----------
+    data: array
+    journal_uri: string
+    */
+    div_uploaded_packages = document.getElementById('div_uploaded_packages');
+    div_uploaded_packages.style.display = "initial";
+
+    tbody_uploaded_packages = document.getElementById('tbody_uploaded_packages');
+
+    for (var i = 0; i < data['article_files'].length; i++){
+        row = tbody_uploaded_packages.insertRow(-1);
+
+        cell_package_file = row.insertCell(-1);
+        cell_package_file.innerHTML = data['package_file'];
+
+        cell_issn = row.insertCell(-1);
+        cell_issn.innerHTML = data['article_files'][i]['issn']
+
+        var acronym_text = data['article_files'][i]['acron'];
+        var journal_link = journal_uri + acronym_text;
+        addLinkCellToRow(row, acronym_text, journal_link);
+
+        var pid_text = data['article_files'][i]['pid'];
+        var pid_link = journal_uri + acronym_text + '/a/' + pid_text;
+        addLinkCellToRow(row, pid_text, pid_link);
+
+        var file_text = data['article_files'][i]['file']['name'];
+        var file_link = data['article_files'][i]['file']['uri'];;
+        addLinkCellToRow(row, file_text, file_link);
+
+        cell_version = row.insertCell(-1)
+        cell_version.innerHTML = data['article_files'][i]['version'];
+
+        cell_datetime = row.insertCell(-1)
+        cell_datetime.innerHTML = formatDate(new Date(data['datetime']));
     }
 }
 

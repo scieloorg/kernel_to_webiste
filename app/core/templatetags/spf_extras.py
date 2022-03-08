@@ -13,14 +13,11 @@ def has_group(user, group):
     return group in user.groups.all()
 
 
-@register.filter(name='to_datetime')
-def to_datetime(text):
-    if isinstance(text, str):
-        try:
-            return parser.parse(text)
-        except:
-            pass
-    return text
+@register.filter(name='format_date')
+def format_date(value):
+    if isinstance(value, datetime):
+        return value.strftime('%Y/%m/%d %H:%M')
+    return value
 
 
 @register.filter(name='to_short_group_name')

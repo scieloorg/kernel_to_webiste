@@ -6,27 +6,57 @@ from packtools.sps import sps_maker
 from adapters import opac_adapter, storage_adapter
 from core import controller, models, utils
 
-@app.task(bind=True,  max_retries=3)
-def task_get_package_uri_by_pid(self, pid, user_id):
-    # obtém objeto User
+
+@app.task(bind=True, max_retries=3)
+def task_make_package(self, user_id, pid, xml_uri, renditions_uris_and_names):
+    """
+    Costrói um pacote e atualiza registros no banco de dados e no file storage.
+
+    Parameters
+    ----------
+    user_id: int
+    pid: str
+    xml_uri: str
+    renditions_uris_and_names: dict
+
+    Returns
+    -------
+    package: dict
+    """
     user = controller.get_user_from_id(user_id)
+    ev = controller.add_event(user, models.Event.Name.MAKE_PACKAGE, annotation={'pid': pid}, status=models.Event.Status.INITIATED)
 
-    # cria evento de pesquisa por pacote
-    ev = controller.add_event(user, Event.Name.RETRIEVE_PACKAGE, annotation={'pid': pid})
+    # cria pacote ZIP
+    try:
+        article_package_uris_and_names = sps_maker.make_package_from_uris(xml_uri, renditions_uris_and_names)
+    except Exception as e:
+        controller.update_event(ev, {'status': models.Event.Status.FAILED, 'annotation': {'pid': pid, 'error': e.__class__.__name__}})
+        return {'error': e.__class__.__name__}
 
-    # obtém o {uri, name} de todos os pacotes existentes para o PID informado
-    result = dsm_ingress.get_package_uri_by_pid(pid)
+    # obtém registro de artigo no banco de dados
+    article = opac_adapter.get_article_by_pid(pid)
 
-    app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
+    # envia pacote ZIP para MinIO
+    article_package_uris_and_names['file'] = storage_adapter.register_article_files(
+        article.journal.scielo_issn,
+        article.aid,
+        article_package_uris_and_names['zip']
+    )
 
-    if result['errors']:
-        # houve alguma falha. atualiza status com valor FAILED e conteúdo da falha ocorrida
-        controller.update_event(ev, {'status': Event.Status.FAILED, 'annotation': result,})
-    else:
-        # evento ocorreu com sucesso. atualiza status com valor COMPLETED
-        controller.update_event(ev, {'status': Event.Status.COMPLETED})
+    # cria registro de article_files no banco de dados
+    article_files = opac_adapter.add_article_files(article.aid, article_package_uris_and_names)
 
-    return result
+    # atualiza evento de geração de pacote
+    controller.update_event(ev, {'status': models.Event.Status.COMPLETED})
+
+    return {
+        'package': {
+            'uri': article_files.file.uri,
+            'name': article_files.file.name,
+            'version': article_files.version,
+            'created': article_files.created,
+            }
+        }
 
 
 @app.task(bind=True,  max_retries=3)

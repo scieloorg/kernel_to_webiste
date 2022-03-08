@@ -87,12 +87,12 @@ $("#upload_form").submit(function(e){
             form_upload.reset();
             progress_bar.innerHTML = '';
 
-            console.log(response);
-
             if ('article_files' in response){
                 if (response['article_files'][0] == 'error'){
                     baseMessages = document.getElementById('baseMessages');
-                    baseMessages.appendChild(createMessage(gettext('It was not possible to upload package. Please, provide a valid ZIP file.'), 'alert-danger'))
+                    cleanMessages(baseMessages);
+                    error_message = gettext('It was not possible to upload package. Please, provide a valid ZIP file.');
+                    baseMessages.appendChild(createMessage(error_message, 'alert-danger'))
                 } else {
                     ingressPackageUploadPopulateTable(response, 'https://scielo.br/j/');
                 }

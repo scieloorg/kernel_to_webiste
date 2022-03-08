@@ -1,4 +1,12 @@
 function createMessage(msg, alert_class){
+    /* 
+    Cria mensagem de alerta na interface gráfica.
+
+    Parameters
+    ----------
+    msg: string
+    alert_class: classe CSS, por exemplo: alert alert-is-danger
+    */
     divAlert = document.createElement('div');
     divAlert.classList.add('alert', alert_class, 'alert-dismissible', 'fade', 'show', 'is-no-rounded', 'm-0', 'p-2');
     divAlert.setAttribute('role', 'alert');
@@ -56,16 +64,39 @@ function ingressPackageDownloadCreateTable(data){
 }
 
 function showLoader(loader, button){
+    /*
+    Exibe um gif do tipo loading para indicar que dados estão sendo obtidos.
+
+    Parameters
+    ----------
+    loader: Elemento `<div>`
+    button: Elemento `<button>`
+    */
     loader.style.display = 'block';
     button.setAttribute('disabled', 'disabled');
 }
 
 function hideLoader(loader, button){
+    /*
+    Oculta um gif do tipo loading para indicar que dados estão sendo obtidos.
+
+    Parameters
+    ----------
+    loader: Elemento `<div>`
+    button: Elemento `<button>`
+    */
     loader.style.display = 'none';
     button.removeAttribute('disabled');
 }
 
 function setEventStatusCompleted(object){
+    /*
+    Sobrescreve estado de evento.
+
+    Parameters
+    ----------
+    object: Elemento `<td>`
+    */
     object.innerHTML = gettext('Completed');
     object.classList.remove('bg-warning');
     object.classList.add('bg-success');

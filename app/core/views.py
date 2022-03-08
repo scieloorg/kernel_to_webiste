@@ -268,13 +268,13 @@ def ingress_search_package_page(request):
                     xml_uri_and_name, renditions_uris_and_names = opac_adapter.get_article_uris_and_names(pid)
 
                     if len(xml_uri_and_name) > 0:
-                        messages.info(request, _(f'No packages available for document {pid}. Generating package. Please, wait.'), extra_tags='alert alert-warning')
+                        messages.info(request, _('No packages available for document ') + pid + _('. Generating package. Please, wait.'), extra_tags='alert alert-warning')
 
                     # gera pacote para xml_uri_and_name e renditions_uris_and_names
                     job = tasks.task_make_package.delay(
                         request.user.id,
                         pid,
-                        xml_uri_and_name['uri'].replace('https://kernel.scielo.br', 'http://192.168.0.33:6543'),
+                        xml_uri_and_name['uri'].replace('https://kernel.scielo.br', 'http://192.168.0.110:6543'),
                         renditions_uris_and_names,
                     )
 
@@ -282,18 +282,18 @@ def ingress_search_package_page(request):
 
                 except opac_adapter.DocumentDoesNotExistError:
                     controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid, 'error': _('Document not found')}, Event.Status.FAILED)
-                    messages.error(request, _(f'Article not found for identifier {pid}. Please, enter a valid PID V3.'), extra_tags='alert alert-danger')
+                    messages.error(request, _('Article not found for identifier ') +  pid + _('. Please, enter a valid PIDv3.'), extra_tags='alert alert-danger')
 
                 except packtools_exceptions.SPSLoadToXMLError:
                     controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid, 'error': {_('It was not possible to generate package')}}, Event.Status.FAILED)
-                    messages.error(request, _(f'It was not possible to generate package for identifier {pid}. Please, contact the platform developers.'), extra_tags='alert alert-danger')
+                    messages.error(request, _('It was not possible to generate package for identifier ') + pid + _('. Please, contact the platform developers.'), extra_tags='alert alert-danger')
 
                 except KeyError:
                     controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid, 'error': {_('The article record is inconsistent')}}, Event.Status.FAILED)
-                    messages.error(request, _(f'The article record {pid} is inconsistent. Please, contact the platform developers.'), extra_tags='alert alert-danger')
+                    messages.error(request, _('The article record ') + pid + _(' is inconsistent. Please, contact the platform developers.'), extra_tags='alert alert-danger')
 
                 except Exception as e:
-                    messages.error(request, _(f'{e.__class__.__name__}. Please, contact the platform developers.'), extra_tags='alert alert-danger')
+                    messages.error(request, e.__class__.__name__ + _(' . Please, contact the platform developers.'), extra_tags='alert alert-danger')
 
                 return render(request, 'ingress/package_search.html', context=context)
 

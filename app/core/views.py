@@ -41,9 +41,7 @@ def user_register_page(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request,
-                             _('User %s was created') % username,
-                             extra_tags='alert-success')
+            messages.success(request, _('User %s was created') % username, extra_tags='alert-success')
             return redirect('login')
         else:
             for val in form.errors.values():
@@ -211,23 +209,30 @@ class UploadView(GroupRequiredMixin, generic.View):
         form = UploadPackageFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-            ev = controller.add_event(request.user, Event.Name.UPLOAD_PACKAGE_TO_DISK, {'file_name': request.FILES['package_file'].name})
-            result = handle_upload_file(request.FILES['package_file'])
+            ev = controller.add_event(request.user, Event.Name.UPLOAD_PACKAGE, {'file_name': request.FILES['package_file'].name})
+            result = utils.handle_upload_file(request.FILES['package_file'])
 
             json_data = {
                 'package_path': result.get('package_path'),
                 'package_file': result.get('package_file'),
                 'error': result.get('error'),
+                'article_files': [],
             }
-            
+
             if result.get('success'):
-                controller.update_event(ev, {'status': Event.Status.COMPLETED})
-                task_ingress_package(json_data.get('package_path'), json_data.get('package_file'), request.user.id)
+                pid_issn_to_uris_and_names = tasks.task_upload_package(json_data.get('package_path'), json_data.get('package_file'), request.user.id)
                 json_data.update({'datetime': result.get('datetime'),})
+                json_data['article_files'].extend(pid_issn_to_uris_and_names)
+
+                if 'error' in pid_issn_to_uris_and_names:
+                    controller.update_event(ev, {'annotation': {'error': _('Invalid ZIP file')},'status': Event.Status.FAILED})
+                else:
+                    controller.update_event(ev, {'status': Event.Status.COMPLETED})
+
                 return JsonResponse(json_data)
             else:
                 json_data.update({'error': result.get('error'),})
-                return JsonResponse(json_data)  
+                return JsonResponse(json_data)
         else:
             return JsonResponse({'error': _('Invalid form data')})
 

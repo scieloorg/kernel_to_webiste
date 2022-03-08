@@ -8,6 +8,7 @@ requires = [
     'Django',
     'django-celery-results',
     'gunicorn',
+    'packtools',
     'pytz',
     'python-dateutil',
     'sqlparse',

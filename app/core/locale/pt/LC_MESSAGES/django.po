@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-29 16:12+0000\n"
+"POT-Creation-Date: 2022-03-08 21:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -91,16 +91,18 @@ msgid "Failed"
 msgstr "Falhou"
 
 #: models.py:49
+msgid "Make package"
+msgstr "Construir pacote"
+
+#: models.py:50
 msgid "Retrieve package"
 msgstr "Procurar pacote"
 
-#: models.py:50
-msgid "Upload package to disk"
-msgstr "Enviar pacote para disco"
-
-#: models.py:51
-msgid "Upload package to MinIO"
-msgstr "Enviar pacote para MinIO"
+#: models.py:51 templates/base.html:41 templates/index.html:41
+#: templates/ingress/package_upload.html:6
+#: templates/ingress/package_upload.html:10
+msgid "Upload package"
+msgstr "Enviar pacote"
 
 #: models.py:52
 msgid "Start validation"
@@ -134,48 +136,58 @@ msgstr "Iniciar migração por acrônimo de periódico"
 msgid "Start migration by volume or year"
 msgstr "Iniciar migração por volume ou ano"
 
-#: templates/base.html:29 templates/journal/journal_list.html:5
+#: templates/base.html:30 templates/journal/journal_list.html:5
 #: templates/journal/journal_list.html:9
 #: templates/migration/pending_documents_by_journal_list.html:5
 #: templates/migration/pending_documents_by_journal_list.html:9
 msgid "Journals"
 msgstr "Periódicos"
 
-#: templates/base.html:32
+#: templates/base.html:33
 msgid "Documents"
 msgstr "Documentos"
 
-#: templates/base.html:44 templates/index.html:19
+#: templates/base.html:38 templates/index.html:37
+msgid "Ingress"
+msgstr "Ingresso"
+
+#: templates/base.html:40 templates/index.html:40
+#: templates/ingress/package_search.html:6
+#: templates/ingress/package_search.html:10
+msgid "Search package"
+msgstr "Procurar pacote"
+
+#: templates/base.html:54 templates/index.html:19
 #: templates/tracking/event_list.html:6 templates/tracking/event_list.html:10
 msgid "Events"
 msgstr "Ações"
 
-#: templates/base.html:45 templates/index.html:26 templates/user/profile.html:6
+#: templates/base.html:55 templates/index.html:26 templates/user/profile.html:6
 #: templates/user/profile.html:10
 msgid "Profile"
 msgstr "Perfil"
 
-#: templates/base.html:46 templates/index.html:27
+#: templates/base.html:56 templates/index.html:27
 #: templates/user/profile_edit.html:7 templates/user/profile_edit.html:11
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: templates/base.html:47 templates/index.html:28
+#: templates/base.html:57 templates/index.html:28
 #: templates/user/change_password.html:7 templates/user/change_password.html:12
 #: templates/user/change_password.html:27
 msgid "Change password"
 msgstr "Alterar senha"
 
-#: templates/base.html:49
+#: templates/base.html:59
 msgid "Logout"
 msgstr "Sair"
 
-#: templates/base.html:54 templates/user/login.html:7
+#: templates/base.html:64 templates/user/login.html:7
 #: templates/user/login.html:25 templates/user/register.html:44
 msgid "Login"
 msgstr "Entrar"
 
-#: templates/base.html:57 templates/user/login.html:27
+#: templates/base.html:67 templates/user/login.html:27
 #: templates/user/register.html:7
 msgid "Sign up"
 msgstr "Registrar-se"
@@ -200,21 +212,6 @@ msgstr "Pacotes depositados"
 #: templates/index.html:24
 msgid "Migrated data"
 msgstr "Dados migrados"
-
-#: templates/index.html:37
-msgid "Ingress"
-msgstr "Ingresso"
-
-#: templates/index.html:40 templates/ingress/package_download.html:6
-#: templates/ingress/package_download.html:10
-#: templates/ingress/package_download.html:16
-msgid "Search package"
-msgstr "Procurar pacote"
-
-#: templates/index.html:41 templates/ingress/package_upload.html:7
-#: templates/ingress/package_upload.html:11
-msgid "Upload package"
-msgstr "Enviar pacote"
 
 #: templates/index.html:49
 msgid "Document management"
@@ -296,53 +293,16 @@ msgstr "Adicionar usuário"
 msgid "User groups"
 msgstr "Grupos de usuário"
 
-#: templates/ingress/package_download.html:22
-#: templates/migration/search_pending_documents.html:36
-msgid "Document identifier"
-msgstr "Identificador de documento"
-
-#: templates/ingress/package_download.html:23
-#: templates/migration/search_pending_documents.html:38
-msgid "Enter a document identifier"
-msgstr "Digite um identificador de documento"
-
-#: templates/ingress/package_download.html:25
-#: templates/migration/search_pending_documents.html:16
-#: templates/migration/search_pending_documents.html:42
-msgid "Search"
-msgstr "Procurar"
-
-#: templates/ingress/package_download.html:31
-msgid "Loading"
-msgstr "Carregando"
-
-#: templates/ingress/package_download.html:33
-msgid "Collecting resources"
-msgstr "Coletando recursos"
-
-#: templates/ingress/package_download.html:39
-msgid "Results for document"
-msgstr "Resultados para o documento"
-
-#: templates/ingress/package_download.html:43
-msgid "Version"
-msgstr "Versão"
-
-#: templates/ingress/package_download.html:44
-#: templates/ingress/package_list.html:20
-msgid "Package name"
-msgstr "Nome do pacote"
-
-#: templates/ingress/package_download.html:45
-msgid "Creation date"
-msgstr "Data de criação"
-
 #: templates/ingress/package_list.html:19 templates/tracking/event_list.html:20
 #: templates/user/add.html:18 templates/user/groups_edit.html:21
 #: templates/user/login.html:18 templates/user/profile.html:18
 #: templates/user/profile_edit.html:17 templates/user/register.html:18
 msgid "Username"
 msgstr "Usuário"
+
+#: templates/ingress/package_list.html:20
+msgid "Package name"
+msgstr "Nome do pacote"
 
 #: templates/ingress/package_list.html:21
 msgid "Datetime"
@@ -406,12 +366,100 @@ msgstr "Próximo"
 msgid "Last"
 msgstr "Último"
 
-#: templates/ingress/package_upload.html:20
-#: templates/ingress/package_upload.html:38
-msgid "Package file"
-msgstr "Pacote"
+#: templates/ingress/package_search.html:16
+msgid "Search for document identifer and find ZIP packages"
+msgstr "Pesquisa por identificadores de documentos e encontre pacotes ZIP"
 
-#: templates/ingress/package_upload.html:39
+#: templates/ingress/package_search.html:22
+msgid "Document Identifier"
+msgstr "Identificador de Documento"
+
+#: templates/ingress/package_search.html:23
+msgid "Enter a Document identifier (PIDv3)"
+msgstr "Digite um identificador de Documento (PIDv3)"
+
+#: templates/ingress/package_search.html:24
+msgid "Hint: "
+msgstr "Dica: "
+
+#: templates/ingress/package_search.html:27
+#: templates/ingress/package_upload.html:27
+msgid "Reset"
+msgstr "Limpar"
+
+#: templates/ingress/package_search.html:28
+#: templates/migration/search_pending_documents.html:16
+#: templates/migration/search_pending_documents.html:42
+msgid "Search"
+msgstr "Procurar"
+
+#: templates/ingress/package_search.html:35
+msgid "Loading"
+msgstr "Carregando"
+
+#: templates/ingress/package_search.html:37
+msgid "Collecting resources. Please, wait."
+msgstr "Obtendo recursos. Por favor, aguarde."
+
+#: templates/ingress/package_search.html:47
+msgid "Results for document identifier"
+msgstr "Resultados para o identificador de documento"
+
+#: templates/ingress/package_search.html:51
+msgid "Name"
+msgstr "Nome"
+
+#: templates/ingress/package_search.html:52
+#: templates/ingress/package_upload.html:46
+msgid "Version"
+msgstr "Versão"
+
+#: templates/ingress/package_search.html:53
+msgid "Create date"
+msgstr "Data de criação"
+
+#: templates/ingress/package_search.html:54
+msgid "Download"
+msgstr "Baixar"
+
+#: templates/ingress/package_upload.html:16
+msgid "Upload a package for updating site content"
+msgstr "Enviar um pacote para atualização do contéudo do site"
+
+#: templates/ingress/package_upload.html:22
+msgid "Package File"
+msgstr "Arquivo de pacote"
+
+#: templates/ingress/package_upload.html:24
+msgid "Hint: choose a ZIP file."
+msgstr "Dica: escolha um arquivo em formato ZIP."
+
+#: templates/ingress/package_upload.html:28
+msgid "Upload"
+msgstr "Enviar"
+
+#: templates/ingress/package_upload.html:41
+msgid "Uploaded package"
+msgstr "Pacote enviado"
+
+#: templates/ingress/package_upload.html:42
+#: templates/journal/journal_list.html:23
+msgid "SciELO ISSN"
+msgstr "SciELO ISSN"
+
+#: templates/ingress/package_upload.html:43
+msgid "Journal acronym"
+msgstr "Acrônimos de periódicos"
+
+#: templates/ingress/package_upload.html:44
+msgid "Document"
+msgstr "Documento"
+
+#: templates/ingress/package_upload.html:45
+msgid "Package generated"
+msgstr "Pacote gerado"
+
+#: templates/ingress/package_upload.html:47
 msgid "Uploaded datetime"
 msgstr "Data de envio"
 
@@ -436,10 +484,6 @@ msgstr "Print ISSN"
 #: templates/journal/journal_list.html:22
 msgid "Online ISSN"
 msgstr "Online ISSN"
-
-#: templates/journal/journal_list.html:23
-msgid "SciELO ISSN"
-msgstr "SciELO ISSN"
 
 #: templates/migration/isis_db.html:15
 msgid "Migrate database by ID file or ISIS database"
@@ -532,6 +576,14 @@ msgstr "Insira um ISSN"
 #: templates/migration/search_pending_documents.html:29
 msgid "Year"
 msgstr "Ano"
+
+#: templates/migration/search_pending_documents.html:36
+msgid "Document identifier"
+msgstr "Identificador de documento"
+
+#: templates/migration/search_pending_documents.html:38
+msgid "Enter a document identifier"
+msgstr "Digite um identificador de documento"
 
 #: templates/migration/search_pending_documents.html:49
 msgid "Pending documents"
@@ -688,19 +740,19 @@ msgstr "Digite sua senha novamente"
 msgid "Already have an account"
 msgstr "Já possui uma conta"
 
-#: templatetags/spf_extras.py:29
+#: templatetags/spf_extras.py:26
 msgid "Q. Analyst"
 msgstr "An. de Qualidade"
 
-#: templatetags/spf_extras.py:31
+#: templatetags/spf_extras.py:28
 msgid "Op. Ingress"
 msgstr "Op. de Ingresso"
 
-#: templatetags/spf_extras.py:33
+#: templatetags/spf_extras.py:30
 msgid "Op. Migration"
 msgstr "Op. de Migração"
 
-#: templatetags/spf_extras.py:35
+#: templatetags/spf_extras.py:32
 msgid "Manager"
 msgstr "Gerente"
 
@@ -709,72 +761,93 @@ msgstr "Gerente"
 msgid "File %s does not exist"
 msgstr "Arquivo %s não existe"
 
-#: views.py:73 views.py:135
+#: views.py:44 views.py:105
 #, python-format
 msgid "User %s was created"
 msgstr "Usuário %s foi criado"
 
-#: views.py:103
+#: views.py:73
 msgid "Incorrect username or password"
 msgstr "Nome de usuário ou senha incorreto"
 
-#: views.py:164
+#: views.py:134
 msgid "Your password was updated"
 msgstr "Sua senha foi atualizada"
 
-#: views.py:200
+#: views.py:170
 msgid "Users' groups were updated"
 msgstr "Grupos de usuários foram atualizados"
 
-#: views.py:220
+#: views.py:190
 #, python-format
 msgid "User %s was updated"
 msgstr "Usuário %s foi atualizado"
 
-#: views.py:260
+#: views.py:228
+msgid "Invalid ZIP file"
+msgstr "Arquivo ZIP inválido"
+
+#: views.py:237
 msgid "Invalid form data"
 msgstr "Dados de formulário inválidos"
 
-#: views.py:353
+#: views.py:271
+msgid "No packages available for document "
+msgstr "Não há pacotes disponíveis para o documento "
+
+#: views.py:271
+msgid ". Generating package. Please, wait."
+msgstr ". Gerando pacote. Por favor, aguarde."
+
+#: views.py:284
+msgid "Document not found"
+msgstr "Documento não encontrado"
+
+#: views.py:285
+msgid "Article not found for identifier "
+msgstr "Não foi encontrado artigo para o identificador "
+
+#: views.py:285
+msgid ". Please, enter a valid PIDv3."
+msgstr ". Por favor, digite um código PIDv3 válido."
+
+#: views.py:288
+msgid "It was not possible to generate package"
+msgstr "Não foi possível gerar o pacote"
+
+#: views.py:289
+msgid "It was not possible to generate package for identifier "
+msgstr "Não foi possível gerar o pacote para o identificador "
+
+#: views.py:289
+msgid ". Please, contact the platform developers."
+msgstr ". Por favor, contate os desenvolvedores desta plataforma."
+
+#: views.py:292
+msgid "The article record is inconsistent"
+msgstr "Os dados do artigo estão inconsistentes na base de dados"
+
+#: views.py:293
+msgid "The article record "
+msgstr "O registro do artigo "
+
+#: views.py:293
+msgid " is inconsistent. Please, contact the platform developers."
+msgstr " está inconsistente. Por favor, contate os desenvolvedores desta plataforma."
+
+#: views.py:296
+msgid " . Please, contact the platform developers."
+msgstr " . Por favor, contate os desenvolvedores desta plataforma."
+
+#: views.py:369
 #, python-format
 msgid "User %s are not allowed to see the status of the event %s"
 msgstr "Usuário %s não possui permissão para visualizar o estado do evento %s"
 
-#: views.py:357
+#: views.py:373
 msgid "No results were found"
 msgstr "Não foram encontrados resultados"
 
-#: views.py:397 views.py:448 views.py:563 views.py:588 views.py:618
+#: views.py:413 views.py:464 views.py:579 views.py:604 views.py:634
 msgid "Task submitted successfully"
 msgstr "Tarefa enviada com sucesso"
-
-#~ msgid "Migrate title"
-#~ msgstr "Migrar periódico"
-
-#~ msgid "Migrate fascicle"
-#~ msgstr "Migrar fascículo"
-
-#~ msgid "Migrate document"
-#~ msgstr "Migrar artigo"
-
-#~ msgid "Identifier"
-#~ msgstr "Identificador de documento"
-
-#~ msgid "Update date"
-#~ msgstr "Data de atualização"
-
-#~ msgid "Upload"
-#~ msgstr "Enviar"
-
-#, python-format
-#~ msgid "Errors ocurred: %s"
-#~ msgstr "Ocorreram erros: %s"
-
-#, python-format
-#~ msgid "Package (%(name)s, %(id)s) was added"
-#~ msgstr "Pacote (%(name)s, %(id)s) foi adicionado"
-
-#~ msgid " does not have a valid format. Please provide a zip file."
-#~ msgstr ""
-#~ " não possui um formato válido. Por favor, forneça um arquivo em formato "
-#~ "zip."

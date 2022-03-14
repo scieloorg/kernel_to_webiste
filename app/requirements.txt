@@ -1,6 +1,7 @@
--e git+https://github.com/scieloorg/dsm.git#egg=dsm
--e git+https://github.com/scieloorg/opac_schema.git#egg=opac_schema
--e git+https://github.com/scieloorg/packtools.git#egg=packtools
+-e git+https://github.com/scieloorg/dsm@v0.1.1#egg=dsm
+-e git+https://github.com/scieloorg/opac_schema@v2.65#egg=opac_schema
+-e git+https://github.com/scieloorg/packtools@2.9.2#egg=packtools
+-e git+https://github.com/scieloorg/scielo_v3_manager@0.6#egg=scielo_v3_manager
 asgiref==3.4.1
 celery==5.1.2
 confusable-homoglyphs==3.2.0

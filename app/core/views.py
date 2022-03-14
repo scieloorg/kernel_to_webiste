@@ -217,6 +217,7 @@ class UploadView(GroupRequiredMixin, generic.View):
                 'package_file': result.get('package_file'),
                 'error': result.get('error'),
                 'article_files': [],
+                'opac_uri': settings.OPAC_URI,
             }
 
             if result.get('success'):

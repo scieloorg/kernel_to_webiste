@@ -94,7 +94,8 @@ $("#upload_form").submit(function(e){
                     error_message = gettext('It was not possible to upload package. Please, provide a valid ZIP file.');
                     baseMessages.appendChild(createMessage(error_message, 'alert-danger'))
                 } else {
-                    ingressPackageUploadPopulateTable(response, 'https://scielo.br/j/');
+                    journal_uri = response['opac_uri'] + '/j/';
+                    ingressPackageUploadPopulateTable(response, journal_uri);
                 }
             }
 

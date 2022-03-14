@@ -45,11 +45,11 @@ __Create a PostgreSQL database named "spf"__
 
 ```shell
 # Through a Docker container with a PostgreSQL database
-docker exec --user postgres -it scl_postgres_1 psql -c 'create database spf;'
+docker exec --user <USERNAME> -it <CONTAINER_NAME> psql -c 'create database <DATABASE>;'
 
 # Or through psql
-psql --user postgres;
-create database spf;
+psql --user <USERNAME>;
+create database <DATABASE>;
 ```
 
 __Run the Message Broker RabbitMQ__

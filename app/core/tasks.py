@@ -94,7 +94,6 @@ def task_upload_package(self, package_path, package_file, user_id):
         renditions_uris_and_names = storage_adapter.register_renditions(pkg_data, xml_sps)
         xml_uri_and_name = storage_adapter.register_xml(xml_sps)
 
-        article_package_uris_and_names = sps_maker.make_package_from_uris(xml_uri_and_name['uri'], renditions_uris_and_names)
         article_package_uris_and_names['file'] = storage_adapter.register_article_files(
             xml_sps.issn,
             xml_sps.scielo_pid_v3,
@@ -122,10 +121,6 @@ def task_upload_package(self, package_path, package_file, user_id):
             package_uris_and_names,
         )
 
-        package_uris_and_names['pid'] = article_files.aid
-        package_uris_and_names['issn'] = xml_sps.issn
-        package_uris_and_names['acron'] = xml_sps.acron
-        package_uris_and_names['version'] = article_files.version
 
         packages_metadata.append(package_uris_and_names)
 
@@ -140,6 +135,21 @@ def task_upload_package(self, package_path, package_file, user_id):
 def task_get_names_and_packages(self, path):
     return sps_maker.get_names_and_packages(path)
 
+
+@app.task(bind=True, max_retries=3)
+
+
+@app.task(bind=True, max_retries=3)
+def task_fill_package_uris_and_names(self, package_uris_and_names, article_files, xml_sps):
+    package_uris_and_names['pid'] = article_files.aid
+    package_uris_and_names['issn'] = xml_sps.issn
+    package_uris_and_names['acron'] = xml_sps.acron
+    package_uris_and_names['version'] = article_files.version
+
+
+@app.task(bind=True, max_retries=3)
+def task_make_package_from_uris(self, xml_uri_and_name, renditions_uris_and_names):
+    return sps_maker.make_package_from_uris(xml_uri_and_name['uri'], renditions_uris_and_names)
 
 @app.task(bind=True,  max_retries=3)
 def task_migrate_identify_documents(self):

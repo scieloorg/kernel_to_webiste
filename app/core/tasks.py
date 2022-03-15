@@ -77,7 +77,7 @@ def task_upload_package(self, package_path, package_file, user_id):
 
     # obtém os arquivos de cada documento
     try:
-        names_and_packages = sps_maker.get_names_and_packages(package_path)
+        names_and_packages = task_get_names_and_packages(package_path)
     except ValueError:
         return ['error']
 
@@ -134,6 +134,11 @@ def task_upload_package(self, package_path, package_file, user_id):
     utils.fs_delete_file(package_path)
 
     return packages_metadata
+
+
+@app.task(bind=True, max_retries=3)
+def task_get_names_and_packages(self, path):
+    return sps_maker.get_names_and_packages(path)
 
 
 @app.task(bind=True,  max_retries=3)

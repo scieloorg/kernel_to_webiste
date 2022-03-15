@@ -121,9 +121,14 @@ def task_upload_package(self, package_path, package_file, user_id):
 
         controller.update_event(ev, {'status': models.Event.Status.COMPLETED})
 
-    utils.fs_delete_file(package_path)
 
     return packages_metadata
+
+
+@app.task(bind=True, max_retries=3)
+def task_delete_file(self, path):
+    utils.fs_delete_file(path)
+    return
 
 
 @app.task(bind=True, max_retries=3)

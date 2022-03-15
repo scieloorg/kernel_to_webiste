@@ -115,3 +115,5 @@ MEDIA_INGRESS_TEMP = os.path.join(MEDIA_ROOT, 'ingress', 'tmp')
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'pyamqp://broker:5672'),
 
 CELERY_RESULT_BACKEND = 'django-db'
+
+OPAC_URI = os.environ.get('OPAC_URI', 'https://scielo.br')

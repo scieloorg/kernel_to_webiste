@@ -20,299 +20,299 @@ msgstr ""
 
 #: decorators.py:26 decorators.py:30
 msgid "You do not have permission to access the requested page "
-msgstr "Você não possui permissão para acessar a página requisitada "
+msgstr ""
 
 #: forms.py:15 forms.py:39 templates/user/login.html:19
 #: templates/user/register.html:19
 msgid "Enter your username"
-msgstr "Digite seu nome de usuário"
+msgstr ""
 
 #: forms.py:19 forms.py:44 templates/user/profile_edit.html:22
 #: templates/user/register.html:23
 msgid "Enter your e-mail"
-msgstr "Digite seu e-mail"
+msgstr ""
 
 #: forms.py:23 forms.py:48 templates/user/profile_edit.html:26
 #: templates/user/register.html:27
 msgid "Enter your first name"
-msgstr "Digite seu nome"
+msgstr ""
 
 #: forms.py:27 forms.py:52 templates/user/profile_edit.html:30
 #: templates/user/register.html:31
 msgid "Enter your last name"
-msgstr "Digite seu sobrenome"
+msgstr ""
 
 #: models.py:16 models.py:34
 msgid "Received"
-msgstr "Recebido"
+msgstr ""
 
 #: models.py:17
 msgid "Queued for validation"
-msgstr "Agendado para validação"
+msgstr ""
 
 #: models.py:18
 msgid "Validating"
-msgstr "Validando"
+msgstr ""
 
 #: models.py:19
 msgid "Validation failure"
-msgstr "Validação falhou"
+msgstr ""
 
 #: models.py:20
 msgid "Validated"
-msgstr "Validado"
+msgstr ""
 
 #: models.py:21
 msgid "Queued for uploading"
-msgstr "Enfileirado para envio"
+msgstr ""
 
 #: models.py:22
 msgid "Uploading"
-msgstr "Enviando"
+msgstr ""
 
 #: models.py:23
 msgid "Uploading failure"
-msgstr "Falha no envio"
+msgstr ""
 
 #: models.py:24
 msgid "Uploaded"
-msgstr "Enviado com sucesso"
+msgstr ""
 
 #: models.py:44
 msgid "Initiated"
-msgstr "Iniciado"
+msgstr ""
 
 #: models.py:45
 msgid "Completed"
-msgstr "Completado"
+msgstr ""
 
 #: models.py:46
 msgid "Failed"
-msgstr "Falhou"
+msgstr ""
 
 #: models.py:49
 msgid "Make package"
-msgstr "Construir pacote"
+msgstr ""
 
 #: models.py:50
 msgid "Retrieve package"
-msgstr "Procurar pacote"
+msgstr ""
 
 #: models.py:51 templates/base.html:41 templates/index.html:41
 #: templates/ingress/package_upload.html:6
 #: templates/ingress/package_upload.html:10
 msgid "Upload package"
-msgstr "Enviar pacote"
+msgstr ""
 
 #: models.py:52
 msgid "Start validation"
-msgstr "Iniciar validação"
+msgstr ""
 
 #: models.py:53
 msgid "Finalize validation"
-msgstr "Finalizar validação"
+msgstr ""
 
 #: models.py:54
 msgid "Change user groups"
-msgstr "Alterar grupos de usuários"
+msgstr ""
 
 #: models.py:55
 msgid "Identify documents to migrate"
-msgstr "Identificar documentos para migração"
+msgstr ""
 
 #: models.py:56
 msgid "Start migration by id file"
-msgstr "Iniciar migração por arquivo id"
+msgstr ""
 
 #: models.py:57
 msgid "Start migration by ISIS database"
-msgstr "Iniciar migração por base ISIS"
+msgstr ""
 
 #: models.py:58
 msgid "Start migration by acronym"
-msgstr "Iniciar migração por acrônimo de periódico"
+msgstr ""
 
 #: models.py:59
 msgid "Start migration by volume or year"
-msgstr "Iniciar migração por volume ou ano"
+msgstr ""
 
 #: templates/base.html:30 templates/journal/journal_list.html:5
 #: templates/journal/journal_list.html:9
 #: templates/migration/pending_documents_by_journal_list.html:5
 #: templates/migration/pending_documents_by_journal_list.html:9
 msgid "Journals"
-msgstr "Periódicos"
+msgstr ""
 
 #: templates/base.html:33
 msgid "Documents"
-msgstr "Documentos"
+msgstr ""
 
 #: templates/base.html:38 templates/index.html:37
 msgid "Ingress"
-msgstr "Ingresso"
+msgstr ""
 
 #: templates/base.html:40 templates/index.html:40
 #: templates/ingress/package_search.html:6
 #: templates/ingress/package_search.html:10
 msgid "Search package"
-msgstr "Procurar pacote"
+msgstr ""
 
 #: templates/base.html:54 templates/index.html:19
 #: templates/tracking/event_list.html:6 templates/tracking/event_list.html:10
 msgid "Events"
-msgstr "Ações"
+msgstr ""
 
 #: templates/base.html:55 templates/index.html:26 templates/user/profile.html:6
 #: templates/user/profile.html:10
 msgid "Profile"
-msgstr "Perfil"
+msgstr ""
 
 #: templates/base.html:56 templates/index.html:27
 #: templates/user/profile_edit.html:7 templates/user/profile_edit.html:11
 msgid "Edit profile"
-msgstr "Editar perfil"
+msgstr ""
 
 #: templates/base.html:57 templates/index.html:28
 #: templates/user/change_password.html:7 templates/user/change_password.html:12
 #: templates/user/change_password.html:27
 msgid "Change password"
-msgstr "Alterar senha"
+msgstr ""
 
 #: templates/base.html:59
 msgid "Logout"
-msgstr "Sair"
+msgstr ""
 
 #: templates/base.html:64 templates/user/login.html:7
 #: templates/user/login.html:25 templates/user/register.html:44
 msgid "Login"
-msgstr "Entrar"
+msgstr ""
 
 #: templates/base.html:67 templates/user/login.html:27
 #: templates/user/register.html:7
 msgid "Sign up"
-msgstr "Registrar-se"
+msgstr ""
 
 #: templates/faq.html:5 templates/faq.html:10
 msgid "Frequently asked questions"
-msgstr "Perguntas frequentes"
+msgstr ""
 
 #: templates/index.html:10
 msgid "Home"
-msgstr "Início"
+msgstr ""
 
 #: templates/index.html:16
 msgid "My space"
-msgstr "Meu espaço"
+msgstr ""
 
 #: templates/index.html:21 templates/ingress/package_list.html:6
 #: templates/ingress/package_list.html:10
 msgid "Deposited packages"
-msgstr "Pacotes depositados"
+msgstr ""
 
 #: templates/index.html:24
 msgid "Migrated data"
-msgstr "Dados migrados"
+msgstr ""
 
 #: templates/index.html:49
 msgid "Document management"
-msgstr "Gerenciamento de documentos"
+msgstr ""
 
 #: templates/index.html:52
 msgid "Add article to issue"
-msgstr "Adicionar artigo a fascículo"
+msgstr ""
 
 #: templates/index.html:53
 msgid "Include errata into article"
-msgstr "Incluir Errata em artigo"
+msgstr ""
 
 #: templates/index.html:54
 msgid "Schedule article for publication"
-msgstr "Agendar artigo para publicação"
+msgstr ""
 
 #: templates/index.html:55
 msgid "Edit article assets and renditions"
-msgstr "Edite assets e renditions"
+msgstr ""
 
 #: templates/index.html:56
 msgid "Edit article metadata"
-msgstr "Edite metadados do artigo"
+msgstr ""
 
 #: templates/index.html:57
 msgid "Find problems"
-msgstr "Procurar problemas"
+msgstr ""
 
 #: templates/index.html:68
 msgid "Migration"
-msgstr "Migração"
+msgstr ""
 
 #: templates/index.html:71
 msgid "Identify documents"
-msgstr "Identificar documentos"
+msgstr ""
 
 #: templates/index.html:72 templates/migration/isis_db.html:5
 #: templates/migration/isis_db.html:9
 msgid "Migrate database"
-msgstr "Migrar base"
+msgstr ""
 
 #: templates/index.html:73 templates/migration/search_pending_documents.html:6
 #: templates/migration/search_pending_documents.html:11
 msgid "Search pending documents"
-msgstr "Procurar documentos pendentes"
+msgstr ""
 
 #: templates/index.html:74
 msgid "Pending documents by journal"
-msgstr "Procurar documentos pendentes por periódico"
+msgstr ""
 
 #: templates/index.html:84
 msgid "Package management"
-msgstr "Gerenciamento de pacotes"
+msgstr ""
 
 #: templates/index.html:87
 msgid "All deposited packages"
-msgstr "Todo os pacotes depositados"
+msgstr ""
 
 #: templates/index.html:88
 msgid "Articles' files"
-msgstr "Arquivos de artigos"
+msgstr ""
 
 #: templates/index.html:96
 msgid "User management"
-msgstr "Gerenciamento de usuário"
+msgstr ""
 
 #: templates/index.html:99
 msgid "All events"
-msgstr "Todas as ações"
+msgstr ""
 
 #: templates/index.html:100 templates/user/add.html:7
 #: templates/user/add.html:46 templates/user/register.html:41
 msgid "Add user"
-msgstr "Adicionar usuário"
+msgstr ""
 
 #: templates/index.html:101 templates/user/groups_edit.html:6
 #: templates/user/groups_edit.html:10
 msgid "User groups"
-msgstr "Grupos de usuário"
+msgstr ""
 
 #: templates/ingress/package_list.html:19 templates/tracking/event_list.html:20
 #: templates/user/add.html:18 templates/user/groups_edit.html:21
 #: templates/user/login.html:18 templates/user/profile.html:18
 #: templates/user/profile_edit.html:17 templates/user/register.html:18
 msgid "Username"
-msgstr "Usuário"
+msgstr ""
 
 #: templates/ingress/package_list.html:20
 msgid "Package name"
-msgstr "Nome do pacote"
+msgstr ""
 
 #: templates/ingress/package_list.html:21
 msgid "Datetime"
-msgstr "Data e hora"
+msgstr ""
 
 #: templates/ingress/package_list.html:22
 #: templates/migration/search_pending_documents.html:67
 #: templates/tracking/event_list.html:24
 msgid "Status"
-msgstr "Estado"
+msgstr ""
 
 #: templates/ingress/package_list.html:46
 #: templates/journal/journal_list.html:49
@@ -322,7 +322,7 @@ msgstr "Estado"
 #: templates/migration/search_pending_documents.html:129
 #: templates/tracking/event_list.html:56 templates/user/groups_edit.html:64
 msgid "First"
-msgstr "Primeiro"
+msgstr ""
 
 #: templates/ingress/package_list.html:50
 #: templates/journal/journal_list.html:53
@@ -332,19 +332,19 @@ msgstr "Primeiro"
 #: templates/migration/search_pending_documents.html:133
 #: templates/tracking/event_list.html:60 templates/user/groups_edit.html:68
 msgid "Previous"
-msgstr "Anterior"
+msgstr ""
 
 #: templates/ingress/package_list.html:55
 #: templates/journal/journal_list.html:58 templates/tracking/event_list.html:65
 #: templates/user/groups_edit.html:73
 msgid "Page"
-msgstr "Página"
+msgstr ""
 
 #: templates/ingress/package_list.html:55
 #: templates/journal/journal_list.html:58 templates/tracking/event_list.html:65
 #: templates/user/groups_edit.html:73
 msgid "of"
-msgstr "de"
+msgstr ""
 
 #: templates/ingress/package_list.html:60
 #: templates/journal/journal_list.html:63
@@ -354,7 +354,7 @@ msgstr "de"
 #: templates/migration/search_pending_documents.html:145
 #: templates/tracking/event_list.html:70 templates/user/groups_edit.html:78
 msgid "Next"
-msgstr "Próximo"
+msgstr ""
 
 #: templates/ingress/package_list.html:63
 #: templates/journal/journal_list.html:66
@@ -364,490 +364,490 @@ msgstr "Próximo"
 #: templates/migration/search_pending_documents.html:148
 #: templates/tracking/event_list.html:73 templates/user/groups_edit.html:81
 msgid "Last"
-msgstr "Último"
+msgstr ""
 
 #: templates/ingress/package_search.html:16
 msgid "Search for document identifer and find ZIP packages"
-msgstr "Pesquisa por identificadores de documentos e encontre pacotes ZIP"
+msgstr ""
 
 #: templates/ingress/package_search.html:22
 msgid "Document Identifier"
-msgstr "Identificador de Documento"
+msgstr ""
 
 #: templates/ingress/package_search.html:23
 msgid "Enter a Document identifier (PIDv3)"
-msgstr "Digite um identificador de Documento (PIDv3)"
+msgstr ""
 
 #: templates/ingress/package_search.html:24
 msgid "Hint: "
-msgstr "Dica: "
+msgstr ""
 
 #: templates/ingress/package_search.html:27
 #: templates/ingress/package_upload.html:27
 msgid "Reset"
-msgstr "Limpar"
+msgstr ""
 
 #: templates/ingress/package_search.html:28
 #: templates/migration/search_pending_documents.html:16
 #: templates/migration/search_pending_documents.html:42
 msgid "Search"
-msgstr "Procurar"
+msgstr ""
 
 #: templates/ingress/package_search.html:35
 msgid "Loading"
-msgstr "Carregando"
+msgstr ""
 
 #: templates/ingress/package_search.html:37
 msgid "Collecting resources. Please, wait."
-msgstr "Obtendo recursos. Por favor, aguarde."
+msgstr ""
 
 #: templates/ingress/package_search.html:47
 msgid "Results for document identifier"
-msgstr "Resultados para o identificador de documento"
+msgstr ""
 
 #: templates/ingress/package_search.html:51
 msgid "Name"
-msgstr "Nome"
+msgstr ""
 
 #: templates/ingress/package_search.html:52
 #: templates/ingress/package_upload.html:46
 msgid "Version"
-msgstr "Versão"
+msgstr ""
 
 #: templates/ingress/package_search.html:53
 msgid "Create date"
-msgstr "Data de criação"
+msgstr ""
 
 #: templates/ingress/package_search.html:54
 msgid "Download"
-msgstr "Baixar"
+msgstr ""
 
 #: templates/ingress/package_upload.html:16
 msgid "Upload a package for updating site content"
-msgstr "Enviar um pacote para atualização do contéudo do site"
+msgstr ""
 
 #: templates/ingress/package_upload.html:22
 msgid "Package File"
-msgstr "Arquivo de pacote"
+msgstr ""
 
 #: templates/ingress/package_upload.html:24
 msgid "Hint: choose a ZIP file."
-msgstr "Dica: escolha um arquivo em formato ZIP."
+msgstr ""
 
 #: templates/ingress/package_upload.html:28
 msgid "Upload"
-msgstr "Enviar"
+msgstr ""
 
 #: templates/ingress/package_upload.html:41
 msgid "Uploaded package"
-msgstr "Pacote enviado"
+msgstr ""
 
 #: templates/ingress/package_upload.html:42
 #: templates/journal/journal_list.html:23
 msgid "SciELO ISSN"
-msgstr "SciELO ISSN"
+msgstr ""
 
 #: templates/ingress/package_upload.html:43
 msgid "Journal acronym"
-msgstr "Acrônimos de periódicos"
+msgstr ""
 
 #: templates/ingress/package_upload.html:44
 msgid "Document"
-msgstr "Documento"
+msgstr ""
 
 #: templates/ingress/package_upload.html:45
 msgid "Package generated"
-msgstr "Pacote gerado"
+msgstr ""
 
 #: templates/ingress/package_upload.html:47
 msgid "Uploaded datetime"
-msgstr "Data de envio"
+msgstr ""
 
 #: templates/journal/journal_list.html:18
 #: templates/migration/pending_documents_by_journal_list.html:22
 msgid "Title"
-msgstr "Título"
+msgstr ""
 
 #: templates/journal/journal_list.html:19
 msgid "Short title"
-msgstr "Título abreviado"
+msgstr ""
 
 #: templates/journal/journal_list.html:20
 #: templates/migration/pending_documents_by_journal_list.html:21
 msgid "Acronym"
-msgstr "Acrônimo"
+msgstr ""
 
 #: templates/journal/journal_list.html:21
 msgid "Print ISSN"
-msgstr "Print ISSN"
+msgstr ""
 
 #: templates/journal/journal_list.html:22
 msgid "Online ISSN"
-msgstr "Online ISSN"
+msgstr ""
 
 #: templates/migration/isis_db.html:15
 msgid "Migrate database by ID file or ISIS database"
-msgstr "Migrar base de dados por arquivo ID ou base ISIS"
+msgstr ""
 
 #: templates/migration/isis_db.html:21
 msgid "Choose ID file"
-msgstr "Escolha o arquivo ID"
+msgstr ""
 
 #: templates/migration/isis_db.html:25
 msgid "OR"
-msgstr "OU"
+msgstr ""
 
 #: templates/migration/isis_db.html:28
 msgid "Use the default ISIS database path"
-msgstr "Use o caminho padrão da base ISIS"
+msgstr ""
 
 #: templates/migration/isis_db.html:32
 msgid "Choose data type"
-msgstr "Escolha o tipo de base ISIS"
+msgstr ""
 
 #: templates/migration/isis_db.html:36
 msgid "Title data"
-msgstr "Base Title"
+msgstr ""
 
 #: templates/migration/isis_db.html:42
 msgid "Issue data"
-msgstr "Base Issue"
+msgstr ""
 
 #: templates/migration/isis_db.html:48
 msgid "Article data (it can be very time consuming)"
-msgstr "Base Artigo (pode demorar)"
+msgstr ""
 
 #: templates/migration/isis_db.html:52
 #: templates/migration/pending_documents_by_journal_list.html:24
 msgid "Migrate"
-msgstr "Migrar"
+msgstr ""
 
 #: templates/migration/pending_documents_by_issue_list.html:5
 msgid "Issues"
-msgstr "Fascículos"
+msgstr ""
 
 #: templates/migration/pending_documents_by_issue_list.html:9
 msgid "Issues of"
-msgstr "Fascículos de"
+msgstr ""
 
 #: templates/migration/pending_documents_by_issue_list.html:20
 msgid "Years"
-msgstr "Anos"
+msgstr ""
 
 #: templates/migration/pending_documents_by_issue_list.html:21
 msgid "Migrate year?"
-msgstr "Migrar ano?"
+msgstr ""
 
 #: templates/migration/pending_documents_by_issue_list.html:22
 #: templates/migration/pending_documents_by_issue_list.html:25
 #: templates/migration/pending_documents_by_journal_list.html:23
 msgid "View documents"
-msgstr "Ver documentos"
+msgstr ""
 
 #: templates/migration/pending_documents_by_issue_list.html:23
 msgid "Volume"
-msgstr "Volume"
+msgstr ""
 
 #: templates/migration/pending_documents_by_issue_list.html:24
 msgid "Migrate volume?"
-msgstr "Migrar volume?"
+msgstr ""
 
 #: templates/migration/pending_documents_by_issue_list.html:55
 msgid "Migrate selected years"
-msgstr "Migrar anos selecionados"
+msgstr ""
 
 #: templates/migration/pending_documents_by_issue_list.html:56
 msgid "Migrate selected volumes"
-msgstr "Migrar volumes selecionados"
+msgstr ""
 
 #: templates/migration/pending_documents_by_journal_list.html:20
 #: templates/migration/search_pending_documents.html:22
 msgid "ISSN"
-msgstr "ISSN"
+msgstr ""
 
 #: templates/migration/pending_documents_by_journal_list.html:43
 msgid "Migrate acronym"
-msgstr "Migrar acrônimo"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:24
 msgid "Enter an ISSN"
-msgstr "Insira um ISSN"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:29
 msgid "Year"
-msgstr "Ano"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:36
 msgid "Document identifier"
-msgstr "Identificador de documento"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:38
 msgid "Enter a document identifier"
-msgstr "Digite um identificador de documento"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:49
 msgid "Pending documents"
-msgstr "Documentos pendentes"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:54
 msgid "Results"
-msgstr "Resultados"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:64
 msgid "PID"
-msgstr "PID"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:65
 msgid "Created"
-msgstr "Criado"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:66
 msgid "Isis updated date"
-msgstr "Data de atualização ISIS"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:68
 msgid "Updated"
-msgstr "Atualizado"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:69
 msgid "Migrate?"
-msgstr "Migrar?"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:89
 msgid "Migrate selected documents"
-msgstr "Migrar documentos selecionados"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:90
 msgid "Migrate documents (this page)"
-msgstr "Migrar documentos (esta página)"
+msgstr ""
 
 #: templates/migration/search_pending_documents.html:91
 msgid "Migrate all documents (all pages)"
-msgstr "Migrar todos os documentos (todas as páginas)"
+msgstr ""
 
 #: templates/tracking/event_list.html:22
 msgid "Activity"
-msgstr "Atividade"
+msgstr ""
 
 #: templates/tracking/event_list.html:23
 msgid "Annotation"
-msgstr "Anotação"
+msgstr ""
 
 #: templates/tracking/event_list.html:25
 msgid "Timestamp"
-msgstr "Data e hora"
+msgstr ""
 
 #: templates/user/add.html:19
 msgid "Enter the username"
-msgstr "Digite o nome de usuário"
+msgstr ""
 
 #: templates/user/add.html:23
 msgid "Enter the user e-mail"
-msgstr "Digite o e-mail"
+msgstr ""
 
 #: templates/user/add.html:26 templates/user/login.html:22
 #: templates/user/register.html:34
 msgid "Password"
-msgstr "Senha"
+msgstr ""
 
 #: templates/user/add.html:27
 msgid "Enter the user password"
-msgstr "Digite a senha"
+msgstr ""
 
 #: templates/user/add.html:30
 msgid "Confirm the password"
-msgstr "Confirme a senha"
+msgstr ""
 
 #: templates/user/add.html:31
 msgid "Re-enter the user password"
-msgstr "Digita a senha novamente"
+msgstr ""
 
 #: templates/user/add.html:34 templates/user/profile.html:23
 msgid "Groups"
-msgstr "Grupos"
+msgstr ""
 
 #: templates/user/change_password.html:16
 msgid "Old password"
-msgstr "Senha antiga"
+msgstr ""
 
 #: templates/user/change_password.html:17
 msgid "Enter your old password"
-msgstr "Digite sua senha antiga"
+msgstr ""
 
 #: templates/user/change_password.html:20
 msgid "New password"
-msgstr "Senha nova"
+msgstr ""
 
 #: templates/user/change_password.html:21
 msgid "Enter your new password"
-msgstr "Digita sua senha nova"
+msgstr ""
 
 #: templates/user/change_password.html:24
 msgid "Confirm new password"
-msgstr "Confirme sua senha nova"
+msgstr ""
 
 #: templates/user/change_password.html:25
 msgid "Re-enter your new password"
-msgstr "Digite sua senha nova novamente"
+msgstr ""
 
 #: templates/user/groups_edit.html:22 templates/user/profile.html:19
 #: templates/user/profile_edit.html:25 templates/user/register.html:26
 msgid "First name"
-msgstr "Nome"
+msgstr ""
 
 #: templates/user/groups_edit.html:23 templates/user/profile.html:20
 #: templates/user/profile_edit.html:29 templates/user/register.html:30
 msgid "Last name"
-msgstr "Sobrenome"
+msgstr ""
 
 #: templates/user/groups_edit.html:24 templates/user/profile.html:21
 msgid "E-mail"
-msgstr "E-mail"
+msgstr ""
 
 #: templates/user/groups_edit.html:54
 msgid "Update users' groups"
-msgstr "Atualizar grupos de usuários"
+msgstr ""
 
 #: templates/user/login.html:23 templates/user/register.html:35
 msgid "Enter your password"
-msgstr "Digite sua senha"
+msgstr ""
 
 #: templates/user/login.html:27
 msgid "Don't have an account"
-msgstr "Não possui uma conta"
+msgstr ""
 
 #: templates/user/profile.html:15
 msgid "User profile"
-msgstr "Editar perfil"
+msgstr ""
 
 #: templates/user/profile.html:22
 msgid "Last login date"
-msgstr "Data do último acesso"
+msgstr ""
 
 #: templates/user/profile_edit.html:32
 msgid "Update user"
-msgstr "Atualizar usuário"
+msgstr ""
 
 #: templates/user/register.html:38
 msgid "Confirm your password"
-msgstr "Confirme sua senha"
+msgstr ""
 
 #: templates/user/register.html:39
 msgid "Re-enter your password"
-msgstr "Digite sua senha novamente"
+msgstr ""
 
 #: templates/user/register.html:44
 msgid "Already have an account"
-msgstr "Já possui uma conta"
+msgstr ""
 
 #: templatetags/spf_extras.py:26
 msgid "Q. Analyst"
-msgstr "An. de Qualidade"
+msgstr ""
 
 #: templatetags/spf_extras.py:28
 msgid "Op. Ingress"
-msgstr "Op. de Ingresso"
+msgstr ""
 
 #: templatetags/spf_extras.py:30
 msgid "Op. Migration"
-msgstr "Op. de Migração"
+msgstr ""
 
 #: templatetags/spf_extras.py:32
 msgid "Manager"
-msgstr "Gerente"
+msgstr ""
 
 #: utils.py:61
 #, python-format
 msgid "File %s does not exist"
-msgstr "Arquivo %s não existe"
+msgstr ""
 
 #: views.py:44 views.py:105
 #, python-format
 msgid "User %s was created"
-msgstr "Usuário %s foi criado"
+msgstr ""
 
 #: views.py:73
 msgid "Incorrect username or password"
-msgstr "Nome de usuário ou senha incorreto"
+msgstr ""
 
 #: views.py:134
 msgid "Your password was updated"
-msgstr "Sua senha foi atualizada"
+msgstr ""
 
 #: views.py:170
 msgid "Users' groups were updated"
-msgstr "Grupos de usuários foram atualizados"
+msgstr ""
 
 #: views.py:190
 #, python-format
 msgid "User %s was updated"
-msgstr "Usuário %s foi atualizado"
+msgstr ""
 
 #: views.py:228
 msgid "Invalid ZIP file"
-msgstr "Arquivo ZIP inválido"
+msgstr ""
 
 #: views.py:237
 msgid "Invalid form data"
-msgstr "Dados de formulário inválidos"
+msgstr ""
 
 #: views.py:271
 msgid "No packages available for document "
-msgstr "Não há pacotes disponíveis para o documento "
+msgstr ""
 
 #: views.py:271
 msgid ". Generating package. Please, wait."
-msgstr ". Gerando pacote. Por favor, aguarde."
+msgstr ""
 
 #: views.py:284
 msgid "Document not found"
-msgstr "Documento não encontrado"
+msgstr ""
 
 #: views.py:285
 msgid "Article not found for identifier "
-msgstr "Não foi encontrado artigo para o identificador "
+msgstr ""
 
 #: views.py:285
 msgid ". Please, enter a valid PIDv3."
-msgstr ". Por favor, digite um código PIDv3 válido."
+msgstr ""
 
 #: views.py:288
 msgid "It was not possible to generate package"
-msgstr "Não foi possível gerar o pacote"
+msgstr ""
 
 #: views.py:289
 msgid "It was not possible to generate package for identifier "
-msgstr "Não foi possível gerar o pacote para o identificador "
+msgstr ""
 
 #: views.py:289
 msgid ". Please, contact the platform developers."
-msgstr ". Por favor, contate os desenvolvedores desta plataforma."
+msgstr ""
 
 #: views.py:292
 msgid "The article record is inconsistent"
-msgstr "Os dados do artigo estão inconsistentes na base de dados"
+msgstr ""
 
 #: views.py:293
 msgid "The article record "
-msgstr "O registro do artigo "
+msgstr ""
 
 #: views.py:293
 msgid " is inconsistent. Please, contact the platform developers."
-msgstr " está inconsistente. Por favor, contate os desenvolvedores desta plataforma."
+msgstr ""
 
 #: views.py:296
 msgid " . Please, contact the platform developers."
-msgstr " . Por favor, contate os desenvolvedores desta plataforma."
+msgstr ""
 
 #: views.py:369
 #, python-format
 msgid "User %s are not allowed to see the status of the event %s"
-msgstr "Usuário %s não possui permissão para visualizar o estado do evento %s"
+msgstr ""
 
 #: views.py:373
 msgid "No results were found"
-msgstr "Não foram encontrados resultados"
+msgstr ""
 
 #: views.py:413 views.py:464 views.py:579 views.py:604 views.py:634
 msgid "Task submitted successfully"
-msgstr "Tarefa enviada com sucesso"
+msgstr ""

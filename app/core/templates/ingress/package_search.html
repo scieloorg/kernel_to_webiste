@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load spf_extras %}
+
+{% block title %}
+SciELO Publishing Framework - {% trans 'Search package' %}
+{% endblock %}
+
+{% block content %}
+<h1 class="h4 pt-5">{% trans 'Search package' %}</h1>
+
+<div class="row my-3">
+    <div class="col-auto mb-3">
+        <div class="card my-3">
+            <div class="card-header">
+                {% trans 'Search for document identifer and find ZIP packages' %}
+            </div>
+            <div class="card-body">
+                <form class="bg-white form-user" method="GET" action="{% url 'ingress_package_search' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="pid" class="form-label">{% trans 'Document Identifier' %}</label>
+                        <input maxlength="30" required type="text" name="pid" autofocus id="pid" class="form-control" placeholder="{% trans 'Enter a Document identifier (PIDv3)' %}" value="{{ pid }}">
+                        <div class="form-text">{% trans 'Hint: '%} YDm3hSwJ3xQQjqwvVKMX9Qc</div>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button id="buttonReset" type="reset" class="btn btn-outline-danger">{% trans 'Reset' %}</button>
+                        <button id="buttonSearch" type="submit" class="btn btn-primary">{% trans 'Search' %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id='divLoader' style="display: none;" role="status">
+            <div class="spinner-border text-primary">
+                <span class="sr-only">{% trans 'Loading' %}...</span>
+            </div>
+            <span class="text-primary px-1 fw-bold">{% trans 'Collecting resources. Please, wait.' %}</span>
+        </div>
+        <div class="alert alert-danger" id="resultErrors" style="display: none;"></div>
+    </div>
+
+    {% if show_packages_table %}
+        <div id="packagesTable" class="table-responsive">
+    {% else %}
+        <div id="packagesTable" class="table-responsive" style="display: none;">
+    {% endif %}
+        <h2 class="h4">{% trans 'Results for document identifier' %} <strong>{{ pid }}</strong></h2>
+        <table class="table table-sm table-bordered table-striped" id="table">
+            <thead>
+                <tr>
+                    <th>{% trans 'Name' %}</th>
+                    <th>{% trans 'Version' %}</th>
+                    <th>{% trans 'Create date' %}</th>
+                    <th>{% trans 'Download' %}</th>
+                </tr>
+                </thead>
+                <tbody id="packagesTableBody" class="tbody">
+                    {% for package in packages %}
+                        <tr>
+                            <td>{{ package.file.name }}</td>
+                            <td>{{ package.version }}</td>
+                            <td>{{ package.created|format_date }}</td>
+                            <td><a href="{{ package.file.uri }}">ZIP</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    var checkStatus = '{{ check_status }}';
+    var loader = document.getElementById('divLoader');
+    var button = document.getElementById('buttonSearch');
+    var requested = false;
+    var timer;
+
+    function checkTaskStatus() {
+        if (!requested){
+            showLoader(loader, button);
+
+            $.ajax({
+                url: '/task/update_status/?task_id={{ task_id }}',
+                type: 'GET',
+                success: function(result) {
+                    if (result.data) {
+                        requested = true;
+                        window.clearTimeout(timer);
+                        hideLoader(loader, button);
+                        
+                        if ('package' in result.data){
+                            // adiciona conteúdo à tabela
+                            ingressPackageSearchPopulateTable(result.data['package']);
+                        }
+
+                        else if ('error' in result.data){
+                            // apresenta erro ao usuário
+                            errorExceptionMessage = result.data['error'];
+                            baseMessages = document.getElementById('baseMessages');
+                            cleanMessages(baseMessages);
+                            baseMessages.appendChild(createMessage(errorExceptionMessage + '. ' + gettext('It was not possible to generate package. Please, contact the platform developers.'), 'alert-danger'))
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    if(checkStatus){
+        checkTaskStatus();
+        var timer = setInterval(function(){
+            checkTaskStatus();
+        }, 2000);
+    }
+</script>
+
+{% endblock %}

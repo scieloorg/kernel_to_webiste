@@ -1,62 +1,34 @@
+import math
+import os
+from adapters import opac_adapter
+
+from braces.views import GroupRequiredMixin
 from celery.result import AsyncResult
-
-from core.decorators import (
-    unauthenticated_user,
-    allowed_users,
-)
-from core.forms import (
-    CreateUserForm,
-    UpdateUserForm,
-    UploadPackageFileForm,
-)
-from core.models import Event
-from core.tasks import (
-    task_get_package_uri_by_pid,
-    task_ingress_package,
-    task_migrate_acron,
-    task_migrate_documents,
-    task_migrate_identify_documents,
-    task_migrate_isis_db,
-)
-from core.utils import handle_upload_file
-
 from datetime import datetime
 
 from django.contrib import messages
-from django.contrib.auth import (
-    authenticate,
-    login, logout,
-    update_session_auth_hash,
-)
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
-from django.http.response import (
-    HttpResponseRedirect,
-    JsonResponse,
-)
-from django.shortcuts import (
-    render,
-    redirect,
-)
+from django.http.response import HttpResponseRedirect, JsonResponse
+from django.shortcuts import render, redirect
+from django.views import generic
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from dsm.extdeps.isis_migration.migration_models import ISISDocument
-
+from dsm import migration as dsm_migration
 from opac_schema.v1.models import Issue as OPACIssue
 
+from core import controller, tasks, utils
+from core.decorators import unauthenticated_user, allowed_users
+from core.forms import CreateUserForm, UpdateUserForm, UploadPackageFileForm
+from core.models import Event
 from spf import settings
 
-import core.controller as controller
-import dsm.ingress as dsm_ingress
-import dsm.migration as dsm_migration
-import math
-import os
-
-from django.views import generic
-from braces.views import GroupRequiredMixin
+from packtools.sps import exceptions as packtools_exceptions
 
 
 ################
@@ -69,9 +41,7 @@ def user_register_page(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request,
-                             _('User %s was created') % username,
-                             extra_tags='alert-success')
+            messages.success(request, _('User %s was created') % username, extra_tags='alert-success')
             return redirect('login')
         else:
             for val in form.errors.values():
@@ -239,53 +209,100 @@ class UploadView(GroupRequiredMixin, generic.View):
         form = UploadPackageFileForm(request.POST, request.FILES)
 
         if form.is_valid():
-            ev = controller.add_event(request.user, Event.Name.UPLOAD_PACKAGE_TO_DISK, {'file_name': request.FILES['package_file'].name})
-            result = handle_upload_file(request.FILES['package_file'])
+            ev = controller.add_event(request.user, Event.Name.UPLOAD_PACKAGE, {'file_name': request.FILES['package_file'].name})
+            result = utils.handle_upload_file(request.FILES['package_file'])
 
             json_data = {
                 'package_path': result.get('package_path'),
                 'package_file': result.get('package_file'),
                 'error': result.get('error'),
+                'article_files': [],
+                'opac_uri': settings.OPAC_URI,
             }
-            
+
             if result.get('success'):
-                controller.update_event(ev, {'status': Event.Status.COMPLETED})
-                task_ingress_package(json_data.get('package_path'), json_data.get('package_file'), request.user.id)
+                pid_issn_to_uris_and_names = tasks.task_upload_package(json_data.get('package_path'), json_data.get('package_file'), request.user.id)
                 json_data.update({'datetime': result.get('datetime'),})
+                json_data['article_files'].extend(pid_issn_to_uris_and_names)
+
+                if 'error' in pid_issn_to_uris_and_names:
+                    controller.update_event(ev, {'annotation': {'error': _('Invalid ZIP file')},'status': Event.Status.FAILED})
+                else:
+                    controller.update_event(ev, {'status': Event.Status.COMPLETED})
+
                 return JsonResponse(json_data)
             else:
                 json_data.update({'error': result.get('error'),})
-                return JsonResponse(json_data)  
+                return JsonResponse(json_data)
         else:
             return JsonResponse({'error': _('Invalid form data')})
 
 
-@login_required(login_url='login')
+@login_required
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
-def ingress_package_download_page(request):
-    pid = request.GET.get('pid', '')
+def ingress_search_package_page(request):
+    pid = request.GET.get('pid', '').strip()
     job_id = request.GET.get('job', '')
+    packages = []
+    context = {}
 
-    # Há task sendo executada: renderiza template para mostrar resultados (ou aguardar por eles)
-    if job_id:
-        job = AsyncResult(job_id)
+    if pid:
+        for p in opac_adapter.get_article_files_by_pid(pid):
+            packages.append(p)
 
-        context = {
-            'pid': pid,
-            'check_status': 1,
-            'data': '',
-            'state': 'STARTING',
-            'task_id': job_id
-        }
-        return render(request, 'ingress/package_download.html', context)
+        if len(packages) == 0:
+            if job_id:
+                job = AsyncResult(job_id)
 
-    # Inicializa task para o PID informado e redireciona para a própria página aguardando resultado
-    elif pid:
-        job = task_get_package_uri_by_pid.delay(pid, request.user.id)
-        return HttpResponseRedirect(reverse('ingress_package_download') + '?job=' + job.id + '&pid=' + pid)
+                context.update({
+                    'pid': pid,
+                    'check_status': 1,
+                    'data': '',
+                    'state': 'STARTING',
+                    'task_id': job_id
+                })
 
-    # Abre template pela primeira vez para digitar PID
-    return render(request, 'ingress/package_download.html')
+                return render(request, 'ingress/package_search.html', context)
+            else:
+                try:
+                    # obtém dados da base opac.article
+                    xml_uri_and_name, renditions_uris_and_names = opac_adapter.get_article_uris_and_names(pid)
+
+                    if len(xml_uri_and_name) > 0:
+                        messages.info(request, _('No packages available for document ') + pid + _('. Generating package. Please, wait.'), extra_tags='alert alert-warning')
+
+                    # gera pacote para xml_uri_and_name e renditions_uris_and_names
+                    job = tasks.task_make_package.delay(
+                        request.user.id,
+                        pid,
+                        xml_uri_and_name['uri'],
+                        renditions_uris_and_names,
+                    )
+
+                    return HttpResponseRedirect(reverse('ingress_package_search') + '?job=' + job.id + '&pid=' + pid)
+
+                except opac_adapter.DocumentDoesNotExistError:
+                    controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid, 'error': _('Document not found')}, Event.Status.FAILED)
+                    messages.error(request, _('Article not found for identifier ') +  pid + _('. Please, enter a valid PIDv3.'), extra_tags='alert alert-danger')
+
+                except packtools_exceptions.SPSLoadToXMLError:
+                    controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid, 'error': {_('It was not possible to generate package')}}, Event.Status.FAILED)
+                    messages.error(request, _('It was not possible to generate package for identifier ') + pid + _('. Please, contact the platform developers.'), extra_tags='alert alert-danger')
+
+                except KeyError:
+                    controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid, 'error': {_('The article record is inconsistent')}}, Event.Status.FAILED)
+                    messages.error(request, _('The article record ') + pid + _(' is inconsistent. Please, contact the platform developers.'), extra_tags='alert alert-danger')
+
+                except Exception as e:
+                    messages.error(request, e.__class__.__name__ + _(' . Please, contact the platform developers.'), extra_tags='alert alert-danger')
+
+                return render(request, 'ingress/package_search.html', context=context)
+
+        controller.add_event(request.user, Event.Name.RETRIEVE_PACKAGE, {'pid': pid}, Event.Status.COMPLETED)
+
+    context.update({'pid': pid, 'packages': packages, 'show_packages_table': len(packages) > 0})
+
+    return render(request, 'ingress/package_search.html', context=context)
 
 
 @login_required(login_url='login')
@@ -307,7 +324,7 @@ def ingress_package_list_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_ingress'])
 def journal_list_page(request):
-    journal_list = dsm_ingress._journals_manager.get_journals()
+    journal_list = opac_adapter.get_journals()
 
     paginator = Paginator(journal_list, 25)
     page_number = request.GET.get('page')
@@ -389,7 +406,7 @@ def migrate_identify_documents(request):
     ev = controller.add_event(request.user, Event.Name.IDENTIFY_DOCUMENTS_TO_MIGRATE)
 
     # identifica documentos para migrar
-    task_migrate_identify_documents.delay()
+    tasks.task_migrate_identify_documents.delay()
 
     controller.update_event(ev, {'status': Event.Status.COMPLETED})
 
@@ -423,7 +440,7 @@ def migrate_isis_db_page(request):
             ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_ID_FILE, {'path': fs_full_path_id_file})
 
             # inica task para efetuar migração
-            task_migrate_isis_db.delay(data_type, fs_full_path_id_file)
+            tasks.task_migrate_isis_db.delay(data_type, fs_full_path_id_file)
 
             input_path = fs_full_path_id_file
 
@@ -436,7 +453,7 @@ def migrate_isis_db_page(request):
             ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_ISIS_DB, {'path': full_isis_path})
 
             # inica task para efetuar migração
-            task_migrate_isis_db.delay(data_type, full_isis_path)
+            tasks.task_migrate_isis_db.delay(data_type, full_isis_path)
 
             input_path = full_isis_path
 
@@ -556,7 +573,7 @@ def migrate_search_pending_documents_page(request):
             for f in filter_documents:
                 migrate.append(f.id)
 
-        task_migrate_documents.delay(pid=",".join(migrate))
+        tasks.task_migrate_documents.delay(pid=",".join(migrate))
 
         ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_AVY)
 
@@ -572,7 +589,7 @@ def migrate_search_pending_documents_page(request):
 @login_required(login_url='login')
 @allowed_users(allowed_groups=['manager', 'operator_migration'])
 def migrate_pending_documents_by_journal_list_page(request):
-    journals = dsm_ingress._journals_manager.get_journals()
+    journals = opac_adapter.get_journals()
 
     paginator = Paginator(journals, 25)
     page_number = request.GET.get('page')
@@ -580,7 +597,7 @@ def migrate_pending_documents_by_journal_list_page(request):
 
     if request.method == 'POST':
         acronym = request.POST.getlist('acronym')
-        task_migrate_acron.delay(",".join(acronym))
+        tasks.task_migrate_acron.delay(",".join(acronym))
 
         # registra evento de migração por acrônimo
         ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_ACRONYM)
@@ -610,7 +627,7 @@ def migrate_pending_documents_by_issue_list_page(request):
             volumes = ",".join(selected)
 
         acron = request.GET.get('acron')
-        task_migrate_documents.delay(acronym=acron, volume=volumes, pub_year=years)
+        tasks.task_migrate_documents.delay(acronym=acron, volume=volumes, pub_year=years)
 
         # registra evento de migração por acrônimo, volume e ano
         ev = controller.add_event(request.user, Event.Name.START_MIGRATION_BY_AVY)

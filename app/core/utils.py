@@ -30,23 +30,23 @@ def write_file_to_disk(file):
                 destination.write(chunk)
 
             return {
-                'success': True, 
-                'path': path, 
+                'success': True,
+                'path': path,
                 'created': datetime.fromtimestamp(os.stat(path).st_ctime),
             }
     except Exception as e:
         return {
-            'success': False, 
+            'success': False,
             'error': e,
         }
 
 
 def handle_upload_file(file):
     result = write_file_to_disk(file)
-    
+
     return {
-        'package_file': file.name, 
-        'package_path': result.get('path'), 
+        'package_file': file.name,
+        'package_path': result.get('path'),
         'datetime': result.get('created'),
         'error': result.get('errro'),
         'success': result.get('success'),

@@ -1,52 +1,175 @@
 from spf.celery import app
-from core import controller, utils
-from core.models import Event, IngressPackage
 
-import dsm.ingress as dsm_ingress
-import dsm.migration as dsm_migration
+from dsm import migration as dsm_migration
+from packtools.sps import sps_maker
 
-
-@app.task(bind=True,  max_retries=3)
-def task_get_package_uri_by_pid(self, pid, user_id):
-    # obtém objeto User
-    user = controller.get_user_from_id(user_id)
-
-    # cria evento de pesquisa por pacote
-    ev = controller.add_event(user, Event.Name.RETRIEVE_PACKAGE, annotation={'pid': pid})
-
-    # obtém o {uri, name} de todos os pacotes existentes para o PID informado
-    result = dsm_ingress.get_package_uri_by_pid(pid)
-
-    app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...',})
-
-    if result['errors']:
-        # houve alguma falha. atualiza status com valor FAILED e conteúdo da falha ocorrida
-        controller.update_event(ev, {'status': Event.Status.FAILED, 'annotation': result,})
-    else:
-        # evento ocorreu com sucesso. atualiza status com valor COMPLETED
-        controller.update_event(ev, {'status': Event.Status.COMPLETED})
-
-    return result
+from adapters import opac_adapter, storage_adapter
+from core import controller, models, utils
 
 
-@app.task(bind=True,  max_retries=3)
-def task_ingress_package(self, package_path, package_file, user_id):
-    user = controller.get_user_from_id(user_id)
-    ev = controller.add_event(user, Event.Name.UPLOAD_PACKAGE_TO_MINIO, {'package_file': package_file}, Event.Status.INITIATED)
+@app.task(bind=True, max_retries=3)
+def task_make_package(self, user_id, pid, xml_uri, renditions_uris_and_names):
+    """
+    Costrói um pacote e atualiza registros no banco de dados e no file storage.
 
-    results = {}
+    Parameters
+    ----------
+    user_id: int
+    pid: str
+    xml_uri: str
+    renditions_uris_and_names: dict
 
+    Returns
+    -------
+    package: dict
+    """
+    ev = controller.add_event(user_id, models.Event.Name.MAKE_PACKAGE, annotation={'pid': pid}, status=models.Event.Status.INITIATED)
+
+    # cria pacote ZIP
     try:
-        results.update(dsm_ingress.upload_package(package_path))
-        controller.update_event(ev, {'status': Event.Status.COMPLETED})
-        controller.add_ingress_package(user, ev.datetime, package_file, IngressPackage.Status.RECEIVED)
-    except ValueError as e:
-        controller.update_event(ev, {'status': Event.Status.FAILED, 'annotation': {'error': str(e)},})
-        results.update({'error': str(e)})
+        article_package_uris_and_names = sps_maker.make_package_from_uris(xml_uri, renditions_uris_and_names)
+    except Exception as e:
+        controller.update_event(ev, {'status': models.Event.Status.FAILED, 'annotation': {'pid': pid, 'error': e.__class__.__name__}})
+        return {'error': e.__class__.__name__}
 
-    utils.fs_delete_file(package_path)
-    
-    return results
+    # obtém registro de artigo no banco de dados
+    article = opac_adapter.get_article_by_pid(pid)
+
+    # envia pacote ZIP para MinIO
+    article_package_uris_and_names['file'] = storage_adapter.register_article_files(
+        article.journal.scielo_issn,
+        article.aid,
+        article_package_uris_and_names['zip']
+    )
+
+    # cria registro de article_files no banco de dados
+    article_files = opac_adapter.add_article_files(article.aid, article_package_uris_and_names)
+
+    # atualiza evento de geração de pacote
+    controller.update_event(ev, {'status': models.Event.Status.COMPLETED})
+
+    return {
+        'package': {
+            'uri': article_files.file.uri,
+            'name': article_files.file.name,
+            'version': article_files.version,
+            'created': article_files.created,
+            }
+        }
+
+
+@app.task(bind=True,  max_retries=3)
+def task_upload_package(self, package_path, package_file, user_id):
+    """
+    Envia um pacote para o sistema, atualiza banco de dados e file storage.
+
+    Parameters
+    ----------
+    package_path: str
+    package_file: str
+    user_id: int
+
+    Returns
+    -------
+    package: dict
+    """
+    ev = controller.add_event(user_id, models.Event.Name.UPLOAD_PACKAGE, {'package_file': package_file}, models.Event.Status.INITIATED)
+
+    # obtém os arquivos de cada documento
+    try:
+        names_and_packages = task_get_names_and_packages(package_path)
+    except ValueError:
+        return ['error']
+
+    packages_metadata = []
+
+    # processa cada documento contido no pacote
+    for pkg_name, pkg_data in names_and_packages.items():
+        packages_metadata.append(task_upload_document(user_id, pkg_data))
+
+    controller.update_event(ev, {'status': models.Event.Status.COMPLETED})
+
+    task_delete_file(package_path)
+
+    return packages_metadata
+
+
+@app.task(bind=True, max_retries=3)
+def task_delete_file(self, path):
+    utils.fs_delete_file(path)
+    return
+
+
+@app.task(bind=True, max_retries=3)
+def task_get_names_and_packages(self, path):
+    return sps_maker.get_names_and_packages(path)
+
+
+@app.task(bind=True, max_retries=3)
+def task_upload_document(self, user_id, pkg_data):
+    xml_sps = task_generate_sps(pkg_data.xml_content)
+    package_uris_and_names = task_register_content(pkg_data, xml_sps)
+    article_package_uris_and_names = task_make_package_from_uris(package_uris_and_names['xml'], package_uris_and_names['renditions'])
+
+    package_uris_and_names['file'] = storage_adapter.register_article_files(
+        xml_sps.issn,
+        xml_sps.scielo_pid_v3,
+        article_package_uris_and_names['zip']
+    )
+
+    controller.add_ingress_package(user_id, package_uris_and_names['file']['name'], models.IngressPackage.Status.RECEIVED)
+
+    opac_adapter.update_article(
+        pid=xml_sps.scielo_pid_v3,
+        xml_sps=xml_sps,
+        xml_uri=package_uris_and_names['xml']['uri'],
+        renditions_uris_and_names=package_uris_and_names['renditions'],
+    )
+
+    article_files = opac_adapter.add_article_files(
+        xml_sps.scielo_pid_v3,
+        package_uris_and_names,
+    )
+
+    task_fill_package_uris_and_names(package_uris_and_names, article_files, xml_sps)
+
+    return package_uris_and_names
+
+
+@app.task(bind=True, max_retries=3)
+def task_fill_package_uris_and_names(self, package_uris_and_names, article_files, xml_sps):
+    package_uris_and_names['pid'] = article_files.aid
+    package_uris_and_names['issn'] = xml_sps.issn
+    package_uris_and_names['acron'] = xml_sps.acron
+    package_uris_and_names['version'] = article_files.version
+
+
+@app.task(bind=True, max_retries=3)
+def task_make_package_from_uris(self, xml_uri_and_name, renditions_uris_and_names):
+    return sps_maker.make_package_from_uris(xml_uri_and_name['uri'], renditions_uris_and_names)
+
+
+@app.task(bind=True, max_retries=3)
+def task_generate_sps(self, xml_content, convert_remote_to_local=True):
+    xml_sps = sps_maker.sps_package.SPS_Package(xml_content)
+
+    if convert_remote_to_local:
+        xml_sps.remote_to_local(xml_sps.package_name)
+
+    return xml_sps
+
+
+@app.task(bind=True, max_retries=3)
+def task_register_content(self, pkg_data, xml_sps):
+    assets_uris_and_names = storage_adapter.register_assets(pkg_data, xml_sps)
+    renditions_uris_and_names = storage_adapter.register_renditions(pkg_data, xml_sps)
+    xml_uri_and_name = storage_adapter.register_xml(xml_sps)
+
+    return {
+        'xml': xml_uri_and_name,
+        'renditions': renditions_uris_and_names,
+        'assets': assets_uris_and_names,
+    }
 
 
 @app.task(bind=True,  max_retries=3)

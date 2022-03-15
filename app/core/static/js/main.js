@@ -1,4 +1,12 @@
 function createMessage(msg, alert_class){
+    /* 
+    Cria mensagem de alerta na interface gráfica.
+
+    Parameters
+    ----------
+    msg: string
+    alert_class: classe CSS, por exemplo: alert alert-is-danger
+    */
     divAlert = document.createElement('div');
     divAlert.classList.add('alert', alert_class, 'alert-dismissible', 'fade', 'show', 'is-no-rounded', 'm-0', 'p-2');
     divAlert.setAttribute('role', 'alert');
@@ -19,54 +27,157 @@ function createMessage(msg, alert_class){
     return divAlert;
 }
 
-function ingressPackageDownloadCreateTable(data){
-    tableBody = document.getElementById('resultSearchPackagesTableBody')
+function ingressPackageSearchPopulateTable(data){
+    /*
+    Preenche tabela resultante de busca por pacote.
 
-    counter = 1
-    for (k in data['doc_pkgs']){
-        els = data['doc_pkgs'][k];
-        row = tableBody.insertRow(-1);
+    Parameters
+    ----------
+    data: array
+    */
+    packagesTable = document.getElementById('packagesTable');
+    tableBody = document.getElementById('packagesTableBody');
+    packagesTable.style.display = 'block';
 
-        tdUri = row.insertCell(-1);
-        tdUri.innerHTML = counter;
+    row = tableBody.insertRow(-1);
 
-        aPkgName = document.createElement('a')
-        aPkgName.text = els['name'];
-        aPkgName.href = els['uri'];
-        aPkgName.classList.add('link');
+    pkg_version = row.insertCell(-1);
+    pkg_version.innerHTML = data['name'];
 
-        tdPkgName = row.insertCell(-1);
-        tdPkgName.appendChild(aPkgName);
+    pkg_version = row.insertCell(-1);
+    pkg_version.innerHTML = data['version'];
 
-        tdCreated = row.insertCell(-1)
-        tdCreated.innerHTML = new Date(els['created']);
+    pkg_created = row.insertCell(-1)
+    pkg_created.innerHTML = formatDate(new Date(data['created']));
 
-        counter += 1;
-    }
+    addLinkCellToRow(row, 'ZIP', data['uri'])
 
-    if (data['doc_pkgs'].length > 0) {
-        document.getElementById('resultSearchPackages').style.display = 'block';
-    } else {
-        var divBaseMessages = document.getElementById('baseMessages');
-        for (k in data['errors']){
-            element_message = createMessage(data['errors'][k], 'alert-danger');
-            divBaseMessages.append(element_message);
-        }
+    var divBaseMessages = document.getElementById('baseMessages');
+    cleanMessages(divBaseMessages);
+    element_message = createMessage(gettext('Package was generated with success.'), 'alert-success');
+    divBaseMessages.append(element_message);
+}
+
+function ingressPackageUploadPopulateTable(data, journal_uri){
+    /*
+    Preenche tabela resultante de envio de pacote.
+
+    Parameters
+    ----------
+    data: array
+    journal_uri: string
+    */
+    div_uploaded_packages = document.getElementById('div_uploaded_packages');
+    div_uploaded_packages.style.display = "initial";
+
+    tbody_uploaded_packages = document.getElementById('tbody_uploaded_packages');
+
+    for (var i = 0; i < data['article_files'].length; i++){
+        row = tbody_uploaded_packages.insertRow(-1);
+
+        cell_package_file = row.insertCell(-1);
+        cell_package_file.innerHTML = data['package_file'];
+
+        cell_issn = row.insertCell(-1);
+        cell_issn.innerHTML = data['article_files'][i]['issn']
+
+        var acronym_text = data['article_files'][i]['acron'];
+        var journal_link = journal_uri + acronym_text;
+        addLinkCellToRow(row, acronym_text, journal_link);
+
+        var pid_text = data['article_files'][i]['pid'];
+        var pid_link = journal_uri + acronym_text + '/a/' + pid_text;
+        addLinkCellToRow(row, pid_text, pid_link);
+
+        var file_text = data['article_files'][i]['file']['name'];
+        var file_link = data['article_files'][i]['file']['uri'];;
+        addLinkCellToRow(row, file_text, file_link);
+
+        cell_version = row.insertCell(-1)
+        cell_version.innerHTML = data['article_files'][i]['version'];
+
+        cell_datetime = row.insertCell(-1)
+        cell_datetime.innerHTML = formatDate(new Date(data['datetime']));
     }
 }
 
+function addLinkCellToRow(row, text, href){
+    /*
+    Adiciona célula do tipo link a um objeto `<tr>`.
+
+    Parameters
+    ----------
+    row: `<tr>`
+    text: string
+    href: string
+    */
+    link = document.createElement('a')
+    link.text = text;
+    link.href = href;
+    link.classList.add('link');
+    link.setAttribute('target', '_blank');
+    cell = row.insertCell(-1);
+    cell.appendChild(link);
+}
+
+function formatDate(date){
+    /*
+    Formata data.
+
+    Parameters
+    ----------
+    date: `Datetime`
+    */
+    var datestring = date.getFullYear() + '/' + (date.getMonth()+1) + "/" + date.getDate()  + " " + date.getHours() + ":" + date.getMinutes();
+    return datestring;
+}
+
 function showLoader(loader, button){
+    /*
+    Exibe um gif do tipo loading para indicar que dados estão sendo obtidos.
+
+    Parameters
+    ----------
+    loader: Elemento `<div>`
+    button: Elemento `<button>`
+    */
     loader.style.display = 'block';
     button.setAttribute('disabled', 'disabled');
 }
 
 function hideLoader(loader, button){
+    /*
+    Oculta um gif do tipo loading para indicar que dados estão sendo obtidos.
+
+    Parameters
+    ----------
+    loader: Elemento `<div>`
+    button: Elemento `<button>`
+    */
     loader.style.display = 'none';
     button.removeAttribute('disabled');
 }
 
 function setEventStatusCompleted(object){
+    /*
+    Sobrescreve estado de evento.
+
+    Parameters
+    ----------
+    object: Elemento `<td>`
+    */
     object.innerHTML = gettext('Completed');
     object.classList.remove('bg-warning');
     object.classList.add('bg-success');
+}
+
+function cleanMessages(object){
+    /*
+    Limpa lista de mensagens
+
+    Parameters
+    ----------
+    object: Elemento `<div>`
+    */
+    object.innerHTML = '';
 }

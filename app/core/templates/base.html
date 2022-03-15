@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 {% load i18n %}
+{% load spf_extras %}
 <head>
     {% load static %}
     <title>{% block title %}{% endblock %}</title>
@@ -18,7 +19,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top border-bottom">
     <div class="container">
-        <a class="navbar-brand" href="{% url 'index' %}">SPF</a>
+        <a class="navbar-brand" href="{% url 'index' %}">SciELO Upload</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -32,6 +33,15 @@
                     <a class="nav-link m-1 disabled" href="">{% trans 'Documents' %}</a>
                 </li>
                 {% endif %}
+                {% if user.is_superuser or user|has_group:"manager" or user|has_group:"operator_ingress" %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle m-1" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">{% trans 'Ingress' %}</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'ingress_package_search' %}"><i class="fas fa-search px-2"></i>{% trans "Search package" %}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'ingress_package_upload' %}"><i class="fas fa-upload px-2"></i>{% trans "Upload package" %}</a></li>
+                    </ul>
+                </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link m-1" href="{% url 'faq' %}">FAQ</a>
                 </li>
@@ -41,7 +51,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle m-1" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">{{ request.user }}</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'event_list' %}"><i class="fas fa-columns px-2"></i>{% trans "Events" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'event_list' %}"><i class="fas fa-calendar px-2"></i>{% trans "Events" %}</a></li>
                             <li><a class="dropdown-item" href="{% url 'user_profile' %}"><i class="fas fa-columns px-2"></i>{% trans "Profile" %}</a></li>
                             <li><a class="dropdown-item" href="{% url 'user_profile_edit' %}"><i class="fas fa-cog px-2"></i>{% trans "Edit profile" %}</a></li>
                             <li><a class="dropdown-item" href="{% url 'user_change_password' %}"><i class="fas fa-cog px-2"></i>{% trans "Change password" %}</a></li>

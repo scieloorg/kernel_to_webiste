@@ -46,9 +46,9 @@ class Event(models.Model):
         FAILED = 'F', _('Failed')
 
     class Name(models.TextChoices):
+        MAKE_PACKAGE = 'MP', _('Make package')
         RETRIEVE_PACKAGE = 'RP', _('Retrieve package')
-        UPLOAD_PACKAGE_TO_DISK = 'UPD', _('Upload package to disk')
-        UPLOAD_PACKAGE_TO_MINIO = 'UPM', _('Upload package to MinIO')
+        UPLOAD_PACKAGE = 'UP', _('Upload package')
         START_VALIDATION = 'SV', _('Start validation')
         FINALIZE_VALIDATION = 'FV', _('Finalize validation')
         CHANGE_USER_GROUPS = 'CUG', _('Change user groups')

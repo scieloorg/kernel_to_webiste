@@ -85,42 +85,11 @@ def task_upload_package(self, package_path, package_file, user_id):
 
     # processa cada documento contido no pacote
     for pkg_name, pkg_data in names_and_packages.items():
-        ev = controller.add_event(user, models.Event.Name.UPLOAD_PACKAGE, {'package_file': package_file}, models.Event.Status.INITIATED)
+        packages_metadata.append(task_upload_document(user_id, pkg_data))
 
+    controller.update_event(ev, {'status': models.Event.Status.COMPLETED})
 
-
-        article_package_uris_and_names['file'] = storage_adapter.register_article_files(
-            xml_sps.issn,
-            xml_sps.scielo_pid_v3,
-            article_package_uris_and_names['zip']
-        )
-
-        controller.add_ingress_package(user, article_package_uris_and_names['file']['name'], models.IngressPackage.Status.RECEIVED)
-
-        opac_adapter.update_article(
-            pid=xml_sps.scielo_pid_v3,
-            xml_sps=xml_sps,
-            xml_uri=xml_uri_and_name['uri'],
-            renditions_uris_and_names=renditions_uris_and_names,
-        )
-
-        package_uris_and_names = {
-            'file': article_package_uris_and_names['file'],
-            'xml': xml_uri_and_name,
-            'renditions': renditions_uris_and_names,
-            'assets': assets_uris_and_names,
-        }
-
-        article_files = opac_adapter.add_article_files(
-            xml_sps.scielo_pid_v3,
-            package_uris_and_names,
-        )
-
-
-        packages_metadata.append(package_uris_and_names)
-
-        controller.update_event(ev, {'status': models.Event.Status.COMPLETED})
-
+    task_delete_file(package_path)
 
     return packages_metadata
 
@@ -137,6 +106,34 @@ def task_get_names_and_packages(self, path):
 
 
 @app.task(bind=True, max_retries=3)
+def task_upload_document(self, user_id, pkg_data):
+    xml_sps = task_generate_sps(pkg_data.xml_content)
+    package_uris_and_names = task_register_content(pkg_data, xml_sps)
+    article_package_uris_and_names = task_make_package_from_uris(package_uris_and_names['xml'], package_uris_and_names['renditions'])
+
+    package_uris_and_names['file'] = storage_adapter.register_article_files(
+        xml_sps.issn,
+        xml_sps.scielo_pid_v3,
+        article_package_uris_and_names['zip']
+    )
+
+    controller.add_ingress_package(user_id, package_uris_and_names['file']['name'], models.IngressPackage.Status.RECEIVED)
+
+    opac_adapter.update_article(
+        pid=xml_sps.scielo_pid_v3,
+        xml_sps=xml_sps,
+        xml_uri=package_uris_and_names['xml']['uri'],
+        renditions_uris_and_names=package_uris_and_names['renditions'],
+    )
+
+    article_files = opac_adapter.add_article_files(
+        xml_sps.scielo_pid_v3,
+        package_uris_and_names,
+    )
+
+    task_fill_package_uris_and_names(package_uris_and_names, article_files, xml_sps)
+
+    return package_uris_and_names
 
 
 @app.task(bind=True, max_retries=3)

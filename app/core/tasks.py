@@ -87,8 +87,6 @@ def task_upload_package(self, package_path, package_file, user_id):
     for pkg_name, pkg_data in names_and_packages.items():
         ev = controller.add_event(user, models.Event.Name.UPLOAD_PACKAGE, {'package_file': package_file}, models.Event.Status.INITIATED)
 
-        xml_sps = sps_maker.sps_package.SPS_Package(pkg_data.xml_content)
-        xml_sps.remote_to_local(xml_sps.package_name)
 
         assets_uris_and_names = storage_adapter.register_assets(pkg_data, xml_sps)
         renditions_uris_and_names = storage_adapter.register_renditions(pkg_data, xml_sps)
@@ -151,6 +149,15 @@ def task_fill_package_uris_and_names(self, package_uris_and_names, article_files
 def task_make_package_from_uris(self, xml_uri_and_name, renditions_uris_and_names):
     return sps_maker.make_package_from_uris(xml_uri_and_name['uri'], renditions_uris_and_names)
 
+
+@app.task(bind=True, max_retries=3)
+def task_generate_sps(self, xml_content, convert_remote_to_local=True):
+    xml_sps = sps_maker.sps_package.SPS_Package(xml_content)
+
+    if convert_remote_to_local:
+        xml_sps.remote_to_local(xml_sps.package_name)
+
+    return xml_sps
 @app.task(bind=True,  max_retries=3)
 def task_migrate_identify_documents(self):
     app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...'})

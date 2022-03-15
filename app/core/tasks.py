@@ -88,9 +88,6 @@ def task_upload_package(self, package_path, package_file, user_id):
         ev = controller.add_event(user, models.Event.Name.UPLOAD_PACKAGE, {'package_file': package_file}, models.Event.Status.INITIATED)
 
 
-        assets_uris_and_names = storage_adapter.register_assets(pkg_data, xml_sps)
-        renditions_uris_and_names = storage_adapter.register_renditions(pkg_data, xml_sps)
-        xml_uri_and_name = storage_adapter.register_xml(xml_sps)
 
         article_package_uris_and_names['file'] = storage_adapter.register_article_files(
             xml_sps.issn,
@@ -158,6 +155,21 @@ def task_generate_sps(self, xml_content, convert_remote_to_local=True):
         xml_sps.remote_to_local(xml_sps.package_name)
 
     return xml_sps
+
+
+@app.task(bind=True, max_retries=3)
+def task_register_content(self, pkg_data, xml_sps):
+    assets_uris_and_names = storage_adapter.register_assets(pkg_data, xml_sps)
+    renditions_uris_and_names = storage_adapter.register_renditions(pkg_data, xml_sps)
+    xml_uri_and_name = storage_adapter.register_xml(xml_sps)
+
+    return {
+        'xml': xml_uri_and_name,
+        'renditions': renditions_uris_and_names,
+        'assets': assets_uris_and_names,
+    }
+
+
 @app.task(bind=True,  max_retries=3)
 def task_migrate_identify_documents(self):
     app.current_task.update_state(state='PROGRESS', meta={'status': 'LOADING...'})

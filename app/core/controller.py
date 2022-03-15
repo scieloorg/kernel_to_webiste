@@ -69,7 +69,11 @@ def get_event_from_id(event_id):
 
 def add_event(user, event_name, annotation=None, status=None):
     event = models.Event()
+
+    if not isinstance(user, models.User):
+        user = get_user_from_id(user)
     event.user = user
+
     event.name = event_name
     event.annotation = annotation
     event.status = status or models.Event.Status.INITIATED
@@ -89,7 +93,11 @@ def update_event(event, args):
 
 def add_ingress_package(user, package_name, status=None):
     ip = models.IngressPackage()
+
+    if not isinstance(user, models.User):
+        user = get_user_from_id(user)
     ip.user = user
+    
     ip.datetime = datetime.utcnow()
     ip.package_name = package_name
     ip.status = status or models.IngressPackage.Status.RECEIVED

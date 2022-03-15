@@ -23,8 +23,7 @@ def task_make_package(self, user_id, pid, xml_uri, renditions_uris_and_names):
     -------
     package: dict
     """
-    user = controller.get_user_from_id(user_id)
-    ev = controller.add_event(user, models.Event.Name.MAKE_PACKAGE, annotation={'pid': pid}, status=models.Event.Status.INITIATED)
+    ev = controller.add_event(user_id, models.Event.Name.MAKE_PACKAGE, annotation={'pid': pid}, status=models.Event.Status.INITIATED)
 
     # cria pacote ZIP
     try:
@@ -74,7 +73,7 @@ def task_upload_package(self, package_path, package_file, user_id):
     -------
     package: dict
     """
-    user = controller.get_user_from_id(user_id)
+    ev = controller.add_event(user_id, models.Event.Name.UPLOAD_PACKAGE, {'package_file': package_file}, models.Event.Status.INITIATED)
 
     # obtém os arquivos de cada documento
     try:

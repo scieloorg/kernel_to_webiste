@@ -11,7 +11,7 @@ python-dateutil==2.8.2
 sqlparse==0.4.1
 lxml==4.6.3
 minio==7.1.0
-gunicorn==20.1.0
+gunicorn==22.0.0
 -e git+https://github.com/scieloorg/opac_schema.git@v2.62#egg=opac_schema
 -e git+https://github.com/scieloorg/dsm.git@v0.1.1#egg=dsm
 -e git+https://github.com/scieloorg/scielo_v3_manager.git@0.6#egg=scielo_v3_manager
